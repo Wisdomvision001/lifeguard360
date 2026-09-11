@@ -1,0 +1,191 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+}
+
+/* --------------------------------------------------------------------- hero */
+
+.hero {
+  min-height: 280px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(11, 21, 38, 0.92) 0%, rgba(24, 35, 56, 0.88) 100%);
+  display: flex;
+  align-items: center;
+  padding: var(--space-8) var(--space-7);
+  box-shadow: var(--shadow-md);
+}
+
+.heroContent {
+  max-width: 56ch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.heroTitle {
+  color: #fff;
+  font-size: var(--fs-2xl);
+}
+
+.heroTitle em {
+  color: var(--color-red-600);
+  font-style: normal;
+}
+
+.heroSubtitle {
+  color: var(--color-navy-muted);
+  font-size: var(--fs-md);
+}
+
+.heroActions {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-top: var(--space-2);
+}
+
+/* ---------------------------------------------------------- emergency grid */
+
+.sectionHeading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.sectionHeading h2 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-xl);
+}
+
+.sectionHeading h2 svg {
+  color: var(--color-red-600);
+}
+
+.sectionHint {
+  font-size: var(--fs-sm);
+  color: var(--color-text-faint);
+}
+
+.emergencyGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-5);
+}
+
+.emergencyCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.emergencyCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-border-strong);
+}
+
+.emergencyIcon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: var(--color-red-50);
+  color: var(--color-red-600);
+}
+
+.emergencyBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.emergencyTitle {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-md);
+  color: var(--color-text);
+}
+
+.emergencyDesc {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.emergencyChevron {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--color-text-faint);
+}
+
+/* ------------------------------------------------------------------- aside */
+
+.asideRow {
+  max-width: 640px;
+}
+
+.tipList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.tipList li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+}
+
+.tipList li::before {
+  content: "✓";
+  color: var(--color-green-600);
+  font-weight: var(--fw-bold);
+  flex-shrink: 0;
+}
+
+/* -------------------------------------------------------------- responsive */
+
+@media (max-width: 720px) {
+  .hero {
+    padding: var(--space-6) var(--space-5);
+    min-height: 220px;
+  }
+
+  .heroTitle {
+    font-size: var(--fs-xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: var(--space-5) var(--space-4);
+  }
+
+  .heroActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .emergencyGrid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,148 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.header p {
+  max-width: 62ch;
+}
+
+.searchForm {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.radiusLabel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+}
+
+.radiusLabel select {
+  padding: var(--space-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  font-size: var(--fs-base);
+  min-width: 160px;
+}
+
+.fixInfo {
+  margin-top: var(--space-3);
+  font-size: var(--fs-xs);
+  color: var(--color-text-faint);
+}
+
+.searchError {
+  margin-top: var(--space-3);
+  font-size: var(--fs-sm);
+  color: var(--color-red-600);
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.resultsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.resultsHeader h2 {
+  font-size: var(--fs-lg);
+}
+
+.facilityList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.facilityCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.facilityBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.facilityBody h3 {
+  font-size: var(--fs-md);
+}
+
+.facilityMeta {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.facilityPhone {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--fs-sm);
+  color: var(--color-blue-600);
+  font-weight: var(--fw-semibold);
+}
+
+.directionsLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-shrink: 0;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+  transition: border-color var(--transition-fast);
+}
+
+.directionsLink:hover {
+  border-color: var(--color-text-muted);
+}
+
+.attribution {
+  font-size: var(--fs-xs);
+  color: var(--color-text-faint);
+}
+
+@media (max-width: 720px) {
+  .facilityCard {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .resultsHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+}

@@ -1,0 +1,60 @@
+import { addDoc, collection, getDocs, orderBy, query, serverTimestamp } from "firebase/firestore";
+
+import type { ActivityRecord, ActivityType } from "@/types";
+import { getDb } from "@/services/firebase/client";
+import { describeFirebaseError } from "@/services/firebase/db";
+
+/**
+ * ActivityService (Phase 10): meaningful events only, data minimisation by
+ * design — no page visits, no incidental UI interactions.
+ */
+
+const ACTIVITY_TYPES: readonly string[] = [
+  "contact_added",
+  "contact_updated",
+  "contact_deleted",
+  "location_shared",
+  "emergency_action",
+  "offline_download",
+];
+
+export function isActivityType(value: string): value is ActivityType {
+  return (ACTIVITY_TYPES as readonly string[]).includes(value);
+}
+
+/** Store a minimal, purpose-bound activity record. Best-effort: never throws. */
+export async function logActivity(
+  uid: string,
+  type: ActivityType,
+  detail: Record<string, unknown>,
+): Promise<void> {
+  try {
+    const db = getDb();
+    await addDoc(collection(db, "users", uid, "activity"), {
+      type,
+      detail,
+      createdAt: serverTimestamp(),
+    });
+  } catch {
+    // Activity logging must never block the user's primary action.
+  }
+}
+
+export async function listActivity(uid: string, limitTo = 100): Promise<ActivityRecord[]> {
+  try {
+    const db = getDb();
+    const ref = collection(db, "users", uid, "activity");
+    const snapshot = await getDocs(query(ref, orderBy("createdAt", "desc")));
+    return snapshot.docs.slice(0, limitTo).map((docSnapshot) => {
+      const data = docSnapshot.data() as Record<string, unknown>;
+      return {
+        id: docSnapshot.id,
+        type: isActivityType(String(data.type)) ? (data.type as ActivityType) : "emergency_action",
+        detail: (data.detail as Record<string, unknown>) ?? {},
+        createdAt: "",
+      };
+    });
+  } catch (error) {
+    throw new Error(describeFirebaseError(error), { cause: error });
+  }
+}

@@ -1,0 +1,70 @@
+.authWrap {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-7) 0;
+}
+
+.authCard {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.authTitle {
+  font-size: var(--fs-xl);
+}
+
+.authSubtitle {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  max-width: 48ch;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.authFooter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-4);
+}
+
+.authFooter a {
+  color: var(--color-blue-600);
+  font-weight: var(--fw-semibold);
+}
+
+.linkButton {
+  text-align: left;
+  font-size: var(--fs-sm);
+  color: var(--color-blue-600);
+  font-weight: var(--fw-semibold);
+  padding: 0;
+}
+
+.errorNote {
+  font-size: var(--fs-sm);
+  color: var(--color-red-600);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-red-50);
+  border: 1px solid var(--color-red-100);
+  border-radius: var(--radius-md);
+}
+
+.infoNote {
+  font-size: var(--fs-sm);
+  color: var(--color-green-700);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-green-50);
+  border: 1px solid var(--color-green-100);
+  border-radius: var(--radius-md);
+}
