@@ -1,0 +1,176 @@
+/* ==========================================================================
+   Lifeguard360 — responsive.css
+   Breakpoint behaviour for the desktop shell built in Stage 1.
+
+   NOTE: per the project brief, mobile is emergency-first and should not be
+   a simple compression of the desktop dashboard. This file keeps the
+   desktop shell usable down to small screens for now (Stage 1). A
+   dedicated mobile-first template (matching the reference app screens)
+   is planned for Stage 2 and will extend/override these rules.
+   ========================================================================== */
+
+/* ---- Large tablets / small desktops ---- */
+@media (max-width: 1180px) {
+  .layout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-row-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ---- Tablets ---- */
+@media (max-width: 900px) {
+  :root {
+    --sidebar-width: 220px;
+  }
+
+  .emergency-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-row-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .content {
+    padding: var(--space-5);
+  }
+}
+
+/* ---- Mobile ---- */
+@media (max-width: 720px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  /* Sidebar becomes an off-canvas drawer, toggled via .is-open */
+  .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(280px, 82vw);
+    transform: translateX(-100%);
+    transition: transform var(--transition-base);
+    z-index: 40;
+  }
+
+  .sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(11, 21, 38, 0.5);
+    z-index: 30;
+  }
+
+  .sidebar-overlay.is-open {
+    display: block;
+  }
+
+  .topbar {
+    padding: 0 var(--space-4);
+  }
+
+  .topbar__nav {
+    display: none;
+  }
+
+  .topbar__menu-toggle {
+    display: inline-flex;
+  }
+
+  .topbar__location {
+    display: none;
+  }
+
+  .content {
+    padding: var(--space-4);
+    padding-bottom: calc(var(--space-9) + 56px);
+  }
+
+  .hero {
+    min-height: 220px;
+    padding: var(--space-5);
+    background-position: right center;
+  }
+
+  .hero__title {
+    font-size: var(--fs-xl);
+  }
+
+  .hero__content {
+    max-width: 100%;
+  }
+
+  .emergency-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+
+  .emergency-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+    padding: var(--space-4);
+  }
+
+  .emergency-card__chevron {
+    display: none;
+  }
+
+  .content__footer {
+    padding-bottom: calc(var(--space-6) + 56px);
+  }
+
+  /* Bottom navigation replaces the sidebar's primary links on mobile */
+  .bottom-nav {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 25;
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    padding: var(--space-2) var(--space-2) max(var(--space-2), env(safe-area-inset-bottom));
+  }
+
+  .bottom-nav__link {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-size: 10px;
+    font-weight: var(--fw-semibold);
+    color: var(--color-text-faint);
+    padding: var(--space-1) 0;
+  }
+
+  .bottom-nav__link svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .bottom-nav__link.is-active {
+    color: var(--color-red-600);
+  }
+}
+
+@media (max-width: 480px) {
+  .emergency-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .hero {
+    background-image: none;
+  }
+
+  .hero::before {
+    background: var(--color-navy-950);
+  }
+}

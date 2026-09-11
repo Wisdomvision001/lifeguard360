@@ -1,0 +1,671 @@
+/* ==========================================================================
+   Lifeguard360 — components.css
+   Reusable components shared across pages: buttons, cards, badges, etc.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------- */
+/* Buttons                                                                 */
+/* ---------------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  white-space: nowrap;
+  transition:
+    background var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn--block {
+  width: 100%;
+  white-space: normal;
+  text-align: center;
+}
+
+.btn--lg {
+  padding: var(--space-4) var(--space-6);
+  font-size: var(--fs-base);
+  border-radius: var(--radius-md);
+}
+
+.btn--danger {
+  background: var(--color-red-600);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(224, 52, 44, 0.28);
+}
+
+.btn--danger:hover {
+  background: var(--color-red-700);
+}
+
+.btn--success {
+  background: var(--color-green-600);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(31, 157, 85, 0.24);
+}
+
+.btn--success:hover {
+  background: var(--color-green-700);
+}
+
+.btn--outline {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border-strong);
+}
+
+.btn--outline:hover {
+  background: var(--color-bg);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--color-blue-600);
+  padding: var(--space-2) var(--space-3);
+}
+
+.btn--ghost:hover {
+  background: var(--color-blue-50);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Card                                                                    */
+/* ---------------------------------------------------------------------- */
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+
+.card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-5);
+}
+
+.card__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  min-width: 0;
+}
+
+.card__title svg {
+  width: 18px;
+  height: 18px;
+  color: var(--color-red-600);
+}
+
+.card__link {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-blue-600);
+}
+
+.card__hint {
+  margin-bottom: var(--space-3);
+  font-size: var(--fs-xs);
+  color: var(--color-text-faint);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Badge                                                                   */
+/* ---------------------------------------------------------------------- */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+}
+
+.badge--green {
+  background: var(--color-green-50);
+  color: var(--color-green-700);
+}
+.badge--red {
+  background: var(--color-red-50);
+  color: var(--color-red-700);
+}
+.badge--blue {
+  background: var(--color-blue-50);
+  color: var(--color-blue-600);
+}
+.badge--amber {
+  background: var(--color-amber-50);
+  color: var(--color-amber-600);
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Icon button (bell, avatar, hamburger)                                  */
+/* ---------------------------------------------------------------------- */
+
+.icon-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  color: var(--color-text-muted);
+  transition: background var(--transition-fast);
+}
+
+.icon-btn:hover {
+  background: var(--color-bg);
+}
+
+.icon-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.icon-btn__badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  border-radius: var(--radius-pill);
+  background: var(--color-red-600);
+  color: #fff;
+  font-size: 10px;
+  font-weight: var(--fw-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-surface);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: #fff;
+  background: var(--color-navy-700);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Hero banner                                                             */
+/* ---------------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  background: var(--color-navy-950) url("../assets/images/hero-first-aid.jpg") center/cover
+    no-repeat;
+  padding: var(--space-8);
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(11, 21, 38, 0.92) 0%,
+    rgba(11, 21, 38, 0.55) 55%,
+    rgba(11, 21, 38, 0.15) 100%
+  );
+}
+
+.hero__content {
+  position: relative;
+  max-width: 460px;
+  color: #fff;
+}
+
+.hero__title {
+  font-size: var(--fs-2xl);
+  line-height: 1.15;
+}
+
+.hero__title em {
+  font-style: normal;
+  color: var(--color-red-600);
+}
+
+.hero__subtitle {
+  margin-top: var(--space-3);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: var(--fs-base);
+}
+
+.hero__cta {
+  margin-top: var(--space-6);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Emergency category card                                                 */
+/* ---------------------------------------------------------------------- */
+
+.emergency-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+.emergency-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition:
+    box-shadow var(--transition-base),
+    transform var(--transition-base),
+    border-color var(--transition-base);
+}
+
+.emergency-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-border-strong);
+  transform: translateY(-2px);
+}
+
+.emergency-card__icon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emergency-card__icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.emergency-card__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.emergency-card__title {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-base);
+}
+
+.emergency-card__desc {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.emergency-card__chevron {
+  color: var(--color-text-faint);
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: var(--space-1);
+}
+
+/* icon color variants, one per emergency category */
+.icon-burns {
+  background: var(--color-red-50);
+  color: var(--color-red-600);
+}
+.icon-bleeding {
+  background: var(--color-red-50);
+  color: var(--color-red-600);
+}
+.icon-choking {
+  background: var(--color-blue-50);
+  color: var(--color-blue-600);
+}
+.icon-snake-bite {
+  background: var(--color-green-50);
+  color: var(--color-green-700);
+}
+.icon-road-accident {
+  background: #f2ecff;
+  color: #7c4dff;
+}
+.icon-fractures {
+  background: var(--color-amber-50);
+  color: var(--color-amber-600);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Alert / callout panel                                                   */
+/* ---------------------------------------------------------------------- */
+
+.panel-alert {
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  color: #fff;
+}
+
+.panel-alert--danger {
+  background: linear-gradient(160deg, var(--color-red-600), var(--color-red-700));
+}
+
+.panel-alert__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+}
+
+.panel-alert__title svg {
+  width: 18px;
+  height: 18px;
+}
+
+.panel-alert__body {
+  margin-top: var(--space-3);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.panel-alert__body svg {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.panel-alert__body p {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: var(--fs-sm);
+}
+
+.panel-alert .btn {
+  margin-top: var(--space-5);
+}
+
+.panel-alert__meta {
+  margin-top: var(--space-4);
+  font-size: var(--fs-xs);
+  color: rgba(255, 255, 255, 0.75);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Info panel (quick tips)                                                 */
+/* ---------------------------------------------------------------------- */
+
+.tip-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.tip-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+}
+
+.tip-list svg {
+  width: 16px;
+  height: 16px;
+  color: var(--color-green-600);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Location card                                                           */
+/* ---------------------------------------------------------------------- */
+
+.location-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.location-meta__item {
+  font-size: var(--fs-xs);
+  color: var(--color-text-faint);
+}
+
+.location-meta__value {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+  margin-top: 2px;
+}
+
+.map-placeholder {
+  position: relative;
+  height: 200px;
+  border-radius: var(--radius-md);
+  background: var(--color-blue-50)
+    linear-gradient(
+      135deg,
+      rgba(47, 111, 237, 0.08) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba(47, 111, 237, 0.08) 50%,
+      rgba(47, 111, 237, 0.08) 75%,
+      transparent 75%,
+      transparent
+    );
+  background-size: 24px 24px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-placeholder__pin {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-blue-600);
+  box-shadow: 0 0 0 8px rgba(47, 111, 237, 0.18);
+}
+
+.map-placeholder__caption {
+  position: absolute;
+  bottom: var(--space-2);
+  right: var(--space-3);
+  font-size: 10px;
+  color: var(--color-text-faint);
+}
+
+.location-actions {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Hospital list                                                           */
+/* ---------------------------------------------------------------------- */
+
+.hospital-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.hospital-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.hospital-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.hospital-item__icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--color-red-50);
+  color: var(--color-red-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hospital-item__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.hospital-item__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.hospital-item__name {
+  display: block;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.hospital-item__distance {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.hospital-item__action {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-green-700);
+  background: var(--color-green-50);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  flex-shrink: 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Contact card                                                            */
+/* ---------------------------------------------------------------------- */
+
+.contact-primary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--color-green-50);
+  border-radius: var(--radius-md);
+}
+
+.contact-primary__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.contact-primary__name {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+.contact-primary__phone {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.contact-primary .btn {
+  margin-top: var(--space-3);
+}
+
+.contact-chip-row {
+  margin-top: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.contact-chip {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-navy-700);
+  color: #fff;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-chip--more {
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+}
+
+.contact-chip-row__link {
+  margin-left: auto;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-blue-600);
+}

@@ -1,0 +1,224 @@
+/* ==========================================================================
+   Lifeguard360 — layout.css
+   App shell: sidebar navigation, topbar, and main content region.
+   ========================================================================== */
+
+.app-shell {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  min-height: 100vh;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Sidebar                                                                 */
+/* ---------------------------------------------------------------------- */
+
+.sidebar {
+  background: var(--color-navy-950);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-6) var(--space-4);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-2) var(--space-6);
+}
+
+.sidebar__brand-icon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.sidebar__brand-name {
+  font-family: var(--font-display);
+  font-weight: var(--fw-extrabold);
+  font-size: var(--fs-md);
+  letter-spacing: 0.01em;
+  color: #fff;
+}
+
+.sidebar__brand-name span {
+  color: var(--color-red-600);
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+}
+
+.sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-navy-muted);
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.sidebar__link svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.sidebar__link:hover {
+  background: var(--color-navy-800);
+  color: #fff;
+}
+
+.sidebar__link.is-active {
+  background: var(--color-red-600);
+  color: #fff;
+}
+
+.sidebar__footer {
+  margin-top: var(--space-6);
+  padding: var(--space-5);
+  background: var(--color-navy-800);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.sidebar__footer-icon {
+  width: 28px;
+  height: 28px;
+  margin: 0 auto var(--space-2);
+  color: var(--color-red-600);
+}
+
+.sidebar__footer-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: #fff;
+}
+
+.sidebar__footer-copy {
+  font-size: var(--fs-xs);
+  color: var(--color-navy-muted);
+  margin-top: var(--space-1);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Main column                                                             */
+/* ---------------------------------------------------------------------- */
+
+.main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.topbar {
+  height: var(--topbar-height);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-7);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.topbar__nav {
+  display: flex;
+  gap: var(--space-6);
+}
+
+.topbar__nav-link {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+  padding-bottom: var(--space-1);
+  border-bottom: 2px solid transparent;
+}
+
+.topbar__nav-link.is-active {
+  color: var(--color-red-600);
+  border-bottom-color: var(--color-red-600);
+}
+
+.topbar__menu-toggle {
+  display: none;
+}
+
+.topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.topbar__location {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-xs);
+}
+
+.topbar__location-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-green-600);
+}
+
+.content {
+  flex: 1;
+  padding: var(--space-7);
+  max-width: var(--content-max-width);
+  width: 100%;
+}
+
+.content__footer {
+  padding: var(--space-6) var(--space-7);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--fs-xs);
+  color: var(--color-text-faint);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Dashboard grid regions (shared by any page using a 2/3 + 1/3 split)    */
+/* ---------------------------------------------------------------------- */
+
+.layout-grid {
+  display: grid;
+  grid-template-columns: 2.2fr 1fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.layout-grid__main,
+.layout-grid__aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Bottom navigation (mobile) — hidden on desktop, see responsive.css     */
+/* ---------------------------------------------------------------------- */
+
+.bottom-nav {
+  display: none;
+}
