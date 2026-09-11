@@ -1,0 +1,165 @@
+rules_version = '2';
+
+// ============================================================================
+// Lifeguard360 — Firestore Security Rules (Phase 11)
+//
+// Security architecture (CIA triad, AD-19):
+//   - Firestore rules are the ONLY enforcement layer; the client is never
+//     trusted for authorization decisions.
+//   - Least privilege: each principal (guest / owner) gets exactly the access
+//     its role requires, nothing more.
+//   - Data minimisation is modelled in what is even writable.
+//
+// Collections:
+//   users/{uid}                    — owner read/update on a strict field set
+//   users/{uid}/contacts/{id}      — owner-only CRUD
+//   users/{uid}/activity/{id}      — owner-only create (append-only) + read
+//   firstAidGuides/{category}      — public read; admin-only write (MVP: no
+//                                    client writes at all)
+//   facilities/{id}                — public read; no client writes
+//   config/{doc}                   — public read; no client writes
+//
+// NOTE: There are no responder/dispatch collections by design — Lifeguard360
+// is an individual-user assistance platform, not a dispatch system.
+// ============================================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ------------------------------------------------------------- helpers
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    // ------------------------------------------------------------- users
+
+    match /users/{uid} {
+      // Profile is readable only by its owner. Confidentiality: contacts,
+      // phone and preferences are personal data.
+      allow get, list: if isOwner(uid);
+
+      // Integrity: the client may set its own profile on creation and update
+      // presentation fields, but never timestamps (server-set) and never
+      // introduce unknown fields.
+      allow create: if isOwner(uid)
+        && request.resource.data.keys().hasOnly(
+          ['displayName', 'phone', 'preferences', 'createdAt', 'updatedAt'])
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() >= 1
+        && request.resource.data.displayName.size() <= 80
+        && request.resource.data.preferences is map
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+
+      allow update: if isOwner(uid)
+        && request.resource.data.keys().hasOnly(
+          ['displayName', 'phone', 'preferences', 'createdAt', 'updatedAt'])
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() >= 1
+        && request.resource.data.displayName.size() <= 80
+        && request.resource.data.preferences is map
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.updatedAt == request.time;
+
+      allow delete: if false; // MVP: accounts are not deletable from the client
+
+      // ------------------------------------------------- contacts (subcollection)
+
+      match /contacts/{contactId} {
+        allow read: if isOwner(uid);
+
+        // Confidentiality + integrity: contact records are strictly owned,
+        // strictly validated, phone numbers must be E.164 Nigerian format.
+        allow create: if isOwner(uid)
+          && request.resource.data.keys().hasOnly(
+            ['fullName', 'relationship', 'phoneNumber', 'createdAt', 'updatedAt'])
+          && request.resource.data.fullName is string
+          && request.resource.data.fullName.size() >= 2
+          && request.resource.data.fullName.size() <= 80
+          && request.resource.data.relationship in
+            ['Parent', 'Sibling', 'Spouse', 'Friend', 'Guardian', 'Other']
+          && request.resource.data.phoneNumber is string
+          && request.resource.data.phoneNumber.matches('^\\+234[0-9]{10}$')
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.updatedAt == request.time;
+
+        allow update: if isOwner(uid)
+          && request.resource.data.keys().hasOnly(
+            ['fullName', 'relationship', 'phoneNumber', 'createdAt', 'updatedAt'])
+          && request.resource.data.fullName is string
+          && request.resource.data.fullName.size() >= 2
+          && request.resource.data.fullName.size() <= 80
+          && request.resource.data.relationship in
+            ['Parent', 'Sibling', 'Spouse', 'Friend', 'Guardian', 'Other']
+          && request.resource.data.phoneNumber is string
+          && request.resource.data.phoneNumber.matches('^\\+234[0-9]{10}$')
+          && request.resource.data.createdAt == resource.data.createdAt
+          && request.resource.data.updatedAt == request.time;
+
+        allow delete: if isOwner(uid);
+      }
+
+      // ------------------------------------------------- activity (subcollection)
+
+      match /activity/{activityId} {
+        // Append-only audit trail: owner can read and create, never update
+        // or delete. Integrity over convenience.
+        allow read: if isOwner(uid);
+        allow create: if isOwner(uid)
+          && request.resource.data.keys().hasOnly(['type', 'detail', 'createdAt'])
+          && request.resource.data.type in
+            ['contact_added', 'contact_updated', 'contact_deleted',
+             'location_shared', 'emergency_action', 'offline_download']
+          && request.resource.data.detail is map
+          && request.resource.data.createdAt == request.time;
+        allow update, delete: if false;
+      }
+    }
+
+    // ----------------------------------------------------- first aid content
+
+    match /firstAidGuides/{categoryId} {
+      // Availability: guides are public read so guests get life-saving
+      // content without an account.
+      allow get, list: if true;
+
+      // Integrity: no client writes in the MVP. Content publishing is a
+      // controlled process done with admin tooling / console.
+      allow write: if false;
+
+      match /versions/{versionId} {
+        allow get, list: if true;
+        allow write: if false; // immutable published versions
+      }
+    }
+
+    // ------------------------------------------------------------- facilities
+
+    match /facilities/{facilityId} {
+      // Availability: verified facility data is public read.
+      allow get, list: if true;
+
+      // Integrity: facility records enter only through the verified
+      // data-preparation pipeline (admin tooling), never from clients.
+      allow write: if false;
+    }
+
+    // ----------------------------------------------------------------- config
+
+    match /config/{docId} {
+      allow get, list: if true;
+      allow write: if false; // managed via console only
+    }
+
+    // ------------------------------------------------- default deny everything
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
