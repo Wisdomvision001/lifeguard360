@@ -36,4 +36,12 @@ export default tseslint.config(
       globals: globals.browser,
     },
   },
+  {
+    // Node-side tooling (dataset seeder etc.) — no browser globals.
+    files: ["tools/**"],
+    languageOptions: {
+      ecmaVersion: 2022,
+      globals: globals.node,
+    },
+  },
 );

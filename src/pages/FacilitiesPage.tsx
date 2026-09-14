@@ -108,7 +108,10 @@ export function FacilitiesPage(): JSX.Element {
 
       {geo.fix !== null && (
         <section aria-label="Your location on a map">
-          <LocationMap location={geo.fix} />
+          <LocationMap
+            location={geo.fix}
+            facilities={result !== null && result.source === "firestore" ? result.facilities : undefined}
+          />
         </section>
       )}
 

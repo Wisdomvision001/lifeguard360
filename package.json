@@ -13,6 +13,7 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "test:watch": "vitest",
+    "seed:facilities": "node tools/seedFacilities.ts",
     "test:e2e": "playwright test",
     "emulators:start": "firebase emulators:start --only auth,firestore,storage",
     "deploy:rules": "firebase deploy --only firestore:rules,storage"

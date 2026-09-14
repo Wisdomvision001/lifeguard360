@@ -1,0 +1,28 @@
+{
+  "_readme": "EXAMPLE ONLY — NOT PRODUCTION DATA. Fictional records demonstrating the docs/DATASET-CONTRACT.md schema for validation testing. Never import as real data; never present as real facilities.",
+  "meta": {
+    "curator": "EXAMPLE — Lifeguard360 dataset template",
+    "preparedAt": "2026-09-14",
+    "note": "EXAMPLE ONLY — NOT PRODUCTION DATA. Every record here is fictional."
+  },
+  "facilities": [
+    {
+      "name": "Example General Hospital",
+      "category": "hospital",
+      "coordinates": { "latitude": 10.5, "longitude": 13.5 },
+      "verified": false,
+      "source": "EXAMPLE ONLY — not real data",
+      "updatedAt": "2026-09-14T00:00:00Z",
+      "phone": "+2340000000000",
+      "openingHours": "24/7 (example value)"
+    },
+    {
+      "name": "Example Community Clinic",
+      "category": "clinic",
+      "coordinates": { "latitude": 10.75, "longitude": 13.25 },
+      "verified": false,
+      "source": "EXAMPLE ONLY — not real data",
+      "updatedAt": "2026-09-14T00:00:00Z"
+    }
+  ]
+}

@@ -15,3 +15,33 @@
     border-radius: var(--radius-md);
   }
 }
+
+/* Facility popup (5D-1) — existing tokens only. */
+
+.popupName {
+  font-size: var(--fs-sm);
+  margin: 0 0 var(--space-1);
+}
+
+.popupMeta {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.popupSource {
+  font-size: var(--fs-xs);
+  color: var(--color-text-faint);
+  margin: 0;
+  margin-top: var(--space-1);
+  overflow-wrap: anywhere;
+}
+
+.popupLink {
+  display: inline-block;
+  margin-top: var(--space-2);
+  margin-right: var(--space-3);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-blue-600);
+}
