@@ -17,7 +17,7 @@
   color: #fff;
   display: flex;
   flex-direction: column;
-  padding: var(--space-6) var(--space-4);
+  padding: var(--space-5) var(--space-4);
   position: sticky;
   top: 0;
   height: 100vh;
@@ -29,19 +29,33 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: 0 var(--space-2) var(--space-6);
+  padding: 0 var(--space-2) var(--space-5);
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
 .brandName {
   font-family: var(--font-display);
   font-weight: var(--fw-extrabold);
-  font-size: var(--fs-md);
+  font-size: 1.1rem;
   letter-spacing: 0.01em;
   color: #fff;
+  white-space: nowrap;
 }
 
 .brandName span {
   color: var(--color-red-600);
+}
+
+.brandTagline {
+  font-size: 0.625rem;
+  color: var(--color-navy-muted);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
 .nav {
@@ -71,8 +85,22 @@
 }
 
 .navLinkActive {
-  background: var(--color-red-600);
+  background: linear-gradient(90deg, var(--color-red-700), var(--color-red-600));
   color: #fff;
+  box-shadow: 0 4px 14px rgba(224, 52, 44, 0.35);
+}
+
+/* DEV-ONLY section (temporary "Admin Demo" entry). Renders with the exact
+   same nav-link styles as the rest of the sidebar; separated only by a subtle
+   existing-token divider. Removed together with the nav entry when real
+   Firebase admin authentication is implemented. */
+.devSection {
+  border-top: 1px solid var(--color-navy-800);
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
 }
 
 .footer {
@@ -110,35 +138,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--space-7);
+  gap: var(--space-4);
+  padding: 0 var(--space-6);
   position: sticky;
   top: 0;
   z-index: 20;
-}
-
-.topbarNav {
-  display: flex;
-  gap: var(--space-6);
-}
-
-.topbarLink {
-  font-size: var(--fs-sm);
-  font-weight: var(--fw-semibold);
-  color: var(--color-text-muted);
-  padding-bottom: var(--space-1);
-  border-bottom: 2px solid transparent;
-}
-
-.topbarLink:hover,
-.topbarLinkActive {
-  color: var(--color-red-600);
-  border-bottom-color: var(--color-red-600);
 }
 
 .topbarActions {
   display: flex;
   align-items: center;
   gap: var(--space-5);
+  /* With the centre nav removed, keep status/actions pinned to the right. */
+  margin-left: auto;
 }
 
 .onlinePill {
@@ -169,7 +181,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: var(--color-navy-800);
+  background: var(--color-navy-900);
   color: #fff;
   display: flex;
   align-items: center;
@@ -195,13 +207,13 @@
 
 .content {
   flex: 1;
-  padding: var(--space-7);
+  padding: var(--space-6);
   max-width: var(--content-max-width);
   width: 100%;
 }
 
 .contentFooter {
-  padding: var(--space-6) var(--space-7);
+  padding: var(--space-5) var(--space-6);
   border-top: 1px solid var(--color-border);
   display: flex;
   align-items: center;
@@ -228,18 +240,6 @@
 
 /* -------------------------------------------------------------- breakpoints */
 /* 1180 / 900 / 720 / 480 — mirrors legacy responsive.css */
-
-@media (max-width: 1180px) {
-  .topbarNav {
-    gap: var(--space-4);
-  }
-}
-
-@media (max-width: 900px) {
-  .topbarNav {
-    display: none;
-  }
-}
 
 @media (max-width: 720px) {
   .appShell {
@@ -269,11 +269,14 @@
 
   .content {
     padding: var(--space-5) var(--space-4);
-    padding-bottom: calc(var(--space-6) + 72px);
+    padding-bottom: calc(var(--space-6) + 76px);
   }
 
   .contentFooter {
     padding: var(--space-5) var(--space-4);
+    /* Keep clear of the fixed mobile bottom nav. */
+    margin-bottom: 0;
+    padding-bottom: calc(var(--space-5) + 76px);
   }
 
   .bottomNav {
@@ -296,13 +299,18 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2px;
-    font-size: var(--fs-xs);
+    gap: 3px;
+    font-size: 0.6875rem;
     font-weight: var(--fw-medium);
     color: var(--color-text-muted);
   }
 
-  .bottomNavLinkActive {
+  .bottomNavLink svg {
+    color: var(--color-text-faint);
+  }
+
+  .bottomNavLinkActive,
+  .bottomNavLinkActive svg {
     color: var(--color-red-600);
     font-weight: var(--fw-semibold);
   }

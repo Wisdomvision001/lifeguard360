@@ -4,7 +4,7 @@ import { Icon, type IconName } from "@/components/icons";
 import styles from "@/components/Button.module.css";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "danger" | "success" | "outline";
+  variant?: "primary" | "danger" | "success" | "outline" | "ghost";
   size?: "md" | "lg";
   icon?: IconName;
   block?: boolean;

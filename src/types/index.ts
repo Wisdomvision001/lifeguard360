@@ -37,17 +37,72 @@ export interface GuideProvenance {
   verifiedAt: string;
 }
 
+/** One structured step inside a guide's canonical protocol. */
+export interface GuideStep {
+  title: string;
+  /** The instruction. This is the text read aloud by TTS. */
+  text: string;
+  /** Local asset path (public/images) when a step-level image exists. */
+  image?: string;
+  imageAlt?: string;
+  /** Safety-critical caution attached to this step. */
+  warning?: string;
+}
+
+/**
+ * Educational video metadata. Playback integration is a later task: no video
+ * assets are bundled, nothing is downloaded, and embed availability must be
+ * confirmed before any provider value other than "local" is used.
+ */
+export interface GuideVideo {
+  src: string;
+  provider: "local" | "youtube" | "vimeo";
+  title: string;
+  durationSeconds?: number;
+  thumbnail: string;
+  attribution: string;
+  license: string;
+}
+
+/**
+ * Compressed memory-aid presentation of the canonical protocol.
+ * Stored explicitly per category — never runtime-summarised — so a reviewer
+ * can inspect it beside content.steps and verify it introduces no different
+ * medical advice (Quick Guide is a presentation of the one protocol).
+ */
+export interface QuickGuide {
+  immediatePriority: string;
+  essentialActions: string[];
+  criticalDonts: string[];
+}
+
+/**
+ * A clearly labelled protocol variation (e.g. "baby under 1" for choking,
+ * "chemical burn" for burns). Serializable and presentation-independent;
+ * the variant UI is a later task, so no bundled guide populates this yet.
+ */
+export interface GuideVariant {
+  id: string;
+  label: string;
+  steps: GuideStep[];
+}
+
 /** An immutable published version of a first-aid guide. */
 export interface FirstAidGuideVersion {
   id: string;
   contentVersion: string;
   summary: string;
-  steps: string[];
+  /** Canonical protocol — structured steps; `text` is the speakable instruction. */
+  steps: GuideStep[];
   dos: string[];
   donts: string[];
   whenToSeekHelp: string[];
-  /** Storage path of the educational video, when one exists. */
-  videoPath?: string;
+  /** Compressed memory-aid view of the same protocol (see QuickGuide). */
+  quickGuide: QuickGuide;
+  /** Labelled protocol variants; left unset until variant content is authored. */
+  variants?: GuideVariant[];
+  /** Educational video metadata, when one exists. No videos are bundled yet. */
+  video?: GuideVideo;
   reviewStatus: Extract<ReviewStatus, "published">;
   reviewedBy?: string;
   reviewedAt?: string;
@@ -61,9 +116,10 @@ export interface FirstAidGuide {
   label: string;
   summary: string;
   iconClass: string;
+  /** Local photographic imagery for cards/banners (public/images). */
+  image?: string;
   /** Static per-category fallback content bundled with the app. */
   content: Omit<FirstAidGuideVersion, "id" | "reviewStatus" | "publishedAt">;
-  videoSrc?: string;
 }
 
 // ---------------------------------------------------------------- users
@@ -140,10 +196,24 @@ export interface LocationFix {
   accuracy: number;
   /** epoch ms — freshness is judged against this. */
   timestamp: number;
+  /**
+   * Best-effort acquisition source. The browser does NOT reliably tell us
+   * whether a fix is GPS- or network-derived, so this stays honest: when it
+   * cannot be determined it is "unknown", never a guess.
+   */
+  source?: LocationSource;
+  /** Accuracy-band classification of this fix (see classifyAccuracy). */
+  quality?: LocationQuality;
 }
 
+/** Honest acquisition-source label — "unknown" when the platform cannot say. */
+export type LocationSource = "gps" | "network" | "unknown";
+
+/** Accuracy bands (metres): <20 excellent · ≤50 good · ≤100 acceptable · ≤500 poor · >500 critical. */
+export type LocationQuality = "excellent" | "good" | "acceptable" | "poor" | "critical";
+
 export type LocationPermissionState =
-  "idle" | "unsupported" | "requesting" | "granted" | "denied" | "unavailable";
+  "idle" | "unsupported" | "requesting" | "granted" | "denied" | "unavailable" | "invalid";
 
 // ---------------------------------------------------------------- facilities
 

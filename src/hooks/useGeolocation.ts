@@ -1,15 +1,23 @@
 import { useCallback, useState } from "react";
 
 import type { LocationFix } from "@/types";
+import {
+  acquireLocationFix,
+  type LocationOutcome,
+} from "@/services/location/locationService";
 
 /**
- * One-shot browser Geolocation API wrapper (Phase 6 behaviour contract):
+ * One-shot browser Geolocation seam (Phase 6 contract, Phase 5B internals):
  * location is NEVER requested automatically and NEVER watched continuously —
  * only an explicit user action calls `requestFix`.
+ *
+ * Phase 5B: the hook no longer touches navigator.geolocation itself; all
+ * acquisition is delegated to locationService (the single authority) via the
+ * injectable `acquire` parameter used by tests.
  */
 
 export type GeoRequestStatus =
-  "idle" | "requesting" | "granted" | "denied" | "unavailable" | "unsupported";
+  "idle" | "requesting" | "granted" | "denied" | "unavailable" | "unsupported" | "invalid";
 
 export interface GeoRequestResult {
   status: GeoRequestStatus;
@@ -21,6 +29,7 @@ export interface GeoRequestResult {
   reset: () => void;
 }
 
+/** Browser geolocation error code → actionable, honest copy. */
 function errorCodeToMessage(code: number): string {
   switch (code) {
     case 1:
@@ -34,50 +43,56 @@ function errorCodeToMessage(code: number): string {
   }
 }
 
+/** Map a service outcome onto the hook's public status union. */
+function statusForOutcome(outcome: LocationOutcome): {
+  status: GeoRequestStatus;
+  message: string | null;
+} {
+  if (outcome.fix !== null) return { status: "granted", message: null };
+  if (outcome.error !== null && outcome.error.includes("does not support location")) {
+    return { status: "unsupported", message: outcome.error };
+  }
+  if (outcome.error === "Location permission was denied.") {
+    return { status: "denied", message: errorCodeToMessage(1) };
+  }
+  if (outcome.error === "Location request timed out.") {
+    return { status: "unavailable", message: errorCodeToMessage(3) };
+  }
+  if (outcome.error === "Your position could not be determined.") {
+    return { status: "unavailable", message: errorCodeToMessage(2) };
+  }
+  // Invalid browser payload (validation rejection) or unknown failure.
+  return {
+    status: outcome.error !== null && outcome.error.includes("invalid") ? "invalid" : "unavailable",
+    message: outcome.error,
+  };
+}
+
 /**
- * Acquire a single fix with a bounded wait. Returns null (never throws) so
- * callers can branch on `status` and `message`.
+ * Acquire a single fix through the location service. Returns null (never
+ * throws) so callers can branch on `status` and `message`.
  */
-export function useGeolocation(): GeoRequestResult {
+export function useGeolocation(
+  acquire: (options?: PositionOptions) => Promise<LocationOutcome> = (options) =>
+    acquireLocationFix(options),
+): GeoRequestResult {
   const [status, setStatus] = useState<GeoRequestStatus>("idle");
   const [fix, setFix] = useState<LocationFix | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
   const requestFix = useCallback(async (): Promise<LocationFix | null> => {
-    if (typeof navigator === "undefined" || !("geolocation" in navigator)) {
-      setStatus("unsupported");
-      setMessage("Your browser does not support location sharing.");
-      return null;
-    }
-
     setStatus("requesting");
     setMessage(null);
 
-    return new Promise<LocationFix | null>((resolve) => {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const next: LocationFix = {
-            coordinates: {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-            },
-            accuracy: position.coords.accuracy,
-            timestamp: position.timestamp,
-          };
-          setFix(next);
-          setStatus("granted");
-          setMessage(null);
-          resolve(next);
-        },
-        (error) => {
-          setStatus(error.code === 1 ? "denied" : "unavailable");
-          setMessage(errorCodeToMessage(error.code));
-          resolve(null);
-        },
-        { enableHighAccuracy: true, timeout: 15000, maximumAge: 30000 },
-      );
-    });
-  }, []);
+    // Full delegation: the service is the single authority, including
+    // unsupported-browser detection — the hook keeps no environment logic.
+    const outcome = await acquire();
+    const next = statusForOutcome(outcome);
+    setFix(outcome.fix);
+    setStatus(next.status);
+    setMessage(next.message);
+    return outcome.fix;
+  }, [acquire]);
 
   const reset = useCallback((): void => {
     setStatus("idle");

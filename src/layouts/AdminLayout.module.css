@@ -1,0 +1,256 @@
+/* ==========================================================================
+   Admin shell (Phase 1 - Task 3). Visual language deliberately mirrors the
+   public AppLayout: same navy sidebar, same tokens, same drawer mechanics —
+   scoped to the administration area. No new colors, no gradients.
+   ========================================================================== */
+
+.adminShell {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  min-height: 100vh;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* ------------------------------------------------------------------ sidebar */
+
+.sidebar {
+  background: var(--color-navy-950);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-5) var(--space-4);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 40;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-2) var(--space-5);
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.brandName {
+  font-family: var(--font-display);
+  font-weight: var(--fw-extrabold);
+  font-size: 1.1rem;
+  letter-spacing: 0.01em;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.brandName span {
+  color: var(--color-red-600);
+}
+
+.brandTagline {
+  font-size: 0.625rem;
+  color: var(--color-navy-muted);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-navy-muted);
+  min-height: 44px; /* touch-target floor */
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.navLink:hover {
+  background: var(--color-navy-800);
+  color: #fff;
+}
+
+.navLinkActive {
+  background: linear-gradient(90deg, var(--color-red-700), var(--color-red-600));
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(224, 52, 44, 0.35);
+}
+
+.sidebarNote {
+  margin-top: var(--space-5);
+  padding: var(--space-3);
+  font-size: var(--fs-xs);
+  color: var(--color-navy-muted);
+  border-top: 1px solid var(--color-navy-800);
+}
+
+/* ------------------------------------------------------------------- topbar */
+
+.topbar {
+  height: var(--topbar-height);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 0 var(--space-6);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.menuToggle {
+  display: none;
+  color: var(--color-text);
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.topbarTitle {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.topbarAdmin {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-red-600);
+  white-space: nowrap;
+}
+
+.topbarSection {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbarActions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.publicLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.publicLink:hover {
+  color: var(--color-blue-600);
+}
+
+/* ------------------------------------------------------------------ content */
+
+.content {
+  flex: 1;
+  padding: var(--space-6);
+  max-width: var(--content-max-width);
+  width: 100%;
+}
+
+.contentFooter {
+  padding: var(--space-5) var(--space-6);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--fs-xs);
+  color: var(--color-text-faint);
+  gap: var(--space-4);
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 21, 38, 0.55);
+  border: none;
+  z-index: 35;
+  cursor: pointer;
+}
+
+/* -------------------------------------------------------------- breakpoints */
+
+@media (max-width: 1024px) {
+  .adminShell {
+    grid-template-columns: 1fr;
+  }
+
+  .menuToggle {
+    display: inline-flex;
+  }
+
+  .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(320px, 85vw);
+    transform: translateX(-100%);
+    transition: transform var(--transition-base);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sidebarOpen {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 720px) {
+  .topbar {
+    padding: 0 var(--space-4);
+  }
+
+  .content {
+    padding: var(--space-5) var(--space-4);
+  }
+
+  .contentFooter {
+    padding: var(--space-5) var(--space-4);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
+  }
+
+  .publicLink span {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: var(--space-4) var(--space-3);
+  }
+}

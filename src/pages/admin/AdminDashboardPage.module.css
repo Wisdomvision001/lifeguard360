@@ -1,0 +1,221 @@
+/* Admin Dashboard (Phase 1 - Task 4). Existing tokens only. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.pageHeader h1 {
+  font-size: var(--fs-xl);
+  margin-bottom: var(--space-1);
+}
+
+.pageHeader p {
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+}
+
+/* ------------------------------------------------------------------- tiles */
+
+.tileGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+}
+
+.tile {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.tileLabel {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+
+.tileValue {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  color: var(--color-text);
+}
+
+.tileNote {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  line-height: 1.45;
+}
+
+/* ------------------------------------------------------- first-aid content */
+
+.cardIntro {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-4);
+}
+
+.guideList {
+  display: flex;
+  flex-direction: column;
+}
+
+.guideRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-2);
+  border-radius: var(--radius-md);
+  min-height: 44px;
+  transition: background var(--transition-fast);
+}
+
+.guideRow:hover {
+  background: var(--color-bg);
+}
+
+.guideSwatch {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-pill);
+  flex-shrink: 0;
+}
+
+.guideName {
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+}
+
+.guideMeta {
+  margin-left: auto;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.guideChevron {
+  color: var(--color-text-faint);
+  flex-shrink: 0;
+}
+
+/* ------------------------------------------------------------ quick actions */
+
+.actionsRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.sectionTitle {
+  font-size: var(--fs-md);
+}
+
+.actionsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+}
+
+.actionLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text);
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.actionLink:hover {
+  border-color: var(--color-blue-600);
+  color: var(--color-blue-600);
+}
+
+/* ------------------------------------------------------- status + activity */
+
+.statusGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.statusList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.statusRow {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-2);
+}
+
+.statusRow:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.statusRow dt {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.statusRow dd {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+  text-align: right;
+}
+
+.emptyActivity {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  line-height: 1.55;
+}
+
+/* -------------------------------------------------------------- responsive */
+
+@media (max-width: 1024px) {
+  .tileGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .actionsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .tileGrid,
+  .actionsGrid,
+  .statusGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .guideMeta {
+    white-space: normal;
+    text-align: right;
+  }
+}

@@ -36,6 +36,12 @@ export const ICON_NAMES = [
   "external",
   "search",
   "spinner",
+  "flame",
+  "droplet",
+  "person-choking",
+  "snake",
+  "car",
+  "bone",
 ] as const;
 
 export type IconName = (typeof ICON_NAMES)[number];
@@ -149,6 +155,35 @@ const PATHS: Record<IconName, JSX.Element> = {
     </>
   ),
   spinner: <path d="M12 3a9 9 0 1 0 9 9" />,
+  flame: (
+    <path d="M12 22c4.4 0 8-3.1 8-7.5 0-2.4-1.2-4.6-2.7-6.4-.6 1-1.4 1.9-2.3 2.4C14.7 7.6 13.4 4 10.9 2c.3 2.3-.7 4.3-2.2 6C7.1 9.9 6 11.9 6 14.5 6 18.9 7.6 22 12 22z" />
+  ),
+  droplet: <path d="M12 2.7 6.7 8.9c-2.9 3.4-2.4 8.3 1 11.2 2.5 2.1 6.1 2.1 8.6 0 3.4-2.9 3.9-7.8 1-11.2L12 2.7z" />,
+  "person-choking": (
+    <>
+      <circle cx="12" cy="4.5" r="2.5" />
+      <path d="M12 7v5M12 12l-3 5M12 12l3 5M9.5 9.5h5M9 17h6" />
+    </>
+  ),
+  snake: (
+    <>
+      <path d="M4 18c3 0 3-4 6-4s3 2 6 2 4-2 4-4-1.5-4-4-4" />
+      <circle cx="4.5" cy="18" r="1.6" />
+      <path d="M20.5 5.5 19 4M20.5 5.5 22 4" />
+    </>
+  ),
+  car: (
+    <>
+      <path d="M5 16 6.2 9.3A2 2 0 0 1 8.2 8h7.6a2 2 0 0 1 2 1.3L19 16" />
+      <path d="M4 16h16v3a1 1 0 0 1-1 1h-1.5a1 1 0 0 1-1-1v-1h-9v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3z" />
+      <path d="M7.5 12.5h9" />
+    </>
+  ),
+  bone: (
+    <>
+      <path d="M17 10c1.2.3 2.5-.2 3.1-1.3a2.4 2.4 0 0 0-2.5-3.6A2.4 2.4 0 0 0 14 2.9c-1.1.6-1.6 2-1.3 3.1L10 8.7c-1.2-.3-2.5.2-3.1 1.3a2.4 2.4 0 0 0 2.5 3.6 2.4 2.4 0 0 0 3.6 2.5c1.1-.6 1.6-2 1.3-3.1L17 10z" />
+    </>
+  ),
 };
 
 export interface IconProps {

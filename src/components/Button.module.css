@@ -58,6 +58,17 @@
   border-color: var(--color-text-muted);
 }
 
+.ghost {
+  background: transparent;
+  color: var(--color-blue-600);
+  font-size: var(--fs-xs);
+  padding: var(--space-1) var(--space-2);
+}
+
+.ghost:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
 .lg {
   padding: var(--space-4) var(--space-6);
   font-size: var(--fs-base);

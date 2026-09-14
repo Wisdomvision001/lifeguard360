@@ -38,6 +38,11 @@
   --color-amber-600: #d97706;
   --color-amber-50: #fef3e2;
 
+  --color-orange-500: #ea580c;
+  --color-orange-50: #fff1e7;
+  --color-purple-600: #9333ea;
+  --color-purple-50: #f6e8ff;
+
   /* ---- Typography ---- */
   --font-display: "Manrope", "Segoe UI", system-ui, -apple-system, sans-serif;
   --font-body: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;

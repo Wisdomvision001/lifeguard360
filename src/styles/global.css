@@ -61,6 +61,39 @@
   gap: var(--space-6);
 }
 
+/* --------------------------------------------------- category icon tones */
+/* Shared coloured icon bubbles for the six emergency categories. */
+
+.tone-red {
+  background: var(--color-red-50);
+  color: var(--color-red-600);
+}
+
+.tone-orange {
+  background: var(--color-orange-50);
+  color: var(--color-orange-500);
+}
+
+.tone-blue {
+  background: var(--color-blue-50);
+  color: var(--color-blue-600);
+}
+
+.tone-green {
+  background: var(--color-green-50);
+  color: var(--color-green-600);
+}
+
+.tone-purple {
+  background: var(--color-purple-50);
+  color: var(--color-purple-600);
+}
+
+.tone-amber {
+  background: var(--color-amber-50);
+  color: var(--color-amber-600);
+}
+
 /* --------------------------------------------------------------- page head */
 
 .pageHeader {

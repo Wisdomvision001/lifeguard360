@@ -4,6 +4,7 @@ import { Card } from "@/components/Card";
 import { Badge } from "@/components/Badge";
 import { Button } from "@/components/Button";
 import { Icon } from "@/components/icons";
+import { LocationMap } from "@/components/LocationMap";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import {
   facilityDirectionsUrl,
@@ -104,6 +105,12 @@ export function FacilitiesPage(): JSX.Element {
           </p>
         )}
       </Card>
+
+      {geo.fix !== null && (
+        <section aria-label="Your location on a map">
+          <LocationMap location={geo.fix} />
+        </section>
+      )}
 
       {!configured && (
         <Card title="Facility data unavailable" titleIcon="alert">

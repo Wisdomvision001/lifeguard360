@@ -130,12 +130,51 @@ export function GetHelpPage(): JSX.Element {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <h1>Get Help Now</h1>
+        <div className={styles.headerMedia}>
+          <img
+            src="/images/emergency-help.jpg"
+            alt="Emergency responders assisting a person on a stretcher"
+            className={styles.headerImage}
+            width={1200}
+            height={800}
+          />
+          <span className={styles.bellBadge} aria-hidden="true">
+            <Icon name="bell" size={26} />
+          </span>
+        </div>
+        <h1>Emergency Alert</h1>
         <p>
-          Reach your trusted contacts and nearby help using your own device. Lifeguard360 prepares
-          calls and messages — your phone, SIM and mobile network deliver them.
+          Send your location and alert your emergency contacts. Lifeguard360 prepares calls and
+          messages — your phone, SIM and mobile network deliver them.
         </p>
       </header>
+
+      <section className={styles.includesCard} aria-labelledby="includes-heading">
+        <h2 id="includes-heading">Alert will include:</h2>
+        <ul className={styles.includesList}>
+          <li>
+            <Icon name="map-pin" size={18} className={styles.includesIcon} />
+            <div>
+              <strong>Your current location</strong>
+              <span>GPS coordinates as a map link (if you include it)</span>
+            </div>
+          </li>
+          <li>
+            <Icon name="sos" size={18} className={styles.includesIcon} />
+            <div>
+              <strong>Your chosen contact</strong>
+              <span>One trusted contact per alert</span>
+            </div>
+          </li>
+          <li>
+            <Icon name="history" size={18} className={styles.includesIcon} />
+            <div>
+              <strong>Time &amp; date</strong>
+              <span>When the message was prepared</span>
+            </div>
+          </li>
+        </ul>
+      </section>
 
       <Card title="Before you continue" titleIcon="alert" className={styles.preconditions}>
         <p>{PRECONDITIONS_NOTICE}</p>

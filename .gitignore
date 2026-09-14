@@ -27,5 +27,8 @@ tsconfig.node.tsbuildinfo
 # macOS
 .DS_Store
 
+# Editor settings
+.vscode/
+
 # Agent workspace state
 .freebuff/

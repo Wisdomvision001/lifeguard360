@@ -27,9 +27,17 @@ export function AppLayout(): JSX.Element {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [drawerOpen]);
 
-  const items = NAV_ITEMS.filter((item) => !item.requiresAccount || signedIn);
-  const bottomItems = items.filter((item) => item.inBottomBar === true).slice(0, 5);
-  const topBarItems = items.filter((item) => item.inTopBar === true);
+  const items = NAV_ITEMS.filter(
+    (item) => (!item.requiresAccount || signedIn) && (!item.devOnly || import.meta.env.DEV),
+  );
+  const bottomItems = items
+    .filter((item) => item.inBottomBar === true)
+    .slice(0, 5);
+  // DEV-ONLY: "Admin Demo" entry for temporary /admin access during
+  // development. Removed from builds when real admin authentication lands.
+  const devItems = import.meta.env.DEV
+    ? items.filter((item) => item.devOnly === true)
+    : [];
 
   const initials =
     authState.user?.displayName
@@ -58,13 +66,18 @@ export function AppLayout(): JSX.Element {
         >
           <Link to="/" className={styles.brand} onClick={() => setDrawerOpen(false)}>
             <BrandMark />
-            <span className={styles.brandName}>
-              LIFEGUARD<span>360</span>
+            <span className={styles.brandText}>
+              <span className={styles.brandName}>
+                LIFEGUARD<span>360</span>
+              </span>
+              <span className={styles.brandTagline}>First Aid. Emergency Help. Life Saving.</span>
             </span>
           </Link>
 
           <nav className={styles.nav}>
-            {items.map((item) => (
+            {items
+              .filter((item) => item.devOnly !== true)
+              .map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
@@ -77,7 +90,24 @@ export function AppLayout(): JSX.Element {
                 <Icon name={item.icon} size={18} />
                 {item.label}
               </NavLink>
-            ))}
+              ))}
+            {devItems.length > 0 && (
+              <div className={styles.devSection}>
+                {devItems.map((item) => (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    className={({ isActive }) =>
+                      `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`
+                    }
+                    onClick={() => setDrawerOpen(false)}
+                  >
+                    <Icon name={item.icon} size={18} />
+                    {item.label}
+                  </NavLink>
+                ))}
+              </div>
+            )}
             {!signedIn && (
               <NavLink
                 to="/login"
@@ -111,21 +141,6 @@ export function AppLayout(): JSX.Element {
             >
               <Icon name="menu" size={22} />
             </button>
-
-            <nav className={styles.topbarNav} aria-label="Section">
-              {topBarItems.map((item) => (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  end={item.to === "/"}
-                  className={({ isActive }) =>
-                    `${styles.topbarLink} ${isActive ? styles.topbarLinkActive : ""}`
-                  }
-                >
-                  {item.label}
-                </NavLink>
-              ))}
-            </nav>
 
             <div className={styles.topbarActions}>
               <span className={styles.onlinePill} aria-live="polite">

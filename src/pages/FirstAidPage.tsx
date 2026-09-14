@@ -10,19 +10,30 @@ export function FirstAidPage(): JSX.Element {
   return (
     <div>
       <header className={styles.header}>
-        <h1>First Aid Guide</h1>
-        <p>
-          Clear, conservative first-aid guidance for the six supported emergency categories. Text is
-          the primary source of information; read-aloud assistance is available on each guide.
-        </p>
+        <div>
+          <h1>First Aid Guide</h1>
+          <p>
+            Clear, conservative first-aid guidance for the six supported emergency categories. Text
+            is the primary source of information; read-aloud assistance is available on each guide.
+          </p>
+        </div>
+        <img
+          src="/images/first-aid.jpg"
+          alt="Person practising CPR on a training mannequin"
+          className={styles.headerImage}
+          width={280}
+          height={158}
+        />
       </header>
 
       <div className={styles.grid}>
         {GUIDE_LIST.map((guide) => (
           <Link key={guide.id} to={`/first-aid/${guide.id}`} className={styles.card}>
-            <span className={styles.icon} aria-hidden="true">
-              <Icon name="first-aid" size={22} />
-            </span>
+            {guide.image !== undefined && (
+              <span className={styles.thumb} aria-hidden="true">
+                <img src={guide.image} alt="" loading="lazy" width={88} height={66} />
+              </span>
+            )}
             <span className={styles.body}>
               <span className={styles.title}>{guide.label}</span>
               <span className={styles.summary}>{guide.summary}</span>
