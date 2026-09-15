@@ -92,8 +92,9 @@
 
 /* "Admin Demo" section (temporary entry until real Firebase admin auth).
    Renders with the exact same nav-link styles as the rest of the sidebar;
-   separated only by a subtle existing-token divider. Access is still gated
-   by the RequireAdmin guard — visibility is not authorization. */
+   separated only by a subtle existing-token divider. Temporary demo
+   posture: /admin is intentionally open until real admin authentication
+   is implemented. */
 .devSection {
   border-top: 1px solid var(--color-navy-800);
   margin-top: var(--space-4);

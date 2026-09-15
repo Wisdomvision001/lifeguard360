@@ -61,9 +61,9 @@ const PUBLIC_NAV_ITEMS = [
 
 /**
  * Demo access to the /admin route branch, rendered in a separated sidebar
- * section in ALL builds. Visibility is not authorization: production access
- * is still denied by the RequireAdmin guard (redirect to /login) until real
- * Firebase admin authentication is implemented.
+ * section in ALL builds. Temporary demo posture: /admin is intentionally
+ * open while the Firestore/admin functionality is built; real Firebase
+ * admin authentication will replace this later.
  */
 const ADMIN_DEMO_NAV_ITEMS: readonly NavItem[] = [
   { to: "/admin", label: "Admin Demo", icon: "settings", devOnly: true },
