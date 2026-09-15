@@ -5,6 +5,9 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   plugins: [react()],
+  // Deployment base: GitHub Pages serves this project under /lifeguard360/.
+  // VITE_BASE is set in the Pages CI workflow; unset (dev, tests) means "/".
+  base: process.env.VITE_BASE,
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "src"),

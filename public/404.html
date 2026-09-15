@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Lifeguard360</title>
+    <script>
+      /*
+       * SPA fallback for GitHub Pages (project site served under /lifeguard360/).
+       *
+       * GitHub Pages is a static host with no server-side rewrites, so a deep
+       * link like /lifeguard360/first-aid/burns returns this 404 page. We
+       * forward the intended route through the query string to the real entry
+       * (index.html), which restores the path client-side before React Router
+       * reads the location.
+       */
+      (function () {
+        var l = window.location;
+        var first = l.pathname.split("/").filter(Boolean)[0];
+        var base = first ? "/" + first + "/" : "/";
+        var rest = l.pathname.slice(base.length);
+        l.replace(base + "?/" + rest + l.search + l.hash);
+      })();
+    </script>
+  </head>
+  <body>
+    <noscript>Enable JavaScript to use Lifeguard360.</noscript>
+  </body>
+</html>

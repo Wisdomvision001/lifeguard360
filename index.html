@@ -17,6 +17,20 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      /*
+       * GitHub Pages SPA fallback (paired with public/404.html): when the app
+       * was entered via /?/<route>, restore the real path before React Router
+       * mounts so BrowserRouter (with the deployment basename) sees it.
+       */
+      (function () {
+        var s = window.location.search;
+        if (s.indexOf("?/") === 0) {
+          var base = window.location.pathname.replace(/[^/]*$/, "");
+          window.history.replaceState(null, "", base + s.slice(2));
+        }
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

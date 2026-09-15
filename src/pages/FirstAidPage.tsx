@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import type { JSX } from "react";
 
 import { GUIDE_LIST } from "@/data/firstAid";
+import { assetPath } from "@/utils/paths";
 import { Card } from "@/components/Card";
 import { Icon } from "@/components/icons";
 import styles from "@/pages/FirstAidPage.module.css";
@@ -18,7 +19,7 @@ export function FirstAidPage(): JSX.Element {
           </p>
         </div>
         <img
-          src="/images/first-aid.jpg"
+          src={assetPath("/images/first-aid.jpg")}
           alt="Person practising CPR on a training mannequin"
           className={styles.headerImage}
           width={280}
@@ -31,7 +32,7 @@ export function FirstAidPage(): JSX.Element {
           <Link key={guide.id} to={`/first-aid/${guide.id}`} className={styles.card}>
             {guide.image !== undefined && (
               <span className={styles.thumb} aria-hidden="true">
-                <img src={guide.image} alt="" loading="lazy" width={88} height={66} />
+                <img src={assetPath(guide.image)} alt="" loading="lazy" width={88} height={66} />
               </span>
             )}
             <span className={styles.body}>

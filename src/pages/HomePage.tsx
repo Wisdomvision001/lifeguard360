@@ -17,6 +17,8 @@ const QUICK_TIPS = [
   "Call for professional medical help.",
 ];
 
+import { assetPath } from "@/utils/paths";
+
 export function HomePage(): JSX.Element {
   const geo = useGeolocation();
 
@@ -26,7 +28,7 @@ export function HomePage(): JSX.Element {
       <section className={styles.hero}>
         <div className={styles.heroOverlay} aria-hidden="true" />
         <img
-          src="/images/lifeguard360-hero.jpg"
+          src={assetPath("/images/lifeguard360-hero.jpg")}
           alt=""
           className={styles.heroImage}
           loading="eager"
@@ -66,7 +68,7 @@ export function HomePage(): JSX.Element {
                 >
                   {guide.image !== undefined && (
                     <span className={styles.emergencyThumb} aria-hidden="true">
-                      <img src={guide.image} alt="" loading="lazy" width={72} height={56} />
+                      <img src={assetPath(guide.image)} alt="" loading="lazy" width={72} height={56} />
                     </span>
                   )}
                   <span className={styles.emergencyBody}>
@@ -145,7 +147,7 @@ export function HomePage(): JSX.Element {
         <aside className={styles.homeAside}>
           <section className={styles.alertPanel} aria-labelledby="alert-heading">
             <img
-              src="/images/emergency-response.jpg"
+              src={assetPath("/images/emergency-response.jpg")}
               alt="Paramedics loading a patient into an ambulance"
               className={styles.alertImage}
               width={480}

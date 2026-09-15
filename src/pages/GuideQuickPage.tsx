@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router";
 import type { JSX } from "react";
 
 import { getGuide } from "@/services/firstAid/firstAidService";
+import { assetPath } from "@/utils/paths";
 import { Badge } from "@/components/Badge";
 import { ButtonLink } from "@/components/Button";
 import { Icon } from "@/components/icons";
@@ -58,7 +59,7 @@ export function GuideQuickPage(): JSX.Element {
       <header className={styles.header}>
         {guide.image !== undefined && (
           <img
-            src={guide.image}
+            src={assetPath(guide.image)}
             alt={`First aid for ${guide.label.toLowerCase()}`}
             className={styles.headerImage}
             width={280}

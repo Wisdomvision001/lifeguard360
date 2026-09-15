@@ -26,6 +26,8 @@ import styles from "@/pages/GetHelpPage.module.css";
  * user's own device, and the UI only ever claims what actually happened
  * (prepared ≠ sent ≠ delivered, AD-7).
  */
+import { assetPath } from "@/utils/paths";
+
 export function GetHelpPage(): JSX.Element {
   const { authState } = useAuth();
   const uid = authState.status === "signed-in" ? (authState.user?.uid ?? null) : null;
@@ -132,7 +134,7 @@ export function GetHelpPage(): JSX.Element {
       <header className={styles.header}>
         <div className={styles.headerMedia}>
           <img
-            src="/images/emergency-help.jpg"
+            src={assetPath("/images/emergency-help.jpg")}
             alt="Emergency responders assisting a person on a stretcher"
             className={styles.headerImage}
             width={1200}

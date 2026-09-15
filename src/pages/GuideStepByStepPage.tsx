@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router";
 import type { JSX } from "react";
 
 import { getGuide, getStep } from "@/services/firstAid/firstAidService";
+import { assetPath } from "@/utils/paths";
 import { Badge } from "@/components/Badge";
 import { Button, ButtonLink } from "@/components/Button";
 import { Icon } from "@/components/icons";
@@ -139,7 +140,7 @@ export function GuideStepByStepPage(): JSX.Element {
               invented for steps that do not have one. */}
           {step.image !== undefined ? (
             <figure className={styles.visual}>
-              <img src={step.image} alt={step.imageAlt ?? ""} />
+              <img src={assetPath(step.image)} alt={step.imageAlt ?? ""} />
             </figure>
           ) : (
             <div className={styles.visualPlaceholder}>

@@ -3,6 +3,7 @@ import type { JSX } from "react";
 
 import { getGuide, guideToSpeechText } from "@/services/firstAid/firstAidService";
 import { useSpeech } from "@/hooks/useSpeech";
+import { assetPath } from "@/utils/paths";
 import { Badge } from "@/components/Badge";
 import { Button, ButtonLink } from "@/components/Button";
 import { Icon } from "@/components/icons";
@@ -54,7 +55,7 @@ export function GuidePage(): JSX.Element {
       <header className={styles.header}>
         {guide.image !== undefined && (
           <img
-            src={guide.image}
+            src={assetPath(guide.image)}
             alt={`First aid for ${guide.label.toLowerCase()}`}
             className={styles.headerImage}
             width={280}
