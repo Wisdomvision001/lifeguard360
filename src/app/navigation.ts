@@ -17,9 +17,8 @@ export interface NavItem {
   /** Requires a registered account to be useful. */
   requiresAccount?: boolean;
   /**
-   * DEV-ONLY: rendered in a separated "Dev" section of the sidebar/drawer and
-   * only in development builds. TEMPORARY — remove when real Firebase admin
-   * authentication replaces the temporary RequireAdmin guard.
+   * Renders in the separated "Admin" section of the sidebar/drawer (in all
+   * builds). Route access remains enforced by the RequireAdmin guard.
    */
   devOnly?: boolean;
 }
@@ -61,17 +60,18 @@ const PUBLIC_NAV_ITEMS = [
 ] as const;
 
 /**
- * DEV-ONLY (temporary): development/demo access to the /admin route branch,
- * rendered in a separated sidebar section. Statically stripped from production
- * builds via the import.meta.env.DEV ternary. Remove this block entirely when
- * real Firebase admin authentication is implemented.
+ * Demo access to the /admin route branch, rendered in a separated sidebar
+ * section in ALL builds. Visibility is not authorization: production access
+ * is still denied by the RequireAdmin guard (redirect to /login) until real
+ * Firebase admin authentication is implemented.
  */
-const DEV_NAV_ITEMS: readonly NavItem[] = [
+const ADMIN_DEMO_NAV_ITEMS: readonly NavItem[] = [
   { to: "/admin", label: "Admin Demo", icon: "settings", devOnly: true },
 ];
 
-export const NAV_ITEMS: readonly NavItem[] = import.meta.env.DEV
-  ? [...PUBLIC_NAV_ITEMS, ...DEV_NAV_ITEMS]
-  : PUBLIC_NAV_ITEMS;
+export const NAV_ITEMS: readonly NavItem[] = [
+  ...PUBLIC_NAV_ITEMS,
+  ...ADMIN_DEMO_NAV_ITEMS,
+];
 
 export const BOTTOM_NAV_MAX = 5;

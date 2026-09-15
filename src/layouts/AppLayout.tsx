@@ -27,17 +27,14 @@ export function AppLayout(): JSX.Element {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [drawerOpen]);
 
-  const items = NAV_ITEMS.filter(
-    (item) => (!item.requiresAccount || signedIn) && (!item.devOnly || import.meta.env.DEV),
-  );
+  const items = NAV_ITEMS.filter((item) => !item.requiresAccount || signedIn);
   const bottomItems = items
     .filter((item) => item.inBottomBar === true)
     .slice(0, 5);
-  // DEV-ONLY: "Admin Demo" entry for temporary /admin access during
-  // development. Removed from builds when real admin authentication lands.
-  const devItems = import.meta.env.DEV
-    ? items.filter((item) => item.devOnly === true)
-    : [];
+  // "Admin Demo" entry, rendered in its separated sidebar section in all
+  // builds. Visibility is not authorization: the RequireAdmin guard still
+  // denies production access and redirects to /login.
+  const devItems = items.filter((item) => item.devOnly === true);
 
   const initials =
     authState.user?.displayName

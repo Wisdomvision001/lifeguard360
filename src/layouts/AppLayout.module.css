@@ -90,10 +90,10 @@
   box-shadow: 0 4px 14px rgba(224, 52, 44, 0.35);
 }
 
-/* DEV-ONLY section (temporary "Admin Demo" entry). Renders with the exact
-   same nav-link styles as the rest of the sidebar; separated only by a subtle
-   existing-token divider. Removed together with the nav entry when real
-   Firebase admin authentication is implemented. */
+/* "Admin Demo" section (temporary entry until real Firebase admin auth).
+   Renders with the exact same nav-link styles as the rest of the sidebar;
+   separated only by a subtle existing-token divider. Access is still gated
+   by the RequireAdmin guard — visibility is not authorization. */
 .devSection {
   border-top: 1px solid var(--color-navy-800);
   margin-top: var(--space-4);
