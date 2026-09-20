@@ -14,7 +14,8 @@
       "source": "EXAMPLE ONLY — not real data",
       "updatedAt": "2026-09-14T00:00:00Z",
       "phone": "+2340000000000",
-      "openingHours": "24/7 (example value)"
+      "openingHours": "24/7 (example value)",
+      "address": "1 Example Street, Example Town, Example State, Nigeria (example value)"
     },
     {
       "name": "Example Community Clinic",

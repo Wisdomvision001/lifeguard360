@@ -1,0 +1,3234 @@
+[
+  {
+    "candidateId": "osm-node-4893220623",
+    "osm": {
+      "type": "node",
+      "id": 4893220623,
+      "url": "https://www.openstreetmap.org/node/4893220623",
+      "version": null
+    },
+    "name": "Nassarawo Clinic",
+    "coordinates": {
+      "latitude": 9.2801823,
+      "longitude": 12.443967
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "KNOWN_EXACT",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "curated provenance references OSM node/4893220623 (0 m apart)"
+    }
+  },
+  {
+    "candidateId": "osm-node-7356586585",
+    "osm": {
+      "type": "node",
+      "id": 7356586585,
+      "url": "https://www.openstreetmap.org/node/7356586585",
+      "version": null
+    },
+    "name": "Ajiua Health Centre",
+    "coordinates": {
+      "latitude": 9.278297,
+      "longitude": 12.458884
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": "24/7",
+    "operator": null,
+    "tags": {
+      "amenity": "clinic",
+      "healthcare": "birthing_center;clinic;doctor;laboratory;pharmacy",
+      "opening_hours": "24/7"
+    },
+    "categorySuggestion": "clinic",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "KNOWN_EXACT",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "curated provenance references OSM node/7356586585 (0 m apart)"
+    }
+  },
+  {
+    "candidateId": "osm-node-7840106859",
+    "osm": {
+      "type": "node",
+      "id": 7840106859,
+      "url": "https://www.openstreetmap.org/node/7840106859",
+      "version": null
+    },
+    "name": "Fufore Cottage Hospital",
+    "coordinates": {
+      "latitude": 9.2174876,
+      "longitude": 12.6628648
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-node-7844672028",
+    "osm": {
+      "type": "node",
+      "id": 7844672028,
+      "url": "https://www.openstreetmap.org/node/7844672028",
+      "version": null
+    },
+    "name": "Ba Umshe Health Post",
+    "coordinates": {
+      "latitude": 9.3663646,
+      "longitude": 12.6955902
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-node-7845738966",
+    "osm": {
+      "type": "node",
+      "id": 7845738966,
+      "url": "https://www.openstreetmap.org/node/7845738966",
+      "version": null
+    },
+    "name": "Dasin Hausa Primary Health Care Center",
+    "coordinates": {
+      "latitude": 9.2664263,
+      "longitude": 12.6475023
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-node-7846088743",
+    "osm": {
+      "type": "node",
+      "id": 7846088743,
+      "url": "https://www.openstreetmap.org/node/7846088743",
+      "version": null
+    },
+    "name": "Megaleyi",
+    "coordinates": {
+      "latitude": 9.0255875,
+      "longitude": 12.3964436
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-node-7847670524",
+    "osm": {
+      "type": "node",
+      "id": 7847670524,
+      "url": "https://www.openstreetmap.org/node/7847670524",
+      "version": null
+    },
+    "name": "Safatawa Health Post",
+    "coordinates": {
+      "latitude": 9.0286018,
+      "longitude": 12.3937365
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-node-7847670536",
+    "osm": {
+      "type": "node",
+      "id": 7847670536,
+      "url": "https://www.openstreetmap.org/node/7847670536",
+      "version": null
+    },
+    "name": "Tawa Health Post",
+    "coordinates": {
+      "latitude": 9.0018366,
+      "longitude": 12.4010779
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-1288856908",
+    "osm": {
+      "type": "way",
+      "id": 1288856908,
+      "url": "https://www.openstreetmap.org/way/1288856908",
+      "version": null
+    },
+    "name": "Modibbo Adama University Teaching Hospital",
+    "coordinates": {
+      "latitude": 9.1936627,
+      "longitude": 12.4914568
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "KNOWN_EXACT",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "curated provenance references OSM way/1288856908 (94 m apart)"
+    }
+  },
+  {
+    "candidateId": "osm-way-496365870",
+    "osm": {
+      "type": "way",
+      "id": 496365870,
+      "url": "https://www.openstreetmap.org/way/496365870",
+      "version": null
+    },
+    "name": "Gurigwa Health Clinic",
+    "coordinates": {
+      "latitude": 8.9166083,
+      "longitude": 12.59699
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-803375465",
+    "osm": {
+      "type": "way",
+      "id": 803375465,
+      "url": "https://www.openstreetmap.org/way/803375465",
+      "version": null
+    },
+    "name": "Shagari Health Clinic",
+    "coordinates": {
+      "latitude": 9.1899007,
+      "longitude": 12.4789097
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "KNOWN_EXACT",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "curated provenance references OSM way/803375465 (0 m apart)"
+    }
+  },
+  {
+    "candidateId": "osm-way-803380075",
+    "osm": {
+      "type": "way",
+      "id": 803380075,
+      "url": "https://www.openstreetmap.org/way/803380075",
+      "version": null
+    },
+    "name": "Toungo Health Clinic",
+    "coordinates": {
+      "latitude": 9.2041131,
+      "longitude": 12.4834331
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "KNOWN_EXACT",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "curated provenance references OSM way/803380075 (0 m apart)"
+    }
+  },
+  {
+    "candidateId": "osm-way-837574485",
+    "osm": {
+      "type": "way",
+      "id": 837574485,
+      "url": "https://www.openstreetmap.org/way/837574485",
+      "version": null
+    },
+    "name": "Cottage Hospital Wuro Ai",
+    "coordinates": {
+      "latitude": 9.2166428,
+      "longitude": 12.6638942
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-838437237",
+    "osm": {
+      "type": "way",
+      "id": 838437237,
+      "url": "https://www.openstreetmap.org/way/838437237",
+      "version": null
+    },
+    "name": null,
+    "coordinates": {
+      "latitude": 9.1729759,
+      "longitude": 12.4809295
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-838437238",
+    "osm": {
+      "type": "way",
+      "id": 838437238,
+      "url": "https://www.openstreetmap.org/way/838437238",
+      "version": null
+    },
+    "name": null,
+    "coordinates": {
+      "latitude": 9.1731197,
+      "longitude": 12.4802397
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-838526725",
+    "osm": {
+      "type": "way",
+      "id": 838526725,
+      "url": "https://www.openstreetmap.org/way/838526725",
+      "version": null
+    },
+    "name": "kwayine health clinic",
+    "coordinates": {
+      "latitude": 9.3963048,
+      "longitude": 12.3637911
+    },
+    "addressRaw": {
+      "addr:lga": "demsa",
+      "addr:state": "adamawa",
+      "addr:ward": "demsa"
+    },
+    "addressCandidate": "adamawa",
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-839471746",
+    "osm": {
+      "type": "way",
+      "id": 839471746,
+      "url": "https://www.openstreetmap.org/way/839471746",
+      "version": null
+    },
+    "name": null,
+    "coordinates": {
+      "latitude": 9.3987195,
+      "longitude": 12.363748
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840115650",
+    "osm": {
+      "type": "way",
+      "id": 840115650,
+      "url": "https://www.openstreetmap.org/way/840115650",
+      "version": null
+    },
+    "name": "Badisya Memorial Nursing Maternity Home Chigari",
+    "coordinates": {
+      "latitude": 9.0706288,
+      "longitude": 12.6628926
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840115651",
+    "osm": {
+      "type": "way",
+      "id": 840115651,
+      "url": "https://www.openstreetmap.org/way/840115651",
+      "version": null
+    },
+    "name": null,
+    "coordinates": {
+      "latitude": 9.0706769,
+      "longitude": 12.6630552
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840117899",
+    "osm": {
+      "type": "way",
+      "id": 840117899,
+      "url": "https://www.openstreetmap.org/way/840117899",
+      "version": null
+    },
+    "name": "Belichuti Primary Health Clinic",
+    "coordinates": {
+      "latitude": 9.184541,
+      "longitude": 12.6362192
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840120196",
+    "osm": {
+      "type": "way",
+      "id": 840120196,
+      "url": "https://www.openstreetmap.org/way/840120196",
+      "version": null
+    },
+    "name": "Beti Health Post",
+    "coordinates": {
+      "latitude": 9.1095591,
+      "longitude": 12.6680437
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840121863",
+    "osm": {
+      "type": "way",
+      "id": 840121863,
+      "url": "https://www.openstreetmap.org/way/840121863",
+      "version": null
+    },
+    "name": "Betibappawo",
+    "coordinates": {
+      "latitude": 9.1093373,
+      "longitude": 12.6682328
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840139673",
+    "osm": {
+      "type": "way",
+      "id": 840139673,
+      "url": "https://www.openstreetmap.org/way/840139673",
+      "version": null
+    },
+    "name": "Chigari Primary Health Facility",
+    "coordinates": {
+      "latitude": 9.0710367,
+      "longitude": 12.6633425
+    },
+    "addressRaw": {
+      "addr:state": "adamawa"
+    },
+    "addressCandidate": "adamawa",
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840151126",
+    "osm": {
+      "type": "way",
+      "id": 840151126,
+      "url": "https://www.openstreetmap.org/way/840151126",
+      "version": null
+    },
+    "name": "Garin Chekke Health Clinic",
+    "coordinates": {
+      "latitude": 9.0912227,
+      "longitude": 12.7011131
+    },
+    "addressRaw": {
+      "addr:state": "adamawa"
+    },
+    "addressCandidate": "adamawa",
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840156478",
+    "osm": {
+      "type": "way",
+      "id": 840156478,
+      "url": "https://www.openstreetmap.org/way/840156478",
+      "version": null
+    },
+    "name": "Gawi Primary Health Care",
+    "coordinates": {
+      "latitude": 9.1619174,
+      "longitude": 12.6340156
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840156479",
+    "osm": {
+      "type": "way",
+      "id": 840156479,
+      "url": "https://www.openstreetmap.org/way/840156479",
+      "version": null
+    },
+    "name": null,
+    "coordinates": {
+      "latitude": 9.1620087,
+      "longitude": 12.6332471
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840162234",
+    "osm": {
+      "type": "way",
+      "id": 840162234,
+      "url": "https://www.openstreetmap.org/way/840162234",
+      "version": null
+    },
+    "name": "L C C N Health Post Ba Usmanu",
+    "coordinates": {
+      "latitude": 8.905329,
+      "longitude": 12.7203682
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840163384",
+    "osm": {
+      "type": "way",
+      "id": 840163384,
+      "url": "https://www.openstreetmap.org/way/840163384",
+      "version": null
+    },
+    "name": null,
+    "coordinates": {
+      "latitude": 9.0898022,
+      "longitude": 12.7026842
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840167111",
+    "osm": {
+      "type": "way",
+      "id": 840167111,
+      "url": "https://www.openstreetmap.org/way/840167111",
+      "version": null
+    },
+    "name": "Wuro Ardo Health Clinic",
+    "coordinates": {
+      "latitude": 9.1577306,
+      "longitude": 12.5984552
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "KNOWN_EXACT",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "curated provenance references OSM way/840167111 (0 m apart)"
+    }
+  },
+  {
+    "candidateId": "osm-way-840190721",
+    "osm": {
+      "type": "way",
+      "id": 840190721,
+      "url": "https://www.openstreetmap.org/way/840190721",
+      "version": null
+    },
+    "name": "Abba Kumbo Health Clinic",
+    "coordinates": {
+      "latitude": 9.2182673,
+      "longitude": 12.6509905
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840190722",
+    "osm": {
+      "type": "way",
+      "id": 840190722,
+      "url": "https://www.openstreetmap.org/way/840190722",
+      "version": null
+    },
+    "name": null,
+    "coordinates": {
+      "latitude": 9.2183745,
+      "longitude": 12.6512413
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840196556",
+    "osm": {
+      "type": "way",
+      "id": 840196556,
+      "url": "https://www.openstreetmap.org/way/840196556",
+      "version": null
+    },
+    "name": "Modern Health Clinic Anguwar Gombere",
+    "coordinates": {
+      "latitude": 9.2234578,
+      "longitude": 12.6489457
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840198196",
+    "osm": {
+      "type": "way",
+      "id": 840198196,
+      "url": "https://www.openstreetmap.org/way/840198196",
+      "version": null
+    },
+    "name": "Njanjanre Health Post",
+    "coordinates": {
+      "latitude": 9.2223433,
+      "longitude": 12.7380311
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840330798",
+    "osm": {
+      "type": "way",
+      "id": 840330798,
+      "url": "https://www.openstreetmap.org/way/840330798",
+      "version": null
+    },
+    "name": null,
+    "coordinates": {
+      "latitude": 9.1811718,
+      "longitude": 12.7221157
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840330800",
+    "osm": {
+      "type": "way",
+      "id": 840330800,
+      "url": "https://www.openstreetmap.org/way/840330800",
+      "version": null
+    },
+    "name": "Parda Health Post",
+    "coordinates": {
+      "latitude": 9.1810995,
+      "longitude": 12.7223414
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840502558",
+    "osm": {
+      "type": "way",
+      "id": 840502558,
+      "url": "https://www.openstreetmap.org/way/840502558",
+      "version": null
+    },
+    "name": "Gogra Clinic",
+    "coordinates": {
+      "latitude": 8.9466998,
+      "longitude": 12.5764673
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840505849",
+    "osm": {
+      "type": "way",
+      "id": 840505849,
+      "url": "https://www.openstreetmap.org/way/840505849",
+      "version": null
+    },
+    "name": "Gogra Health Post",
+    "coordinates": {
+      "latitude": 8.9458768,
+      "longitude": 12.5732229
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840513070",
+    "osm": {
+      "type": "way",
+      "id": 840513070,
+      "url": "https://www.openstreetmap.org/way/840513070",
+      "version": null
+    },
+    "name": "Ngurore Health Post",
+    "coordinates": {
+      "latitude": 8.9771016,
+      "longitude": 12.617179
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840709378",
+    "osm": {
+      "type": "way",
+      "id": 840709378,
+      "url": "https://www.openstreetmap.org/way/840709378",
+      "version": null
+    },
+    "name": "Bagale Health Clinic",
+    "coordinates": {
+      "latitude": 9.3446668,
+      "longitude": 12.6836896
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840712380",
+    "osm": {
+      "type": "way",
+      "id": 840712380,
+      "url": "https://www.openstreetmap.org/way/840712380",
+      "version": null
+    },
+    "name": "Bengo Health Clinic",
+    "coordinates": {
+      "latitude": 9.413286,
+      "longitude": 12.7229996
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840713381",
+    "osm": {
+      "type": "way",
+      "id": 840713381,
+      "url": "https://www.openstreetmap.org/way/840713381",
+      "version": null
+    },
+    "name": "Digino Health Post",
+    "coordinates": {
+      "latitude": 9.371802,
+      "longitude": 12.6395358
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840714080",
+    "osm": {
+      "type": "way",
+      "id": 840714080,
+      "url": "https://www.openstreetmap.org/way/840714080",
+      "version": null
+    },
+    "name": "Furo Primary Healthcare Clinic",
+    "coordinates": {
+      "latitude": 9.4509752,
+      "longitude": 12.7227364
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840714736",
+    "osm": {
+      "type": "way",
+      "id": 840714736,
+      "url": "https://www.openstreetmap.org/way/840714736",
+      "version": null
+    },
+    "name": "Gudusu Primary Health Care Center",
+    "coordinates": {
+      "latitude": 9.5092448,
+      "longitude": 12.6438092
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840716334",
+    "osm": {
+      "type": "way",
+      "id": 840716334,
+      "url": "https://www.openstreetmap.org/way/840716334",
+      "version": null
+    },
+    "name": "Kadarbu Primary Health Clinic",
+    "coordinates": {
+      "latitude": 9.5112941,
+      "longitude": 12.7020941
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840716493",
+    "osm": {
+      "type": "way",
+      "id": 840716493,
+      "url": "https://www.openstreetmap.org/way/840716493",
+      "version": null
+    },
+    "name": "Nasarawo Health Facilities",
+    "coordinates": {
+      "latitude": 9.451035,
+      "longitude": 12.7219466
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840817886",
+    "osm": {
+      "type": "way",
+      "id": 840817886,
+      "url": "https://www.openstreetmap.org/way/840817886",
+      "version": null
+    },
+    "name": null,
+    "coordinates": {
+      "latitude": 9.3791406,
+      "longitude": 12.7002048
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840817887",
+    "osm": {
+      "type": "way",
+      "id": 840817887,
+      "url": "https://www.openstreetmap.org/way/840817887",
+      "version": null
+    },
+    "name": "Pariya Maternal And Child Health Clinic",
+    "coordinates": {
+      "latitude": 9.3793271,
+      "longitude": 12.7002061
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840817888",
+    "osm": {
+      "type": "way",
+      "id": 840817888,
+      "url": "https://www.openstreetmap.org/way/840817888",
+      "version": null
+    },
+    "name": null,
+    "coordinates": {
+      "latitude": 9.3790665,
+      "longitude": 12.7003255
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840819501",
+    "osm": {
+      "type": "way",
+      "id": 840819501,
+      "url": "https://www.openstreetmap.org/way/840819501",
+      "version": null
+    },
+    "name": "Wuro Ahi Primary Health Center",
+    "coordinates": {
+      "latitude": 9.4580694,
+      "longitude": 12.6211109
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840821392",
+    "osm": {
+      "type": "way",
+      "id": 840821392,
+      "url": "https://www.openstreetmap.org/way/840821392",
+      "version": null
+    },
+    "name": "Wuro Yolde Health Clinic",
+    "coordinates": {
+      "latitude": 9.5382769,
+      "longitude": 12.7496266
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840823644",
+    "osm": {
+      "type": "way",
+      "id": 840823644,
+      "url": "https://www.openstreetmap.org/way/840823644",
+      "version": null
+    },
+    "name": "Beti Health Clinic",
+    "coordinates": {
+      "latitude": 9.2964383,
+      "longitude": 12.6990166
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840826664",
+    "osm": {
+      "type": "way",
+      "id": 840826664,
+      "url": "https://www.openstreetmap.org/way/840826664",
+      "version": null
+    },
+    "name": null,
+    "coordinates": {
+      "latitude": 9.2658023,
+      "longitude": 12.6484495
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840828381",
+    "osm": {
+      "type": "way",
+      "id": 840828381,
+      "url": "https://www.openstreetmap.org/way/840828381",
+      "version": null
+    },
+    "name": null,
+    "coordinates": {
+      "latitude": 9.2656174,
+      "longitude": 12.6495621
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840828382",
+    "osm": {
+      "type": "way",
+      "id": 840828382,
+      "url": "https://www.openstreetmap.org/way/840828382",
+      "version": null
+    },
+    "name": null,
+    "coordinates": {
+      "latitude": 9.2655049,
+      "longitude": 12.6495974
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840830884",
+    "osm": {
+      "type": "way",
+      "id": 840830884,
+      "url": "https://www.openstreetmap.org/way/840830884",
+      "version": null
+    },
+    "name": "Dason Bwate Health Post",
+    "coordinates": {
+      "latitude": 9.2523066,
+      "longitude": 12.6337065
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840832489",
+    "osm": {
+      "type": "way",
+      "id": 840832489,
+      "url": "https://www.openstreetmap.org/way/840832489",
+      "version": null
+    },
+    "name": "Dason Health Post",
+    "coordinates": {
+      "latitude": 9.2522177,
+      "longitude": 12.6329705
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840839091",
+    "osm": {
+      "type": "way",
+      "id": 840839091,
+      "url": "https://www.openstreetmap.org/way/840839091",
+      "version": null
+    },
+    "name": "Mbedawo",
+    "coordinates": {
+      "latitude": 9.2987134,
+      "longitude": 12.7032285
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840849687",
+    "osm": {
+      "type": "way",
+      "id": 840849687,
+      "url": "https://www.openstreetmap.org/way/840849687",
+      "version": null
+    },
+    "name": null,
+    "coordinates": {
+      "latitude": 9.2683601,
+      "longitude": 12.6810673
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840852038",
+    "osm": {
+      "type": "way",
+      "id": 840852038,
+      "url": "https://www.openstreetmap.org/way/840852038",
+      "version": null
+    },
+    "name": "Bai Health Post",
+    "coordinates": {
+      "latitude": 8.9853857,
+      "longitude": 12.5007039
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840857248",
+    "osm": {
+      "type": "way",
+      "id": 840857248,
+      "url": "https://www.openstreetmap.org/way/840857248",
+      "version": null
+    },
+    "name": "Choli B F Health Facilities",
+    "coordinates": {
+      "latitude": 9.1056902,
+      "longitude": 12.4744763
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840857250",
+    "osm": {
+      "type": "way",
+      "id": 840857250,
+      "url": "https://www.openstreetmap.org/way/840857250",
+      "version": null
+    },
+    "name": "Choli Health Center",
+    "coordinates": {
+      "latitude": 9.1057245,
+      "longitude": 12.4739573
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840860076",
+    "osm": {
+      "type": "way",
+      "id": 840860076,
+      "url": "https://www.openstreetmap.org/way/840860076",
+      "version": null
+    },
+    "name": "Gabsin Dispensary Clinic",
+    "coordinates": {
+      "latitude": 9.077764,
+      "longitude": 12.5832489
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840860702",
+    "osm": {
+      "type": "way",
+      "id": 840860702,
+      "url": "https://www.openstreetmap.org/way/840860702",
+      "version": null
+    },
+    "name": "Gurnati L C C N Dispensary Gurnati",
+    "coordinates": {
+      "latitude": 9.0286155,
+      "longitude": 12.5995137
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840861489",
+    "osm": {
+      "type": "way",
+      "id": 840861489,
+      "url": "https://www.openstreetmap.org/way/840861489",
+      "version": null
+    },
+    "name": "Gurumpah Health Clinic",
+    "coordinates": {
+      "latitude": 9.0625574,
+      "longitude": 12.4557119
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840861490",
+    "osm": {
+      "type": "way",
+      "id": 840861490,
+      "url": "https://www.openstreetmap.org/way/840861490",
+      "version": null
+    },
+    "name": "Koksufa Health Post",
+    "coordinates": {
+      "latitude": 9.062221,
+      "longitude": 12.4562443
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840862446",
+    "osm": {
+      "type": "way",
+      "id": 840862446,
+      "url": "https://www.openstreetmap.org/way/840862446",
+      "version": null
+    },
+    "name": "Jili Health Center",
+    "coordinates": {
+      "latitude": 9.0885276,
+      "longitude": 12.3874628
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840866750",
+    "osm": {
+      "type": "way",
+      "id": 840866750,
+      "url": "https://www.openstreetmap.org/way/840866750",
+      "version": null
+    },
+    "name": "Tomsoro Health Post",
+    "coordinates": {
+      "latitude": 9.0521965,
+      "longitude": 12.4817883
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-840871662",
+    "osm": {
+      "type": "way",
+      "id": 840871662,
+      "url": "https://www.openstreetmap.org/way/840871662",
+      "version": null
+    },
+    "name": "Boloko Health Post",
+    "coordinates": {
+      "latitude": 9.5665088,
+      "longitude": 12.7452634
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-841049660",
+    "osm": {
+      "type": "way",
+      "id": 841049660,
+      "url": "https://www.openstreetmap.org/way/841049660",
+      "version": null
+    },
+    "name": "Bati Health Post",
+    "coordinates": {
+      "latitude": 8.8860528,
+      "longitude": 12.460045
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-841053079",
+    "osm": {
+      "type": "way",
+      "id": 841053079,
+      "url": "https://www.openstreetmap.org/way/841053079",
+      "version": null
+    },
+    "name": "Begni Health Post",
+    "coordinates": {
+      "latitude": 8.89082,
+      "longitude": 12.3934124
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-841061137",
+    "osm": {
+      "type": "way",
+      "id": 841061137,
+      "url": "https://www.openstreetmap.org/way/841061137",
+      "version": null
+    },
+    "name": "Ugi Health Post",
+    "coordinates": {
+      "latitude": 8.9808216,
+      "longitude": 12.4338072
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-841061436",
+    "osm": {
+      "type": "way",
+      "id": 841061436,
+      "url": "https://www.openstreetmap.org/way/841061436",
+      "version": null
+    },
+    "name": "Wuitere Health Post",
+    "coordinates": {
+      "latitude": 8.8507153,
+      "longitude": 12.3992309
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-841061920",
+    "osm": {
+      "type": "way",
+      "id": 841061920,
+      "url": "https://www.openstreetmap.org/way/841061920",
+      "version": null
+    },
+    "name": "Wuitire Dispensary",
+    "coordinates": {
+      "latitude": 8.8513338,
+      "longitude": 12.4001476
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-841212400",
+    "osm": {
+      "type": "way",
+      "id": 841212400,
+      "url": "https://www.openstreetmap.org/way/841212400",
+      "version": null
+    },
+    "name": "Yadim Health Facility",
+    "coordinates": {
+      "latitude": 8.9727386,
+      "longitude": 12.401412
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  },
+  {
+    "candidateId": "osm-way-841212403",
+    "osm": {
+      "type": "way",
+      "id": 841212403,
+      "url": "https://www.openstreetmap.org/way/841212403",
+      "version": null
+    },
+    "name": "Yadim Maternal And Child Health Center",
+    "coordinates": {
+      "latitude": 8.9728658,
+      "longitude": 12.4022126
+    },
+    "addressRaw": null,
+    "addressCandidate": null,
+    "phone": null,
+    "openingHours": null,
+    "operator": null,
+    "tags": {
+      "amenity": "hospital",
+      "healthcare": "hospital"
+    },
+    "categorySuggestion": "hospital",
+    "source": "OpenStreetMap via Overpass API (discovery candidate — unverified, pending human review)",
+    "discovery": {
+      "region": "yola-jimeta",
+      "bbox": [
+        8.85,
+        12.35,
+        9.65,
+        12.75
+      ],
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "queryRef": "medical-v1",
+      "retrievedAt": "2026-09-18T01:17:51.371Z"
+    },
+    "comparison": {
+      "status": "NEW",
+      "matchedDocumentId": null,
+      "changedFields": [],
+      "reason": "no curated record matches this candidate"
+    }
+  }
+]

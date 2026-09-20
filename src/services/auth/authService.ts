@@ -116,10 +116,10 @@ export async function updatePreferences(
 ): Promise<void> {
   const db = getDb();
   await updateDoc(doc(db, "users", uid), {
-    "preferences.updatedAt": serverTimestamp(),
     ...Object.fromEntries(
       Object.entries(preferences).map(([key, value]) => [`preferences.${key}`, value]),
     ),
+    updatedAt: serverTimestamp(),
   });
 }
 

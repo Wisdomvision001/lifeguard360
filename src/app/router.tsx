@@ -67,14 +67,11 @@ export function AppRoutes(): JSX.Element {
         />
         <Route path="get-help" element={<GetHelpPage />} />
         <Route path="facilities" element={<FacilitiesPage />} />
-        <Route
-          path="contacts"
-          element={
-            <RequireAccount>
-              <ContactsPage />
-            </RequireAccount>
-          }
-        />
+        {/* TEMPORARY DEMO MODE (Admin Demo posture): contacts is reachable
+            signed-out. Signed-out visitors use the browser-local demo store;
+            signed-in users get the real users/{uid}/contacts architecture.
+            RequireAccount returns here when final auth hardening lands. */}
+        <Route path="contacts" element={<ContactsPage />} />
         <Route
           path="activity"
           element={

@@ -1,0 +1,36 @@
+{
+  "toolVersion": "0.2.0",
+  "region": "yola-jimeta",
+  "bbox": [
+    8.85,
+    12.35,
+    9.65,
+    12.75
+  ],
+  "endpoint": "https://overpass-api.de/api/interpreter",
+  "queryRef": "medical-v1",
+  "retrievedAt": "2026-09-18T01:17:51.371Z",
+  "request": {
+    "method": "POST",
+    "userAgent": "Lifeguard360-facility-discovery/0.1 (OpenStreetMap attribution)",
+    "timeoutMs": 25000,
+    "retries": 1,
+    "attempts": 2,
+    "bytes": 20818
+  },
+  "totals": {
+    "totalElements": 75,
+    "validCandidates": 75,
+    "skipped": 0,
+    "duplicateFlags": 4
+  },
+  "comparisonCounts": {
+    "knownExact": 6,
+    "knownProbable": 0,
+    "newCount": 69,
+    "changedInfo": 0
+  },
+  "errors": {
+    "skipped": []
+  }
+}

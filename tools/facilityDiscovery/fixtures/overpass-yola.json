@@ -1,0 +1,105 @@
+[
+  {
+    "type": "node",
+    "id": 900001,
+    "lat": 9.21,
+    "lon": 12.47,
+    "version": 2,
+    "tags": {
+      "amenity": "hospital",
+      "name": "Fixture General Hospital",
+      "addr:street": "Abuja Road",
+      "addr:city": "Yola",
+      "addr:state": "Adamawa State",
+      "addr:country": "Nigeria",
+      "phone": "+2348000000001",
+      "opening_hours": "24/7",
+      "operator": "Fixture State Government",
+      "emergency": "yes"
+    }
+  },
+  {
+    "type": "way",
+    "id": 900002,
+    "version": 1,
+    "center": { "lat": 9.215, "lon": 12.471 },
+    "tags": {
+      "amenity": "clinic",
+      "name": "Fixture Way Clinic",
+      "contact:phone": "+2348000000002"
+    }
+  },
+  {
+    "type": "relation",
+    "id": 900003,
+    "version": 3,
+    "center": { "lat": 9.22, "lon": 12.469 },
+    "tags": {
+      "healthcare": "centre",
+      "name": "Fixture Relation Health Centre"
+    }
+  },
+  {
+    "type": "node",
+    "id": 900004,
+    "lat": 9.221,
+    "lon": 12.468,
+    "version": 1,
+    "tags": {
+      "amenity": "pharmacy",
+      "name": "Fixture Pharmacy"
+    }
+  },
+  {
+    "type": "node",
+    "id": 900005,
+    "lat": 9.222,
+    "lon": 12.467,
+    "version": 1,
+    "tags": {
+      "amenity": "doctors",
+      "name": "Fixture Doctors Office",
+      "addr:city": "Yola"
+    }
+  },
+  {
+    "type": "node",
+    "id": 900006,
+    "lat": 9.23,
+    "lon": 12.48,
+    "version": 1,
+    "tags": {
+      "amenity": "hospital"
+    }
+  },
+  {
+    "type": "node",
+    "id": 900007,
+    "version": 1,
+    "tags": {
+      "amenity": "clinic",
+      "name": "Fixture No Coordinates Clinic"
+    }
+  },
+  {
+    "type": "node",
+    "id": 900008,
+    "lat": 120,
+    "lon": 999,
+    "version": 1,
+    "tags": {
+      "amenity": "clinic",
+      "name": "Fixture Malformed Coordinates Clinic"
+    }
+  },
+  {
+    "type": "way",
+    "id": 900009,
+    "version": 2,
+    "center": { "lat": 9.2101, "lon": 12.4701 },
+    "tags": {
+      "amenity": "hospital",
+      "name": "Fixture General Hospital"
+    }
+  }
+]

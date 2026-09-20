@@ -224,6 +224,8 @@ export interface Facility {
   coordinates: GeoCoordinates;
   phone?: string;
   openingHours?: string;
+  /** Human-readable location, most-specific-first, comma-separated; optional — omit rather than guess. */
+  address?: string;
   verified: boolean;
   /** Where this record came from — required for honest attribution. */
   source: string;

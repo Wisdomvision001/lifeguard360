@@ -36,6 +36,7 @@ const HOSPITAL = {
   updatedAt: "2026-09-14T00:00:00Z",
   phone: "+2348012345678",
   openingHours: "24/7",
+  address: "Abuja Road, Yola, Adamawa State, Nigeria",
 };
 
 const DRAFT = {
@@ -77,6 +78,15 @@ describe("listVerifiedFacilities (5D-3 integrity)", () => {
     expect(facilities.every((f) => f.updatedAt === "")).toBe(true);
   });
 
+  it("maps address through when present, omits when absent or malformed", async () => {
+    seedDoc("with-addr", HOSPITAL);
+    seedDoc("no-addr", { ...HOSPITAL, address: undefined });
+    seedDoc("bad-addr", { ...HOSPITAL, address: 123 });
+    const facilities = await listVerifiedFacilities();
+    expect(facilities.find((f) => f.id === "with-addr")?.address).toBe("Abuja Road, Yola, Adamawa State, Nigeria");
+    expect(facilities.find((f) => f.id === "no-addr")?.address).toBeUndefined();
+    expect(facilities.find((f) => f.id === "bad-addr")?.address).toBeUndefined();
+  });
   it("maps source through for provenance visibility", async () => {
     seedDoc("verified-1", HOSPITAL);
     const facilities = await listVerifiedFacilities();

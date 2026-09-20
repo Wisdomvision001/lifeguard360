@@ -157,6 +157,9 @@ export function FacilitiesPage(): JSX.Element {
                     {facility.category} · {formatDistance(facility.distanceMeters)}
                     {facility.openingHours !== undefined && ` · ${facility.openingHours}`}
                   </p>
+                  {facility.address !== undefined && (
+                    <p className={styles.facilityMeta}>{facility.address}</p>
+                  )}
                   {facility.phone !== undefined && (
                     <a className={styles.facilityPhone} href={`tel:${facility.phone}`}>
                       <Icon name="phone" size={14} />

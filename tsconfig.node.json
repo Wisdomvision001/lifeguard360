@@ -13,5 +13,5 @@
 
     "strict": true
   },
-  "include": ["vite.config.ts", "playwright.config.ts", "eslint.config.js", "prettier.config.mjs", "tools/**/*.ts"]
+  "include": ["vite.config.ts", "playwright.config.ts", "eslint.config.js", "prettier.config.mjs", "vitest.rules.config.ts", "firestore.rules.test.ts", "tools/**/*.ts"]
 }

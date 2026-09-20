@@ -47,6 +47,7 @@ export async function listVerifiedFacilities(): Promise<Facility[]> {
           },
           phone: typeof data.phone === "string" ? data.phone : undefined,
           openingHours: typeof data.openingHours === "string" ? data.openingHours : undefined,
+          address: typeof data.address === "string" && data.address !== "" ? data.address : undefined,
           verified: data.verified === true,
           source: typeof data.source === "string" ? data.source : "unknown",
           updatedAt: typeof data.updatedAt === "string" ? data.updatedAt : "",

@@ -26,6 +26,7 @@ Collection: `facilities/{facilityId}` — consumed by
 | `updatedAt` | string | ✔ | ISO 8601 timestamp of last verification/update, e.g. `2026-09-14T10:00:00Z` |
 | `phone` | string | optional | E.164-style: begins `+`, digits only after, e.g. `+2348012345678` |
 | `openingHours` | string | optional | Free text as published by the facility, e.g. `24/7` |
+| `address` | string | optional | Human-readable location, most-specific-first, comma-separated (e.g. `Abuja Road, Yola, Adamawa State, Nigeria`). Omit rather than guess — see §9 |
 
 The client maps defensively (missing `name` → "Unnamed facility", etc.), but records relying on
 those fallbacks are **not** valid under this contract and are rejected by the seeder.
@@ -123,3 +124,31 @@ coord(v) = ("n" if v < 0 else "p") + |v| rounded to 4 decimals, dot → dash
    upgrades `verified` on its own; malformed records are refused, never silently corrected.
 6. A dataset-level provenance note (curator, date, overall source) is required in the input
    file's `meta` block.
+
+## 9. Human-readable address (optional)
+
+- `address` is **optional at schema level**: a human-readable location string so users
+  see a place, not just coordinates. It never replaces `coordinates` — the two coexist.
+- Format: **most-specific-first, comma-separated**, e.g. `Abuja Road, Yola, Adamawa State,
+  Nigeria` (street/city/admin-area/country as far as evidence supports).
+- **Omit rather than guess.** If only the city/administrative context is supported by the
+  evidence, use only that; if no evidence supports a string, leave the field out entirely.
+- If a specific address (e.g. a street) comes from OSM/Nominatim or another source, the
+  record's `source` provenance must identify that basis. Never fabricate or infer parts.
+- Max 200 characters (enforced by the seeder validation).
+
+## 10. Discovery candidates vs. curated vs. published facilities
+
+Three distinct data states exist in the facility pipeline:
+
+| State | Where it lives | What it is |
+|---|---|---|
+| **Discovery candidate** | `tools/discovery/<region>/` (tool output) | Raw OSM/Overpass finding. Advisory fields only, carries **no `verified` field at all**. Never read by the application, the seeder, or Firebase. |
+| **Curated facility** | `tools/facilities.*.json` | Human-reviewed record that satisfies THIS contract, including §5 provenance. The only valid seeding input. |
+| **Published Firestore facility** | `facilities/{facilityId}` | A curated record imported through the seeder; what the application reads. |
+
+**Overpass/OSM is a discovery source, not an authoritative verification source.**
+A discovered facility must never automatically become `verified: true` — promotion
+from candidate to curated record requires human review and deliberate authoring
+under this contract. See `docs/FACILITY-DISCOVERY.md` for the tool, its outputs,
+and the review workflow. The rules above are unchanged by this section.

@@ -1,4 +1,4 @@
-import { useEffect, useState, type JSX } from "react";
+import { useEffect, useMemo, useState, type JSX } from "react";
 import { Link } from "react-router";
 
 import { useAuth } from "@/app/providers/AuthProvider";
@@ -8,6 +8,7 @@ import { Badge } from "@/components/Badge";
 import { Button } from "@/components/Button";
 import { Icon } from "@/components/icons";
 import { listContacts } from "@/services/contacts/contactService";
+import { listDemoContacts } from "@/services/contacts/demoContactStore";
 import { logActivity } from "@/services/activity/activityService";
 import {
   PRECONDITIONS_NOTICE,
@@ -62,13 +63,28 @@ export function GetHelpPage(): JSX.Element {
     };
   }, [uid]);
 
-  const selected = contacts.find((contact) => contact.id === selectedId) ?? null;
-
-  // Guests cannot own contacts; derive instead of storing per-uid state in
-  // an effect, so the UI never hangs on a spinner it can never resolve.
-  const effectiveContacts = uid === null ? [] : contacts;
+  // Guests cannot own Firestore contacts; derive instead of storing per-uid
+  // state in an effect, so the UI never hangs on a spinner it can never
+  // resolve. Guest contacts come from the SAME browser-local demo store the
+  // Contacts page maintains — listDemoContacts() is a synchronous, defensive
+  // localStorage read: no Firestore call, and the derived state resolves
+  // deterministically on first render (no loading loop is possible).
+  const demoContacts = useMemo(() => (uid === null ? listDemoContacts() : []), [uid]);
+  const effectiveContacts = uid === null ? demoContacts : contacts;
   const effectiveLoadState = uid === null ? ("ready" as const) : loadState;
   const effectiveLoadError = uid === null ? null : loadError;
+
+  // Guest selection defaults to the first demo contact so the emergency
+  // actions are immediately reachable. The authenticated selection behaviour
+  // is unchanged (the effect below pre-selects the first loaded contact).
+  const effectiveSelectedId =
+    selectedId !== null && effectiveContacts.some((contact) => contact.id === selectedId)
+      ? selectedId
+      : uid === null
+        ? (effectiveContacts[0]?.id ?? null)
+        : null;
+  const selected =
+    effectiveContacts.find((contact) => contact.id === effectiveSelectedId) ?? null;
 
   const handleCall = (): void => {
     if (selected === null) return;
@@ -182,6 +198,16 @@ export function GetHelpPage(): JSX.Element {
         <p>{PRECONDITIONS_NOTICE}</p>
       </Card>
 
+      {uid === null && (
+        <Card title="Demo mode — saved in this browser only" titleIcon="contacts">
+          <p>
+            You are not signed in, so the contacts shown here come from this browser's local demo
+            storage — nothing is sent to Firestore. Signing in later does not move demo contacts
+            into an account. Sign in to store contacts safely in your account.
+          </p>
+        </Card>
+      )}
+
       {effectiveLoadState === "loading" && (
         <Card>
           <p aria-busy="true">Loading your emergency contacts…</p>
@@ -219,7 +245,7 @@ export function GetHelpPage(): JSX.Element {
                       type="radio"
                       name="emergency-contact"
                       value={contact.id}
-                      checked={contact.id === selectedId}
+                      checked={contact.id === effectiveSelectedId}
                       onChange={() => setSelectedId(contact.id)}
                     />
                     <span className={styles.contactName}>{contact.fullName}</span>

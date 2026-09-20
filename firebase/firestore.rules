@@ -36,6 +36,89 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == uid;
     }
 
+    // UserPreferences is a closed, correctly-typed map mirroring the app's
+    // UserPreferences model exactly: language (string), ttsEnabled (bool),
+    // commsNoticeAcknowledged (bool). Unknown keys, missing keys and wrong
+    // value types are rejected outright.
+    function isValidPreferences(prefs) {
+      return prefs is map
+        && prefs.keys().hasAll(['language', 'ttsEnabled', 'commsNoticeAcknowledged'])
+        && prefs.keys().hasOnly(['language', 'ttsEnabled', 'commsNoticeAcknowledged'])
+        && prefs.language is string
+        && prefs.language.size() >= 1
+        && prefs.language.size() <= 12
+        && prefs.ttsEnabled is bool
+        && prefs.commsNoticeAcknowledged is bool;
+    }
+
+    // phone is nullable; when present it must be a Nigerian E.164 number —
+    // the same constraint the contacts rules already enforce. Absence of the
+    // key is tolerated (older shape), null means "unset".
+    function hasValidProfilePhone(data) {
+      return !('phone' in data)
+        || data.phone == null
+        || (data.phone is string && data.phone.matches('^\\+234[0-9]{10}$'));
+    }
+
+    // GeoCoordinates as the application writes it: exactly {latitude,
+    // longitude}, both numbers, no extra keys. (Phase 5B shape.)
+    function isValidCoordinates(coords) {
+      return coords is map
+        && coords.keys().hasAll(['latitude', 'longitude'])
+        && coords.keys().hasOnly(['latitude', 'longitude'])
+        && coords.latitude is number
+        && coords.longitude is number;
+    }
+
+    // Activity detail shapes mirror the application's logActivity call sites
+    // EXACTLY (src/services/activity/activityService.ts callers). Each type
+    // accepts only its documented variant(s); unknown keys, missing keys and
+    // wrong value types are rejected. The type check first is what makes the
+    // per-type key accesses below safe (short-circuit on mismatched type).
+    function isValidActivityDetail(type, detail) {
+      return (type == 'contact_added'
+          && detail.keys().hasAll(['relationship'])
+          && detail.keys().hasOnly(['relationship'])
+          && detail.relationship is string
+          && detail.relationship in ['Parent', 'Sibling', 'Spouse', 'Friend', 'Guardian', 'Other'])
+        || (type == 'contact_updated'
+          && detail.keys().hasAll(['contactId'])
+          && detail.keys().hasOnly(['contactId'])
+          && detail.contactId is string)
+        || (type == 'contact_deleted'
+          && detail.keys().hasAll(['contactId'])
+          && detail.keys().hasOnly(['contactId'])
+          && detail.contactId is string)
+        || (type == 'location_shared'
+          && detail.via is string
+          && ((detail.via == 'sms'
+              && detail.keys().hasAll(['via', 'contactId', 'coordinates'])
+              && detail.keys().hasOnly(['via', 'contactId', 'coordinates'])
+              && detail.contactId is string
+              && isValidCoordinates(detail.coordinates))
+            || (detail.via == 'get-help'
+              && detail.keys().hasAll(['via', 'coordinates'])
+              && detail.keys().hasOnly(['via', 'coordinates'])
+              && isValidCoordinates(detail.coordinates))))
+        || (type == 'emergency_action'
+          && detail.action is string
+          && detail.contactId is string
+          && ((detail.action == 'sms_prepared'
+              && detail.keys().hasAll(['action', 'contactId', 'includedLocation'])
+              && detail.keys().hasOnly(['action', 'contactId', 'includedLocation'])
+              && detail.includedLocation is bool)
+            || (detail.action == 'call_initiated'
+              && detail.keys().hasAll(['action', 'contactId', 'observedState'])
+              && detail.keys().hasOnly(['action', 'contactId', 'observedState'])
+              && detail.observedState is string
+              && detail.observedState in ['action-available', 'preparing',
+                 'message-prepared', 'composer-opened', 'unavailable'])))
+        || (type == 'offline_download'
+          && detail.keys().hasAll(['version'])
+          && detail.keys().hasOnly(['version'])
+          && detail.version is string);
+    }
+
     // ------------------------------------------------------------- users
 
     match /users/{uid} {
@@ -52,7 +135,8 @@ service cloud.firestore {
         && request.resource.data.displayName is string
         && request.resource.data.displayName.size() >= 1
         && request.resource.data.displayName.size() <= 80
-        && request.resource.data.preferences is map
+        && isValidPreferences(request.resource.data.preferences)
+        && hasValidProfilePhone(request.resource.data)
         && request.resource.data.createdAt == request.time
         && request.resource.data.updatedAt == request.time;
 
@@ -62,7 +146,8 @@ service cloud.firestore {
         && request.resource.data.displayName is string
         && request.resource.data.displayName.size() >= 1
         && request.resource.data.displayName.size() <= 80
-        && request.resource.data.preferences is map
+        && isValidPreferences(request.resource.data.preferences)
+        && hasValidProfilePhone(request.resource.data)
         && request.resource.data.createdAt == resource.data.createdAt
         && request.resource.data.updatedAt == request.time;
 
@@ -108,7 +193,8 @@ service cloud.firestore {
 
       match /activity/{activityId} {
         // Append-only audit trail: owner can read and create, never update
-        // or delete. Integrity over convenience.
+        // or delete. Integrity over convenience. detail must match the
+        // application's exact per-type payload shape (no free-form data).
         allow read: if isOwner(uid);
         allow create: if isOwner(uid)
           && request.resource.data.keys().hasOnly(['type', 'detail', 'createdAt'])
@@ -116,6 +202,7 @@ service cloud.firestore {
             ['contact_added', 'contact_updated', 'contact_deleted',
              'location_shared', 'emergency_action', 'offline_download']
           && request.resource.data.detail is map
+          && isValidActivityDetail(request.resource.data.type, request.resource.data.detail)
           && request.resource.data.createdAt == request.time;
         allow update, delete: if false;
       }

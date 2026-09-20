@@ -23,6 +23,8 @@ export interface FacilityRecordInput {
   updatedAt: string;
   phone?: string;
   openingHours?: string;
+  /** Human-readable location, most-specific-first, comma-separated (contract §1). Optional; omit rather than guess. */
+  address?: string;
 }
 
 export interface DatasetMeta {
@@ -192,6 +194,9 @@ export function validateFacilityRecord(
   }
   if (r.openingHours !== undefined && !isNonEmptyString(r.openingHours)) {
     push("openingHours", "When present, must be a non-empty string.");
+  }
+  if (r.address !== undefined && (!isNonEmptyString(r.address) || r.address.length > 200)) {
+    push("address", "When present, must be a non-empty string of at most 200 characters (human-readable location; omit rather than guess).");
   }
 
   const id =

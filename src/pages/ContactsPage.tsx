@@ -13,6 +13,16 @@ import {
   listContacts,
   updateContact,
 } from "@/services/contacts/contactService";
+import {
+  addDemoContact,
+  deleteDemoContact,
+  listDemoContacts,
+  updateDemoContact,
+} from "@/services/contacts/demoContactStore";
+import {
+  DUPLICATE_PHONE_MESSAGE,
+  findDuplicateContactPhone,
+} from "@/services/contacts/duplicatePhone";
 import { logActivity } from "@/services/activity/activityService";
 import { CONTACT_RELATIONSHIPS, type ContactRelationship, type EmergencyContact } from "@/types";
 import { phoneNumberSchema } from "@/utils/phone";
@@ -22,6 +32,12 @@ import styles from "@/pages/ContactsPage.module.css";
  * Emergency Contacts (Phase 5): registered-user CRUD over users/{uid}/contacts.
  * Phones are normalised to E.164 on the client; Firestore rules remain the
  * authoritative validation.
+ *
+ * TEMPORARY DEMO MODE (same posture as the Admin Demo): signed-out visitors get
+ * the identical interface backed by the browser-local demo store
+ * (demoContactStore — localStorage only, never Firestore). The authenticated
+ * Firestore architecture is untouched and resumes automatically the moment a
+ * user signs in. Final auth hardening lands after the demo phase.
  */
 
 interface ContactDraft {
@@ -62,8 +78,20 @@ export function ContactsPage(): JSX.Element {
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (uid === null) return;
     let cancelled = false;
+    if (uid === null) {
+      // Demo mode: load this browser's localStorage-backed contacts only.
+      // Never touches Firestore.
+      Promise.resolve().then(() => {
+        if (!cancelled) {
+          setContacts(listDemoContacts());
+          setLoading(false);
+        }
+      });
+      return () => {
+        cancelled = true;
+      };
+    }
     listContacts(uid)
       .then((loaded) => {
         if (!cancelled) setContacts(loaded);
@@ -98,8 +126,16 @@ export function ContactsPage(): JSX.Element {
   };
 
   const handleSave = async (): Promise<void> => {
-    if (uid === null) return;
     const errors = validateDraft(draft);
+    // Duplicate-phone gate (demo + authenticated modes): compared against the
+    // current contact list, normalised via toE164Nigerian. Excluding the
+    // contact being edited prevents a false positive when its own number is
+    // unchanged. Presentation-layer validation only — Firestore rules remain
+    // the server-side authority and are untouched.
+    const duplicate = findDuplicateContactPhone(contacts, draft.phoneNumber, editingId);
+    if (duplicate !== null) {
+      errors.phoneNumber = DUPLICATE_PHONE_MESSAGE;
+    }
     setDraftErrors(errors);
     if (Object.keys(errors).length > 0) return;
 
@@ -111,6 +147,18 @@ export function ContactsPage(): JSX.Element {
         relationship: draft.relationship,
         phoneNumber: phoneNumberSchema.parse(draft.phoneNumber),
       };
+      if (uid === null) {
+        // Demo mode: browser-local storage ONLY — no Firestore call exists on
+        // this branch, and activity logging is intentionally skipped.
+        if (editingId !== null) {
+          updateDemoContact(editingId, payload);
+        } else {
+          addDemoContact(payload);
+        }
+        setContacts(listDemoContacts());
+        cancelEdit();
+        return;
+      }
       if (editingId !== null) {
         await updateContact(uid, editingId, payload);
         void logActivity(uid, "contact_updated", { contactId: editingId });
@@ -128,10 +176,15 @@ export function ContactsPage(): JSX.Element {
   };
 
   const handleDelete = async (contactId: string): Promise<void> => {
-    if (uid === null) return;
     setSaving(true);
     setActionError(null);
     try {
+      if (uid === null) {
+        deleteDemoContact(contactId);
+        setContacts(listDemoContacts());
+        setConfirmDeleteId(null);
+        return;
+      }
       await deleteContact(uid, contactId);
       void logActivity(uid, "contact_deleted", { contactId });
       setContacts(await listContacts(uid));
@@ -163,6 +216,16 @@ export function ContactsPage(): JSX.Element {
         </p>
       </header>
 
+      {uid === null && (
+        <Card title="Demo mode — saved in this browser only" titleIcon="contacts">
+          <p>
+            You are not signed in, so these contacts are kept in this browser's local storage for
+            the Lifeguard360 demo — nothing is sent to Firestore. Sign in to store contacts safely
+            in your account.
+          </p>
+        </Card>
+      )}
+
       {listError !== null && (
         <Card title="Contacts unavailable" titleIcon="alert">
           <p role="alert">{listError}</p>
@@ -181,7 +244,10 @@ export function ContactsPage(): JSX.Element {
             <Card key={contact.id}>
               <div className={styles.contactCard}>
                 <div className={styles.contactInfo}>
-                  <h3>{contact.fullName}</h3>
+                  <h3>
+                    {contact.fullName}{" "}
+                    {contact.id.startsWith("demo-") && <Badge tone="neutral">demo</Badge>}
+                  </h3>
                   <p className={styles.contactMeta}>
                     <Badge tone="neutral">{contact.relationship}</Badge>
                     <span>{contact.phoneNumber}</span>

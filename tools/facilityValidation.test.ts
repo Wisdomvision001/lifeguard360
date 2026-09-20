@@ -116,6 +116,32 @@ describe("validateFacilityRecord", () => {
     expect(result.errors.some((e) => e.field === "source" && e.message.includes("verification date"))).toBe(true);
   });
 
+  it("accepts a valid address", () => {
+    const result = validateFacilityRecord({ ...VALID_RECORD, address: "Abuja Road, Yola, Adamawa State, Nigeria" }, 0);
+    expect(result.errors).toEqual([]);
+  });
+
+  it("accepts records without an address (optional; legacy shapes stay valid)", () => {
+    expect(validateFacilityRecord(VALID_RECORD, 0).errors).toEqual([]);
+  });
+
+  it("rejects an empty or whitespace-only address", () => {
+    for (const address of ["", "   "]) {
+      const result = validateFacilityRecord({ ...VALID_RECORD, address }, 0);
+      expect(result.errors.some((e) => e.field === "address")).toBe(true);
+    }
+  });
+
+  it("rejects an address over the 200-character limit", () => {
+    expect(validateFacilityRecord({ ...VALID_RECORD, address: "a".repeat(200) }, 0).errors).toEqual([]);
+    expect(validateFacilityRecord({ ...VALID_RECORD, address: "a".repeat(201) }, 0).errors.some((e) => e.field === "address")).toBe(true);
+  });
+
+  it("rejects a non-string address", () => {
+    const result = validateFacilityRecord({ ...VALID_RECORD, address: 42 }, 0);
+    expect(result.errors.some((e) => e.field === "address")).toBe(true);
+  });
+
   it("rejects an invalid updatedAt", () => {
     for (const updatedAt of ["", "not-a-date", "2026-13-40"]) {
       const result = validateFacilityRecord({ ...VALID_RECORD, updatedAt }, 0);

@@ -1,0 +1,14 @@
+{
+  "regions": {
+    "yola-jimeta": {
+      "bbox": [8.85, 12.35, 9.65, 12.75],
+      "justification": "Encloses all 6 curated facilities with geographic margin and matches the region exercised by the 2026-09-17 research pass."
+    }
+  },
+  "overpass": {
+    "endpoint": "https://overpass-api.de/api/interpreter",
+    "timeoutMs": 25000,
+    "retries": 1
+  },
+  "queryRef": "medical-v1"
+}

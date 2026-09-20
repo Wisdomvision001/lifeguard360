@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "curator": "Lifeguard360 dataset curator",
+    "preparedAt": "2026-09-17",
+    "note": "First real verified facility dataset — Yola/Jimeta, Adamawa State, Nigeria. Coordinates and identities sourced from OpenStreetMap (element-level references in each record's source string) and corroborated where possible by official/institutional sources. No phone number or opening-hours value is included unless independently confirmed; fields are omitted rather than guessed. verified:true means the record passed the project data-verification process (docs/DATASET-CONTRACT.md) — it is NOT a clinical endorsement by Lifeguard360."
+  },
+  "facilities": [
+    {
+      "name": "Modibbo Adama University Teaching Hospital",
+      "category": "hospital",
+      "coordinates": {
+        "latitude": 9.1945102,
+        "longitude": 12.4914788
+      },
+      "phone": "+2348036516745",
+      "openingHours": "Emergency services 24/7; visiting hours 4-6 PM daily",
+      "address": "Abuja Road, Yola, Yola North, Adamawa State, Nigeria",
+      "verified": true,
+      "source": "OpenStreetMap way/1288856908 (9.1936627,12.4914568) and node/13860924598 (Abuja Road, Yola), retrieved and verified 2026-09-17; official hospital website mauth.gov.ng — identity, contact line 08036516745 and 24/7 emergency/visiting hours confirmed; website content verified 2026-09-17; Wikipedia 'Federal Medical Centre, Yola' (en.wikipedia.org) documents the December 2024 upgrade from FMC Yola to Modibbo Adama University Teaching Hospital. Coordinates from the Nominatim-confirmed OSM node; way-center differs by ~100 m (campus polygon vs entrance). Address (Abuja Road, Yola North) from the same Nominatim-confirmed OSM node, retrieved and verified 2026-09-17.",
+      "updatedAt": "2026-09-17T00:00:00Z"
+    },
+    {
+      "name": "Nassarawo Clinic",
+      "category": "clinic",
+      "coordinates": {
+        "latitude": 9.2801823,
+        "longitude": 12.443967
+      },
+      "address": "Jimeta, Yola, Adamawa State, Nigeria",
+      "verified": true,
+      "source": "OpenStreetMap node/4893220623 (Nassarawo Clinic, amenity=hospital, Jimeta area, Yola), retrieved and verified 2026-09-17. Facility identity and mapped position confirmed in OSM within the Jimeta urban fabric; no phone or opening hours published in OSM, so none is claimed. Address limited to the mapped Jimeta-area context and Adamawa State administration (contract §9) — no street-level data published in OSM.",
+      "updatedAt": "2026-09-17T00:00:00Z"
+    },
+    {
+      "name": "Ajiua Health Centre",
+      "category": "health-centre",
+      "coordinates": {
+        "latitude": 9.278297,
+        "longitude": 12.458884
+      },
+      "address": "Jimeta, Yola, Adamawa State, Nigeria",
+      "openingHours": "24/7",
+      "verified": true,
+      "source": "OpenStreetMap node/7356586585 (Ajiua Health Centre, amenity=clinic with opening_hours=24/7 tag, Jimeta area, Yola), retrieved and verified 2026-09-17. Category recorded as health-centre per the facility's own name; OSM amenity=clinic noted as the mapper's classification. Hours taken from the OSM opening_hours tag. Address limited to the mapped Jimeta-area context and Adamawa State administration (contract §9) — no street-level data published in OSM.",
+      "updatedAt": "2026-09-17T00:00:00Z"
+    },
+    {
+      "name": "Shagari Health Clinic",
+      "category": "clinic",
+      "coordinates": {
+        "latitude": 9.1899007,
+        "longitude": 12.4789097
+      },
+      "address": "Yola, Adamawa State, Nigeria",
+      "verified": true,
+      "source": "OpenStreetMap way/803375465 (Shagari Health Clinic, amenity=hospital, Yola South area), retrieved and verified 2026-09-17. Facility identity and mapped position confirmed in OSM; category recorded conservatively as clinic per the facility name, OSM amenity=hospital noted. No phone or hours published; omitted. Address limited to the mapped Yola-area context and Adamawa State administration (contract §9) — no street-level data published in OSM.",
+      "updatedAt": "2026-09-17T00:00:00Z"
+    },
+    {
+      "name": "Toungo Health Clinic",
+      "category": "clinic",
+      "coordinates": {
+        "latitude": 9.2041131,
+        "longitude": 12.4834331
+      },
+      "address": "Yola, Adamawa State, Nigeria",
+      "verified": true,
+      "source": "OpenStreetMap way/803380075 (Toungo Health Clinic, amenity=hospital, Yola area near the university axis), retrieved and verified 2026-09-17. Facility identity and mapped position confirmed in OSM; category recorded conservatively as clinic per the facility name, OSM amenity=hospital noted. No phone or hours published; omitted. Address limited to the mapped Yola (university-axis) context and Adamawa State administration (contract §9) — no street-level data published in OSM.",
+      "updatedAt": "2026-09-17T00:00:00Z"
+    },
+    {
+      "name": "Wuro Ardo Health Clinic",
+      "category": "clinic",
+      "coordinates": {
+        "latitude": 9.1577306,
+        "longitude": 12.5984552
+      },
+      "address": "Wuro Ardo, Yola, Adamawa State, Nigeria",
+      "verified": true,
+      "source": "OpenStreetMap way/840167111 (Wuro Ardo Health Clinic, amenity=hospital, Wuro Ardo area on the Yola-Jimeta urban fringe), retrieved and verified 2026-09-17. Facility identity and mapped position confirmed in OSM; category recorded conservatively as clinic per the facility name. No phone or hours published; omitted. Address limited to the mapped Wuro Ardo settlement context and Adamawa State administration (contract §9) — no street-level data published in OSM.",
+      "updatedAt": "2026-09-17T00:00:00Z"
+    }
+  ]
+}

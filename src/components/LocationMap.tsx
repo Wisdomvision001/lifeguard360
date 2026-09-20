@@ -47,6 +47,14 @@ function buildFacilityPopup(facility: FacilityWithDistance): HTMLElement {
   meta.textContent = `${facility.category} · ${formatDistance(facility.distanceMeters)}`;
   root.appendChild(meta);
 
+  // Address (when curated): safe textContent, never interpolated HTML.
+  if (facility.address !== undefined) {
+    const address = document.createElement("p");
+    address.className = styles.popupMeta;
+    address.textContent = facility.address;
+    root.appendChild(address);
+  }
+
   const verified = document.createElement("p");
   verified.className = styles.popupMeta;
   verified.textContent = facility.verified ? "Verified facility" : "Unverified record";

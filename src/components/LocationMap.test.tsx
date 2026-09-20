@@ -76,6 +76,7 @@ const FACILITY: FacilityWithDistance = {
   coordinates: { latitude: 9.21, longitude: 12.47 },
   phone: "+2348012345678",
   openingHours: "24/7",
+  address: "Test Street, Yola, Adamawa State, Nigeria",
   verified: true,
   source: "Official registry (example.org), verified 2026-09-10",
   updatedAt: "2026-09-14T00:00:00Z",
@@ -197,6 +198,17 @@ describe("LocationMap facilities layer (Phase 5D-1)", () => {
     expect(directions?.getAttribute("href")).toContain("9.21,12.47");
   });
 
+  it("includes the address line in the popup when present", () => {
+    renderMap(FIX, [FACILITY]);
+    const popupContent = markerInstance.bindPopup.mock.calls[0]?.[0] as HTMLElement;
+    expect(popupContent.textContent).toContain("Test Street, Yola, Adamawa State, Nigeria");
+  });
+
+  it("omits the address line when absent", () => {
+    renderMap(FIX, [{ ...FACILITY, address: undefined }]);
+    const popupContent = markerInstance.bindPopup.mock.calls[0]?.[0] as HTMLElement;
+    expect(popupContent.textContent).not.toContain("Test Street");
+  });
   it("shows the provenance source line in the popup (5D-3)", () => {
     renderMap(FIX, [FACILITY]);
     const popupContent = markerInstance.bindPopup.mock.calls[0]?.[0] as HTMLElement;

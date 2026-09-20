@@ -74,10 +74,15 @@ async function writeDataset(dataset: DatasetInput, result: ValidationResult): Pr
   // Dynamic load with a variable specifier: TypeScript cannot statically
   // resolve `firebase-admin` (deliberately not a dependency), so we type the
   // module as unknown and validate its shape at runtime instead.
+  // firebase-admin v12+ exposes Firestore via the `firebase-admin/firestore`
+  // subpath (getFirestore), not the root namespace.
   const specifier = "firebase-admin";
+  const fsSpecifier = "firebase-admin/firestore";
   let admin: unknown;
+  let adminFs: unknown;
   try {
     admin = await import(/* @vite-ignore */ specifier);
+    adminFs = await import(/* @vite-ignore */ fsSpecifier);
   } catch {
     console.error(
       "\nWRITE ABORTED: the `firebase-admin` package is not installed.\n" +
@@ -115,7 +120,15 @@ async function writeDataset(dataset: DatasetInput, result: ValidationResult): Pr
     return 2;
   }
 
-  const firestore = adminApi.firestore();
+  const firestore = (adminFs as {
+    getFirestore: (app?: unknown) => {
+      batch: () => {
+        set: (ref: unknown, data: unknown) => void;
+        commit: () => Promise<void>;
+      };
+      collection: (path: string) => { doc: (id: string) => unknown };
+    };
+  }).getFirestore(app);
   const batch = firestore.batch();
   const collection = firestore.collection("facilities");
   let written = 0;
@@ -136,6 +149,7 @@ async function writeDataset(dataset: DatasetInput, result: ValidationResult): Pr
         updatedAt: input.updatedAt,
         ...(input.phone !== undefined ? { phone: input.phone } : {}),
         ...(input.openingHours !== undefined ? { openingHours: input.openingHours } : {}),
+        ...(input.address !== undefined ? { address: input.address } : {}),
       });
       written += 1;
     }

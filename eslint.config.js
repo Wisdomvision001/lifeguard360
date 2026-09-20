@@ -1,3 +1,4 @@
+// eslint.config.js — flat config for Lifeguard360.
 import js from "@eslint/js";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
@@ -37,8 +38,8 @@ export default tseslint.config(
     },
   },
   {
-    // Node-side tooling (dataset seeder etc.) — no browser globals.
-    files: ["tools/**"],
+    // Node-side tooling (dataset seeder, rules test) — node globals, not browser.
+    files: ["tools/**", "firestore.rules.test.ts", "vitest.rules.config.ts"],
     languageOptions: {
       ecmaVersion: 2022,
       globals: globals.node,

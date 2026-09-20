@@ -1,0 +1,32 @@
+{
+  "flags": [
+    {
+      "type": "POSSIBLE_SAME_SITE",
+      "candidateAId": "osm-way-840115650",
+      "candidateBId": "osm-way-840115651",
+      "distanceMeters": 18.63809232549838,
+      "reason": "elements are only 19 m apart (may be node/way representations of one site)"
+    },
+    {
+      "type": "POSSIBLE_SAME_SITE",
+      "candidateAId": "osm-way-840817886",
+      "candidateBId": "osm-way-840817887",
+      "distanceMeters": 20.738344238415234,
+      "reason": "elements are only 21 m apart (may be node/way representations of one site)"
+    },
+    {
+      "type": "POSSIBLE_SAME_SITE",
+      "candidateAId": "osm-way-840817886",
+      "candidateBId": "osm-way-840817888",
+      "distanceMeters": 15.5960113325378,
+      "reason": "elements are only 16 m apart (may be node/way representations of one site)"
+    },
+    {
+      "type": "POSSIBLE_SAME_SITE",
+      "candidateAId": "osm-way-840828381",
+      "candidateBId": "osm-way-840828382",
+      "distanceMeters": 13.095550640034014,
+      "reason": "elements are only 13 m apart (may be node/way representations of one site)"
+    }
+  ]
+}
