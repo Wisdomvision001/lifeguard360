@@ -55,16 +55,14 @@ export function prepareEmergencySms(input: {
   const to = input.contact.phoneNumber;
   const href = `sms:${to}?&body=${encodeURIComponent(body)}`;
   window.location.href = href;
-  const state: CommunicationState = "composer-opened";
-
-  if (input.uid) {
+  const state: CommunicationState = "composer-opened";  if (input.uid) {
     void logActivity(input.uid, "emergency_action", {
       action: "sms_prepared",
       contactId: input.contact.id,
       includedLocation: input.fix !== null,
     });
   }
-  if (input.uid && input.fix) {
+  if (input.fix) {
     void logActivity(input.uid, "location_shared", {
       via: "sms",
       contactId: input.contact.id,

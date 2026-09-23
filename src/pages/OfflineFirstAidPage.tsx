@@ -35,9 +35,7 @@ export function OfflineFirstAidPage(): JSX.Element {
       saveOfflinePackage(categories, CONTENT_VERSION);
       refreshMeta();
       setMessage("Offline first-aid package saved on this device.");
-      if (uid !== null) {
-        void logActivity(uid, "offline_download", { version: CONTENT_VERSION });
-      }
+      void logActivity(uid, "offline_download", { version: CONTENT_VERSION });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not save the offline package.");
     } finally {

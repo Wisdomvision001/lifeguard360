@@ -149,11 +149,14 @@ export function ContactsPage(): JSX.Element {
       };
       if (uid === null) {
         // Demo mode: browser-local storage ONLY — no Firestore call exists on
-        // this branch, and activity logging is intentionally skipped.
+        // this branch. Demo activity goes to the local demo activity store
+        // via logActivity(null, …) — never Firestore.
         if (editingId !== null) {
           updateDemoContact(editingId, payload);
+          void logActivity(uid, "contact_updated", { contactId: editingId });
         } else {
-          addDemoContact(payload);
+          const added = addDemoContact(payload);
+          void logActivity(uid, "contact_added", { relationship: added.relationship });
         }
         setContacts(listDemoContacts());
         cancelEdit();
@@ -181,6 +184,7 @@ export function ContactsPage(): JSX.Element {
     try {
       if (uid === null) {
         deleteDemoContact(contactId);
+        void logActivity(uid, "contact_deleted", { contactId });
         setContacts(listDemoContacts());
         setConfirmDeleteId(null);
         return;

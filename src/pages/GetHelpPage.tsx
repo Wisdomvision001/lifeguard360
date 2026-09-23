@@ -92,13 +92,11 @@ export function GetHelpPage(): JSX.Element {
     setNotice(
       `Your phone dialer has opened for ${selected.fullName}. Place the call from your device.`,
     );
-    if (uid !== null) {
-      void logActivity(uid, "emergency_action", {
-        action: "call_initiated",
-        contactId: selected.id,
-        observedState: state,
-      });
-    }
+    void logActivity(uid, "emergency_action", {
+      action: "call_initiated",
+      contactId: selected.id,
+      observedState: state,
+    });
   };
 
   const handlePrepareSms = async (): Promise<void> => {
@@ -134,7 +132,7 @@ export function GetHelpPage(): JSX.Element {
           ? (geo.message ?? "Your location could not be determined.")
           : "Location acquired. It is shown below and is only used when you include it in an action.",
       );
-      if (uid !== null && fix !== null) {
+      if (fix !== null) {
         void logActivity(uid, "location_shared", {
           via: "get-help",
           coordinates: fix.coordinates,

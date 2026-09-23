@@ -72,14 +72,12 @@ export function AppRoutes(): JSX.Element {
             signed-in users get the real users/{uid}/contacts architecture.
             RequireAccount returns here when final auth hardening lands. */}
         <Route path="contacts" element={<ContactsPage />} />
-        <Route
-          path="activity"
-          element={
-            <RequireAccount>
-              <ActivityPage />
-            </RequireAccount>
-          }
-        />
+        {/* TEMPORARY DEMO MODE (Admin Demo posture): activity is reachable
+            signed-out. Signed-out visitors get a browser-local demo activity
+            history; signed-in users keep the real users/{uid}/activity
+            architecture. RequireAccount returns here when final auth
+            hardening lands. */}
+        <Route path="activity" element={<ActivityPage />} />
         <Route
           path="offline"
           element={

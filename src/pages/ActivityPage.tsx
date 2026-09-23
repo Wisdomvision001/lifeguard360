@@ -1,4 +1,4 @@
-import { useEffect, useState, type JSX } from "react";
+import { useEffect, useMemo, useState, type JSX } from "react";
 import { Link } from "react-router";
 
 import { useAuth } from "@/app/providers/AuthProvider";
@@ -6,6 +6,7 @@ import { Card } from "@/components/Card";
 import { Badge } from "@/components/Badge";
 import { Icon, type IconName } from "@/components/icons";
 import { listActivity } from "@/services/activity/activityService";
+import { listDemoActivity } from "@/services/activity/demoActivityStore";
 import { formatTimestamp } from "@/utils/format";
 import type { ActivityRecord, ActivityType } from "@/types";
 import styles from "@/pages/ActivityPage.module.css";
@@ -69,6 +70,15 @@ export function ActivityPage(): JSX.Element {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Guests resolve their activity synchronously from the browser-local demo
+  // store (derive-don't-store): the derived state below is ready on first
+  // render, so a guest can never hang on a loading spinner. The authenticated
+  // effect and Firestore path are unchanged.
+  const demoRecords = useMemo(() => (uid === null ? listDemoActivity() : []), [uid]);
+  const effectiveRecords = uid === null ? demoRecords : records;
+  const effectiveLoading = uid === null ? false : loading;
+  const effectiveError = uid === null ? null : error;
+
   useEffect(() => {
     if (uid === null) return;
     let cancelled = false;
@@ -97,19 +107,29 @@ export function ActivityPage(): JSX.Element {
         </p>
       </header>
 
-      {loading && (
+      {uid === null && (
+        <Card title="Demo mode — saved in this browser only" titleIcon="history">
+          <p>
+            You are not signed in, so your activity history is stored in this browser's local demo
+            storage — nothing is sent to Firestore. Signing in later does not move demo activity
+            into an account. Sign in to keep activity history in your account.
+          </p>
+        </Card>
+      )}
+
+      {effectiveLoading && (
         <Card>
           <p aria-busy="true">Loading your activity…</p>
         </Card>
       )}
 
-      {error !== null && (
+      {effectiveError !== null && (
         <Card title="Activity unavailable" titleIcon="alert">
-          <p role="alert">{error}</p>
+          <p role="alert">{effectiveError}</p>
         </Card>
       )}
 
-      {!loading && error === null && records.length === 0 && (
+      {!effectiveLoading && effectiveError === null && effectiveRecords.length === 0 && (
         <Card title="No activity yet" titleIcon="history">
           <p>
             Actions like adding a contact, sharing your location, or downloading the offline package
@@ -118,9 +138,9 @@ export function ActivityPage(): JSX.Element {
         </Card>
       )}
 
-      {records.length > 0 && (
+      {effectiveRecords.length > 0 && (
         <ol className={styles.timeline}>
-          {records.map((record) => (
+          {effectiveRecords.map((record) => (
             <li key={record.id} className={styles.item}>
               <span className={styles.itemIcon} aria-hidden="true">
                 <Icon name={TYPE_ICONS[record.type]} size={18} />

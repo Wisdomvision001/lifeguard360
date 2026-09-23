@@ -48,13 +48,14 @@ const PUBLIC_NAV_ITEMS = [
   },
   {
     to: "/contacts",
+    // TEMPORARY DEMO MODE: guests get the browser-local demo store; the route
+    // is already public. No requiresAccount — matches the Activity item.
     label: "Contacts",
     icon: "contacts",
     shortLabel: "Contacts",
-    requiresAccount: true,
     inBottomBar: true,
   },
-  { to: "/activity", label: "Activity", icon: "history", requiresAccount: true },
+  { to: "/activity", label: "Activity", icon: "history" },
   { to: "/offline", label: "Offline First Aid", icon: "offline", requiresAccount: true },
   { to: "/profile", label: "Profile", icon: "user", shortLabel: "Profile", inBottomBar: true },
 ] as const;

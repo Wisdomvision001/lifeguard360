@@ -3,6 +3,7 @@ import { addDoc, collection, getDocs, orderBy, query, serverTimestamp } from "fi
 import type { ActivityRecord, ActivityType } from "@/types";
 import { getDb } from "@/services/firebase/client";
 import { describeFirebaseError } from "@/services/firebase/db";
+import { logDemoActivity } from "@/services/activity/demoActivityStore";
 
 /**
  * ActivityService (Phase 10): meaningful events only, data minimisation by
@@ -24,10 +25,17 @@ export function isActivityType(value: string): value is ActivityType {
 
 /** Store a minimal, purpose-bound activity record. Best-effort: never throws. */
 export async function logActivity(
-  uid: string,
+  uid: string | null,
   type: ActivityType,
   detail: Record<string, unknown>,
 ): Promise<void> {
+  // Guest demo mode: browser-local storage only — no getDb(), no Firestore
+  // APIs, no Firebase initialisation. The Firestore implementation below is
+  // the unchanged authenticated path.
+  if (uid === null) {
+    logDemoActivity(type, detail);
+    return;
+  }
   try {
     const db = getDb();
     await addDoc(collection(db, "users", uid, "activity"), {
