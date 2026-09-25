@@ -34,11 +34,16 @@ import type { GeoCoordinates } from "@/types";
 export const NOMINATIM_REVERSE_ENDPOINT = "https://nominatim.openstreetmap.org/reverse";
 
 /**
- * Locality-level zoom. The default (18) can name the single nearest OSM object
- * — a shop or one road segment someone happens to stand beside — which would
- * misrepresent a person's position. At 16 the honest locality answer wins.
+ * Street-level zoom — the documented middle ground. The default (18) matches
+ * any single OSM object, so a large named facility (a campus, a market, a
+ * stadium) can be returned for a point anywhere inside its grounds and be
+ * presented as the user's place; at 16 the answer is so coarse it cannot name
+ * the street someone is actually on. 17 is Nominatim's documented
+ * "any street" level: it still resolves to locality-grade address parts
+ * wherever no named street exists nearby, but adds street detail where the
+ * data has it. Verified empirically on a real device fix before adoption.
  */
-export const NOMINATIM_REVERSE_ZOOM = 16;
+export const NOMINATIM_REVERSE_ZOOM = 17;
 
 /** Client-side abort budget. The label is supplementary: it must never hang the UI. */
 export const REVERSE_GEOCODE_TIMEOUT_MS = 6_000;

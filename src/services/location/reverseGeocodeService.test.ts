@@ -132,8 +132,8 @@ describe("buildReverseGeocodeUrl", () => {
     }
   });
 
-  it("requests locality-level detail so a nearby shop is never presented as the user's place", () => {
-    expect(NOMINATIM_REVERSE_ZOOM).toBe(16);
+  it("requests street-level detail (17) — one notch below the facility-level default that could name a large containing amenity", () => {
+    expect(NOMINATIM_REVERSE_ZOOM).toBe(17);
   });
 });
 
