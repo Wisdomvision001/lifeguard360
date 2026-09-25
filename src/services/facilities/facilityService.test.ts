@@ -22,6 +22,7 @@ import {
   listVerifiedFacilities,
 } from "@/services/facilities/facilityService";
 import { isFirebaseConfigured } from "@/services/firebase/client";
+import type { Facility } from "@/types";
 
 function seedDoc(id: string, data: DocData): void {
   mockDocs.push({ id, data: () => data });
@@ -145,8 +146,8 @@ describe("findNearbyFacilities", () => {
 });
 
 describe("facilityDirectionsUrl", () => {
-  it("builds a Google Maps directions link from the facility coordinates", () => {
-    const url = facilityDirectionsUrl({
+  it("builds a Google Maps directions link from a verified facility", () => {
+    const verified: Facility = {
       id: "x",
       name: "Test",
       category: "hospital",
@@ -154,7 +155,16 @@ describe("facilityDirectionsUrl", () => {
       verified: true,
       source: "s",
       updatedAt: "",
-    });
-    expect(url).toBe("https://www.google.com/maps/dir/?api=1&destination=9.21,12.47");
+    };
+    expect(facilityDirectionsUrl(verified)).toBe(
+      "https://www.google.com/maps/dir/?api=1&destination=9.21,12.47",
+    );
+  });
+
+  it("needs only coordinates, so discovered facilities share the same directions behaviour", () => {
+    // Runtime-discovered records carry no `verified` flag and no dataset id —
+    // one directions path serves both sources instead of two divergent ones.
+    const url = facilityDirectionsUrl({ coordinates: { latitude: 9.8965, longitude: 8.8583 } });
+    expect(url).toBe("https://www.google.com/maps/dir/?api=1&destination=9.8965,8.8583");
   });
 });

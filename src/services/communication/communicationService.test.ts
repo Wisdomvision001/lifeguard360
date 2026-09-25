@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
   buildEmergencySmsBody,
@@ -8,6 +8,12 @@ import {
   PRECONDITIONS_NOTICE,
 } from "@/services/communication/communicationService";
 import type { LocationFix } from "@/types";
+
+// Activity logging is mocked so the emergency_action / location_shared records
+// can be asserted without touching Firestore or device storage.
+const logActivityMock = vi.hoisted(() => vi.fn());
+
+vi.mock("@/services/activity/activityService", () => ({ logActivity: logActivityMock }));
 
 /** A deterministic location fix for tests. */
 const FIX: LocationFix = {
@@ -82,5 +88,74 @@ describe("device interactions", () => {
     expect(prepared.state).toBe("composer-opened");
     expect(prepared.to).toBe(CONTACT.phoneNumber);
     expect(prepared.body).toContain("maps.google.com");
+  });
+
+  it("logs the emergency_action for a not-signed-in user (uid: null)", () => {
+    logActivityMock.mockClear();
+
+    prepareEmergencySms({ contact: CONTACT, fix: null, uid: null });
+
+    expect(logActivityMock).toHaveBeenCalledWith(null, "emergency_action", {
+      action: "sms_prepared",
+      contactId: CONTACT.id,
+      includedLocation: false,
+    });
+  });
+
+  it("logs the emergency_action for an authenticated user with the same payload", () => {
+    logActivityMock.mockClear();
+
+    prepareEmergencySms({ contact: CONTACT, fix: null, uid: "user-1" });
+
+    expect(logActivityMock).toHaveBeenCalledWith("user-1", "emergency_action", {
+      action: "sms_prepared",
+      contactId: CONTACT.id,
+      includedLocation: false,
+    });
+  });
+
+  it("keeps the existing location_shared record when a fix is supplied", () => {
+    logActivityMock.mockClear();
+
+    prepareEmergencySms({ contact: CONTACT, fix: FIX, uid: null });
+
+    expect(logActivityMock).toHaveBeenCalledWith(null, "emergency_action", {
+      action: "sms_prepared",
+      contactId: CONTACT.id,
+      includedLocation: true,
+    });
+    // The record proves a fix was included; the coordinates themselves are
+    // never stored (Task 1 data minimisation).
+    expect(logActivityMock).toHaveBeenCalledWith(null, "location_shared", {
+      via: "sms",
+      contactId: CONTACT.id,
+    });
+  });
+
+  it.each([null, "user-1"])(
+    "never stores raw coordinates in the location_shared record (uid: %s)",
+    (uid) => {
+      logActivityMock.mockClear();
+
+      prepareEmergencySms({ contact: CONTACT, fix: FIX, uid });
+
+      const [, , detail] = logActivityMock.mock.calls.find(
+        (call) => call[1] === "location_shared",
+      ) as [unknown, string, Record<string, unknown>];
+      expect(detail).toEqual({ via: "sms", contactId: CONTACT.id });
+      expect("coordinates" in detail).toBe(false);
+    },
+  );
+
+  it("does not log location_shared when no fix is supplied", () => {
+    logActivityMock.mockClear();
+
+    prepareEmergencySms({ contact: CONTACT, fix: null, uid: "user-1" });
+
+    expect(logActivityMock).not.toHaveBeenCalledWith(
+      "user-1",
+      "location_shared",
+      expect.anything(),
+    );
   });
 });

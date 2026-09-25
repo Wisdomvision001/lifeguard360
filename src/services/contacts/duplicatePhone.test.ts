@@ -7,7 +7,7 @@ import {
 import type { EmergencyContact } from "@/types";
 
 /**
- * Duplicate-phone detection (demo + authenticated modes). Both sides of the
+ * Duplicate-phone detection (unauthenticated + authenticated). Both sides of the
  * comparison go through toE164Nigerian, so formatting can never bypass the
  * check; the exclude-id keeps "keep my own number" edits from false-failing.
  */

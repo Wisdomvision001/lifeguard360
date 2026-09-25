@@ -6,6 +6,8 @@ import {
   distanceMeters,
   mapsLink,
   describeAccuracy,
+  formatCoordinates,
+  formatCoordinateMeta,
 } from "@/utils/format";
 
 describe("formatDistance", () => {
@@ -64,5 +66,49 @@ describe("describeAccuracy", () => {
     expect(describeAccuracy(80)).toBe("moderate accuracy");
     expect(describeAccuracy(500)).toBe("low accuracy");
     expect(describeAccuracy(Number.NaN)).toBe("unknown accuracy");
+  });
+});
+
+describe("formatCoordinates", () => {
+  it("formats a coordinate with 4 decimals by default", () => {
+    expect(formatCoordinates({ latitude: 9.2398, longitude: 12.4987 })).toBe("9.2398, 12.4987");
+  });
+
+  it("honours an explicit precision", () => {
+    expect(formatCoordinates({ latitude: 9.2398, longitude: 12.4987 }, 5)).toBe("9.23980, 12.49870");
+  });
+
+  it("never prints a broken coordinate as if it were real", () => {
+    expect(formatCoordinates({ latitude: Number.NaN, longitude: 12.4987 })).toBe("—");
+    expect(formatCoordinates({ latitude: 9.2398, longitude: Number.POSITIVE_INFINITY })).toBe("—");
+  });
+});
+
+describe("formatCoordinateMeta", () => {
+  it("renders the approved secondary line", () => {
+    expect(
+      formatCoordinateMeta({
+        coordinates: { latitude: 9.2398, longitude: 12.4987 },
+        accuracy: 18,
+      }),
+    ).toBe("9.2398, 12.4987 · ±18 m accuracy");
+  });
+
+  it("rounds the accuracy radius the way the device reports it", () => {
+    expect(
+      formatCoordinateMeta({
+        coordinates: { latitude: 9.2398, longitude: 12.4987 },
+        accuracy: 17.6,
+      }),
+    ).toBe("9.2398, 12.4987 · ±18 m accuracy");
+  });
+
+  it("states unknown accuracy instead of guessing one", () => {
+    expect(
+      formatCoordinateMeta({
+        coordinates: { latitude: 9.2398, longitude: 12.4987 },
+        accuracy: Number.NaN,
+      }),
+    ).toBe("9.2398, 12.4987 · accuracy unknown");
   });
 });

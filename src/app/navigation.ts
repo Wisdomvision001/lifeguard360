@@ -2,8 +2,8 @@ import type { IconName } from "@/components/icons";
 
 /**
  * Single source of truth for navigation (sidebar and mobile bottom bar both
- * derive from this). Guest-accessible items are flagged; account-gated items
- * render for registered users and prompt guests to sign in.
+ * derive from this). Items reachable while not signed in are unflagged;
+ * account-gated items render for signed-in users and otherwise prompt sign-in.
  */
 
 export interface NavItem {
@@ -48,8 +48,9 @@ const PUBLIC_NAV_ITEMS = [
   },
   {
     to: "/contacts",
-    // TEMPORARY DEMO MODE: guests get the browser-local demo store; the route
-    // is already public. No requiresAccount — matches the Activity item.
+    // TEMPORARY AUTHENTICATION BYPASS: reachable while not signed in via the
+    // device-local store; the route is public. No requiresAccount — matches
+    // the Activity item.
     label: "Contacts",
     icon: "contacts",
     shortLabel: "Contacts",
@@ -61,18 +62,18 @@ const PUBLIC_NAV_ITEMS = [
 ] as const;
 
 /**
- * Demo access to the /admin route branch, rendered in a separated sidebar
- * section in ALL builds. Temporary demo posture: /admin is intentionally
- * open while the Firestore/admin functionality is built; real Firebase
- * admin authentication will replace this later.
+ * Unauthenticated access to the /admin route branch, rendered in a separated
+ * sidebar section in ALL builds. Temporary posture: /admin is intentionally
+ * open while the admin functionality is built; real Firebase admin
+ * authentication will replace this later.
  */
-const ADMIN_DEMO_NAV_ITEMS: readonly NavItem[] = [
-  { to: "/admin", label: "Admin Demo", icon: "settings", devOnly: true },
+const ADMIN_NAV_ITEMS: readonly NavItem[] = [
+  { to: "/admin", label: "Admin", icon: "settings", devOnly: true },
 ];
 
 export const NAV_ITEMS: readonly NavItem[] = [
   ...PUBLIC_NAV_ITEMS,
-  ...ADMIN_DEMO_NAV_ITEMS,
+  ...ADMIN_NAV_ITEMS,
 ];
 
 export const BOTTOM_NAV_MAX = 5;

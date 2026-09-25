@@ -4,31 +4,45 @@ import { Card } from "@/components/Card";
 import { Badge } from "@/components/Badge";
 import { Button } from "@/components/Button";
 import { Icon } from "@/components/icons";
-import { LocationMap } from "@/components/LocationMap";
+import { LocationMap, toMapFacility } from "@/components/LocationMap";
 import { useGeolocation } from "@/hooks/useGeolocation";
+import { facilityDirectionsUrl } from "@/services/facilities/facilityService";
 import {
-  facilityDirectionsUrl,
-  findNearbyFacilities,
-  type FacilitySearchResult,
-} from "@/services/facilities/facilityService";
-import { isFirebaseConfigured } from "@/services/firebase/client";
-import { formatDistance, describeAccuracy } from "@/utils/format";
+  discoverNearbyFacilities,
+  type NearbyDiscoveryOutcome,
+} from "@/services/facilities/nearbyDiscoveryService";
+import { overpassProvider } from "@/services/facilities/overpassProvider";
+import { formatDistance, formatCoordinateMeta } from "@/utils/format";
 import styles from "@/pages/FacilitiesPage.module.css";
 
 /**
- * Find Nearby Healthcare Facilities (Phase 6).
- * Data comes exclusively from FacilitySearchService (verified Firestore
- * dataset). The UI never talks to a provider directly, and shows honest
- * empty/error states — fabricated facility lists are forbidden.
+ * Find Nearby Healthcare Facilities.
+ *
+ * Location-driven discovery: the browser's current position is the only input.
+ * There is deliberately NO radius control — the search starts local and widens
+ * itself when the area is thin (see nearbyDiscoveryService), and the distance
+ * shown on each facility is information, never an eligibility filter.
+ *
+ * Results come from the existing discovery pipeline: Lifeguard360-verified
+ * Firestore records plus dynamically discovered OpenStreetMap records, each
+ * labelled with its own trust. The UI never talks to a provider directly, and
+ * shows honest empty/error states — fabricated facility lists are forbidden.
  */
+
+/** Display cap: an honest "nearest N of M" list instead of an unbounded one. */
+const DISPLAY_LIMIT = 30;
+const MAP_LIMIT = 10;
+
 export function FacilitiesPage(): JSX.Element {
   const geo = useGeolocation();
-  const [result, setResult] = useState<FacilitySearchResult | null>(null);
+  const [result, setResult] = useState<NearbyDiscoveryOutcome | null>(null);
   const [loading, setLoading] = useState(false);
-  const [radiusMeters, setRadiusMeters] = useState(10000);
   const [searchError, setSearchError] = useState<string | null>(null);
 
-  const configured = isFirebaseConfigured();
+  const facilities = result?.facilities ?? [];
+  const visible = facilities.slice(0, DISPLAY_LIMIT);
+  const mapFacilities = facilities.slice(0, MAP_LIMIT).map(toMapFacility);
+  const hasDynamic = facilities.some((facility) => facility.trust === "dynamic");
 
   const runSearch = async (): Promise<void> => {
     setSearchError(null);
@@ -39,9 +53,9 @@ export function FacilitiesPage(): JSX.Element {
     }
     setLoading(true);
     try {
-      const searchResult = await findNearbyFacilities(fix.coordinates, radiusMeters);
-      setResult(searchResult);
+      setResult(await discoverNearbyFacilities(fix.coordinates, overpassProvider));
     } catch (error) {
+      setResult(null);
       setSearchError(error instanceof Error ? error.message : "Facility search failed.");
     } finally {
       setLoading(false);
@@ -58,30 +72,15 @@ export function FacilitiesPage(): JSX.Element {
       <header className={styles.header}>
         <h1>Find Nearby Healthcare Facilities</h1>
         <p>
-          Verified hospitals and clinics near your current location. Location is acquired one-shot,
-          only when you search — never tracked in the background.
+          Hospitals and clinics around your current location, ordered from nearest to furthest. Your
+          location is acquired one-shot only when you search — never tracked in the background, and
+          nothing about you is sent to the data provider. Distances are straight-line estimates, not
+          a filter.
         </p>
       </header>
 
       <Card>
         <form className={styles.searchForm} onSubmit={handleFormSubmit}>
-          <label className={styles.radiusLabel}>
-            Search radius
-            <select
-              value={radiusMeters}
-              onChange={(event) => {
-                // Reset results inline so the stale list is never presented
-                // as if it answered the new radius query.
-                setResult(null);
-                setRadiusMeters(Number(event.target.value));
-              }}
-            >
-              <option value={2000}>2 km</option>
-              <option value={5000}>5 km</option>
-              <option value={10000}>10 km</option>
-              <option value={25000}>25 km</option>
-            </select>
-          </label>
           <Button type="submit" icon="search" disabled={loading} className={styles.searchButton}>
             {loading ? "Searching…" : geo.fix === null ? "Find facilities near me" : "Search again"}
           </Button>
@@ -89,9 +88,13 @@ export function FacilitiesPage(): JSX.Element {
 
         {geo.fix !== null && (
           <p className={styles.fixInfo}>
-            Using location {geo.fix.coordinates.latitude.toFixed(5)},{" "}
-            {geo.fix.coordinates.longitude.toFixed(5)} ({describeAccuracy(geo.fix.accuracy)}, ±
-            {Math.round(geo.fix.accuracy)} m)
+            Using location {formatCoordinateMeta(geo.fix)}
+          </p>
+        )}
+        {loading && (
+          <p className={styles.fixInfo}>
+            Searching OpenStreetMap around your location — the search widens automatically if
+            nothing is found nearby.
           </p>
         )}
         {geo.message !== null && (
@@ -108,51 +111,58 @@ export function FacilitiesPage(): JSX.Element {
 
       {geo.fix !== null && (
         <section aria-label="Your location on a map">
-          <LocationMap
-            location={geo.fix}
-            facilities={result !== null && result.source === "firestore" ? result.facilities : undefined}
-          />
+          <LocationMap location={geo.fix} facilities={mapFacilities} />
         </section>
       )}
 
-      {!configured && (
-        <Card title="Facility data unavailable" titleIcon="alert">
-          <p>
-            Facility discovery is unavailable because Firebase is not configured in this
-            environment. Add your Firebase project values to <code>.env.local</code> (see{" "}
-            <code>.env.example</code>) and reload.
+      {result !== null && (
+        <Card title="Search status" titleIcon="alert">
+          <p role="status">
+            {result.note ??
+              `Searched within ${Math.round(result.radiusMeters / 1000)} km of your current location.`}
           </p>
         </Card>
       )}
 
-      {configured && result !== null && result.source === "none" && (
-        <Card title="No verified facility data yet" titleIcon="alert">
-          <p role="status">{result.note}</p>
+      {result !== null && facilities.length === 0 && (
+        <Card title="No facilities found nearby" titleIcon="alert">
+          <p>
+            No hospitals or clinics could be found around your location, including after widening
+            the search. This can happen where OpenStreetMap coverage is limited. Try again when you
+            have a stronger location fix.
+          </p>
         </Card>
       )}
 
-      {configured &&
-        result !== null &&
-        result.facilities.length === 0 &&
-        result.source === "firestore" && (
-          <Card title="Nothing found in this radius" titleIcon="alert">
-            <p role="status">{result.note}</p>
-          </Card>
-        )}
-
-      {result !== null && result.facilities.length > 0 && (
+      {visible.length > 0 && (
         <section aria-label="Nearby facilities" className={styles.results}>
           <div className={styles.resultsHeader}>
             <h2>
-              {result.facilities.length} facility{result.facilities.length === 1 ? "" : "s"} found
+              {facilities.length} facilit{facilities.length === 1 ? "y" : "ies"} found
             </h2>
-            <Badge tone="blue">Verified data · Firestore</Badge>
+            <div className={styles.sourceChips}>
+              {facilities.some((facility) => facility.trust === "verified") && (
+                <Badge tone="success" dot>
+                  Lifeguard360 verified
+                </Badge>
+              )}
+              {hasDynamic && (
+                <Badge tone="blue" dot>
+                  OpenStreetMap discovered
+                </Badge>
+              )}
+            </div>
           </div>
           <ul className={styles.facilityList}>
-            {result.facilities.map((facility) => (
+            {visible.map((facility) => (
               <li key={facility.id} className={styles.facilityCard}>
                 <div className={styles.facilityBody}>
-                  <h3>{facility.name}</h3>
+                  <h3>
+                    {facility.name}
+                    <span className={styles.facilityTrust}>
+                      {facility.trust === "verified" ? "Verified" : "OSM"}
+                    </span>
+                  </h3>
                   <p className={styles.facilityMeta}>
                     {facility.category} · {formatDistance(facility.distanceMeters)}
                     {facility.openingHours !== undefined && ` · ${facility.openingHours}`}
@@ -164,6 +174,17 @@ export function FacilitiesPage(): JSX.Element {
                     <a className={styles.facilityPhone} href={`tel:${facility.phone}`}>
                       <Icon name="phone" size={14} />
                       {facility.phone}
+                    </a>
+                  )}
+                  {facility.sourceUrl !== undefined && (
+                    <a
+                      className={styles.facilityPhone}
+                      href={facility.sourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Icon name="external" size={14} />
+                      Source record
                     </a>
                   )}
                 </div>
@@ -179,9 +200,16 @@ export function FacilitiesPage(): JSX.Element {
               </li>
             ))}
           </ul>
+          {facilities.length > visible.length && (
+            <p className={styles.attribution}>
+              Showing the {visible.length} nearest of {facilities.length} facilities found. The map
+              shows the {mapFacilities.length} nearest.
+            </p>
+          )}
           <p className={styles.attribution}>
-            Facility records are verified entries maintained in the project database. Map links open
-            in Google Maps.
+            Lifeguard360-verified records are human-reviewed entries maintained in the project
+            database. OpenStreetMap results are discovered live from your coordinates and are
+            unreviewed data © OpenStreetMap contributors (ODbL). Map links open in Google Maps.
           </p>
         </section>
       )}

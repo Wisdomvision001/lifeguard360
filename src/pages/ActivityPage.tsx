@@ -20,7 +20,7 @@ const TYPE_LABELS: Record<ActivityType, string> = {
   contact_added: "Contact added",
   contact_updated: "Contact updated",
   contact_deleted: "Contact deleted",
-  location_shared: "Location shared",
+  location_shared: "Location",
   emergency_action: "Emergency action",
   offline_download: "Offline package",
 };
@@ -45,10 +45,14 @@ function describeActivity(record: ActivityRecord): string {
       return "An emergency contact was updated.";
     case "contact_deleted":
       return "An emergency contact was removed.";
-    case "location_shared": {
-      const via = detail.via === "sms" ? "via emergency SMS" : "from Get Help Now";
-      return `Your location was shared ${via}.`;
-    }
+    case "location_shared":
+      // Truthfulness: a stored record only proves that a one-shot fix was
+      // acquired (via "get-help"), or that coordinates were included in a
+      // message handed to the messaging app (via "sms") — never that anything
+      // was sent, delivered or shared.
+      return detail.via === "sms"
+        ? "Your location was included in an emergency message prepared for a trusted contact."
+        : "Your location was requested in Get Help Now.";
     case "emergency_action":
       return detail.action === "sms_prepared"
         ? "An emergency SMS was prepared for a trusted contact."
@@ -70,10 +74,10 @@ export function ActivityPage(): JSX.Element {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Guests resolve their activity synchronously from the browser-local demo
-  // store (derive-don't-store): the derived state below is ready on first
-  // render, so a guest can never hang on a loading spinner. The authenticated
-  // effect and Firestore path are unchanged.
+  // Unauthenticated users resolve their activity synchronously from the
+  // device-local store (derive-don't-store): the derived state below is ready
+  // on first render, so they can never hang on a loading spinner. The
+  // authenticated effect and Firestore path are unchanged.
   const demoRecords = useMemo(() => (uid === null ? listDemoActivity() : []), [uid]);
   const effectiveRecords = uid === null ? demoRecords : records;
   const effectiveLoading = uid === null ? false : loading;
@@ -108,11 +112,11 @@ export function ActivityPage(): JSX.Element {
       </header>
 
       {uid === null && (
-        <Card title="Demo mode — saved in this browser only" titleIcon="history">
+        <Card title="Not signed in — saved on this device" titleIcon="history">
           <p>
-            You are not signed in, so your activity history is stored in this browser's local demo
-            storage — nothing is sent to Firestore. Signing in later does not move demo activity
-            into an account. Sign in to keep activity history in your account.
+            You're not signed in, so your activity history is saved on this device — nothing is
+            sent to Firestore. Signing in later does not move this history into an account. Sign
+            in to keep your activity history in your account.
           </p>
         </Card>
       )}

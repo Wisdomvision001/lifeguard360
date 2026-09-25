@@ -31,8 +31,8 @@ export function AppLayout(): JSX.Element {
   const bottomItems = items
     .filter((item) => item.inBottomBar === true)
     .slice(0, 5);
-  // "Admin Demo" entry, rendered in its separated sidebar section in all
-  // builds. Temporary demo posture: /admin is intentionally open until real
+  // "Admin" entry, rendered in its separated sidebar section in all
+  // builds. Temporary posture: /admin is intentionally open until real
   // Firebase admin authentication is implemented.
   const devItems = items.filter((item) => item.devOnly === true);
 

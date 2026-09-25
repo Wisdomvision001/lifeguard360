@@ -9,8 +9,8 @@ import {
 import type { ContactRelationship } from "@/types";
 
 /**
- * Demo-mode contacts store: browser-local only, never Firestore. These tests
- * pin the localStorage contract and the demo-`id` namespacing that keeps demo
+ * Device-local contacts store: localStorage only, never Firestore. These tests
+ * pin the localStorage contract and the `demo-` id namespacing that keeps local
  * records forever distinguishable from real users/{uid}/contacts documents.
  */
 
@@ -20,7 +20,7 @@ const PAYLOAD = {
   phoneNumber: "+2348012345678",
 };
 
-describe("demoContactStore", () => {
+describe("demoContactStore (device-local contacts)", () => {
   beforeEach(() => {
     window.localStorage.clear();
   });
@@ -45,7 +45,7 @@ describe("demoContactStore", () => {
     expect(listDemoContacts()).toHaveLength(1);
   });
 
-  it("updates only demo-ids and refreshes updatedAt", () => {
+  it("updates only local (demo-) ids and refreshes updatedAt", () => {
     const contact = addDemoContact(PAYLOAD);
     const updated = updateDemoContact(contact.id, { ...PAYLOAD, fullName: "Renamed" });
     expect(updated?.fullName).toBe("Renamed");
@@ -54,7 +54,7 @@ describe("demoContactStore", () => {
     expect(updateDemoContact("abc123", { ...PAYLOAD, fullName: "X" })).toBeNull();
   });
 
-  it("deletes only demo-ids and reports honestly", () => {
+  it("deletes only local (demo-) ids and reports honestly", () => {
     const contact = addDemoContact(PAYLOAD);
     expect(deleteDemoContact("firestore-id")).toBe(false);
     expect(deleteDemoContact(contact.id)).toBe(true);

@@ -29,9 +29,9 @@ export async function logActivity(
   type: ActivityType,
   detail: Record<string, unknown>,
 ): Promise<void> {
-  // Guest demo mode: browser-local storage only — no getDb(), no Firestore
-  // APIs, no Firebase initialisation. The Firestore implementation below is
-  // the unchanged authenticated path.
+  // Temporary authentication bypass: device-local storage only — no getDb(),
+  // no Firestore APIs, no Firebase initialisation. The Firestore
+  // implementation below is the unchanged authenticated path.
   if (uid === null) {
     logDemoActivity(type, detail);
     return;
@@ -53,15 +53,26 @@ export async function listActivity(uid: string, limitTo = 100): Promise<Activity
     const db = getDb();
     const ref = collection(db, "users", uid, "activity");
     const snapshot = await getDocs(query(ref, orderBy("createdAt", "desc")));
-    return snapshot.docs.slice(0, limitTo).map((docSnapshot) => {
-      const data = docSnapshot.data() as Record<string, unknown>;
-      return {
-        id: docSnapshot.id,
-        type: isActivityType(String(data.type)) ? (data.type as ActivityType) : "emergency_action",
-        detail: (data.detail as Record<string, unknown>) ?? {},
-        createdAt: "",
-      };
-    });
+    return snapshot.docs
+      .flatMap((docSnapshot) => {
+        const data = docSnapshot.data() as Record<string, unknown>;
+        const rawType = typeof data.type === "string" ? data.type : "";
+        // A record whose type is not one of the six real activity types is
+        // skipped entirely. It used to be relabelled as "emergency_action",
+        // which misrepresented what had actually happened.
+        if (!isActivityType(rawType)) return [];
+        return [
+          {
+            id: docSnapshot.id,
+            type: rawType,
+            detail: (data.detail as Record<string, unknown>) ?? {},
+            // The stored server timestamp is read back as the string the SDK
+            // serialises; anything else becomes "" rather than inventing a time.
+            createdAt: typeof data.createdAt === "string" ? data.createdAt : "",
+          },
+        ];
+      })
+      .slice(0, limitTo);
   } catch (error) {
     throw new Error(describeFirebaseError(error), { cause: error });
   }

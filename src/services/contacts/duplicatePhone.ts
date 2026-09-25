@@ -2,7 +2,7 @@ import type { EmergencyContact } from "@/types";
 import { toE164Nigerian } from "@/utils/phone";
 
 /**
- * Duplicate-phone detection for Contacts (demo + authenticated modes).
+ * Duplicate-phone detection for Contacts (device-local + authenticated modes).
  *
  * Both sides of the comparison are normalised through the app's existing
  * E.164 Nigerian normaliser (`toE164Nigerian`), so formatting differences
@@ -10,7 +10,8 @@ import { toE164Nigerian } from "@/utils/phone";
  * never bypass the duplicate check.
  *
  * This is presentation-layer validation only: it runs at the application
- * boundary (ContactsPage) before either the demo store or contactService is
+ * boundary (ContactsPage) before either the device-local store or
+ * contactService is
  * called. Firestore rules, Firebase Auth, and Storage are untouched — the
  * server-side rules remain the security authority.
  */

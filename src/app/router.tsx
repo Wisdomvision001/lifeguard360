@@ -32,7 +32,7 @@ import { AdminActivityLogPage } from "@/pages/admin/AdminActivityLogPage";
 import { AdminSettingsPage } from "@/pages/admin/AdminSettingsPage";
 import { AdminNotFoundPage } from "@/pages/admin/AdminNotFoundPage";
 
-/** Redirects guests to sign-in, preserving the intended destination. */
+/** Redirects unauthenticated users to sign-in, preserving the intended destination. */
 function RequireAccount({ children }: { children: JSX.Element }): JSX.Element {
   const { authState } = useAuth();
   const location = useLocation();
@@ -67,16 +67,17 @@ export function AppRoutes(): JSX.Element {
         />
         <Route path="get-help" element={<GetHelpPage />} />
         <Route path="facilities" element={<FacilitiesPage />} />
-        {/* TEMPORARY DEMO MODE (Admin Demo posture): contacts is reachable
-            signed-out. Signed-out visitors use the browser-local demo store;
+        {/* TEMPORARY AUTHENTICATION BYPASS: contacts is reachable while not
+            signed in. Unauthenticated users use the device-local store;
             signed-in users get the real users/{uid}/contacts architecture.
-            RequireAccount returns here when final auth hardening lands. */}
+            RequireAccount returns here when authentication enforcement
+            lands. */}
         <Route path="contacts" element={<ContactsPage />} />
-        {/* TEMPORARY DEMO MODE (Admin Demo posture): activity is reachable
-            signed-out. Signed-out visitors get a browser-local demo activity
+        {/* TEMPORARY AUTHENTICATION BYPASS: activity is reachable while not
+            signed in. Unauthenticated users get a device-local activity
             history; signed-in users keep the real users/{uid}/activity
-            architecture. RequireAccount returns here when final auth
-            hardening lands. */}
+            architecture. RequireAccount returns here when authentication
+            enforcement lands. */}
         <Route path="activity" element={<ActivityPage />} />
         <Route
           path="offline"

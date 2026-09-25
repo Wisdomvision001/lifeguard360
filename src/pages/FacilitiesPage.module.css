@@ -21,24 +21,6 @@
   flex-wrap: wrap;
 }
 
-.radiusLabel {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  font-size: var(--fs-sm);
-  font-weight: var(--fw-semibold);
-  color: var(--color-text);
-}
-
-.radiusLabel select {
-  padding: var(--space-3);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-  font-size: var(--fs-base);
-  min-width: 160px;
-}
-
 .fixInfo {
   margin-top: var(--space-3);
   font-size: var(--fs-xs);
@@ -94,7 +76,32 @@
 }
 
 .facilityBody h3 {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
   font-size: var(--fs-md);
+}
+
+/* Inline trust chip so a discovered record can never read as verified data. */
+.facilityTrust {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 2px var(--space-2);
+}
+
+.sourceChips {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
 }
 
 .facilityMeta {

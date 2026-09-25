@@ -1,12 +1,12 @@
 import type { EmergencyCategoryId, OfflinePackageMeta } from "@/types";
 
 /**
- * OfflineContentService (Phase 4): registered users only.
+ * OfflineContentService (Phase 4): device-local offline content cache.
  *
  * Stores the approved first-aid package in localStorage under a dedicated
  * namespace. Truthfulness rules:
- * - Only registered users can download the package.
- * - Guests are refused with a clear explanation.
+ * - The service itself is account-agnostic: it caches content for whichever
+ *   user saves it. Account gating happens at the route/navigation layer.
  * - "Available offline" means the cached content — never communications.
  */
 

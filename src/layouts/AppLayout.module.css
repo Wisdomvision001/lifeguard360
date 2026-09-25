@@ -21,7 +21,10 @@
   position: sticky;
   top: 0;
   height: 100vh;
+  /* Vertical scrolling is fine; horizontal scrolling inside the fixed-width
+     rail is not — the brand block used to force it (see .brandTagline). */
   overflow-y: auto;
+  overflow-x: hidden;
   z-index: 40;
 }
 
@@ -30,6 +33,11 @@
   align-items: center;
   gap: var(--space-3);
   padding: 0 var(--space-2) var(--space-5);
+  min-width: 0;
+}
+
+.brand svg {
+  flex-shrink: 0;
 }
 
 .brandText {
@@ -55,7 +63,9 @@
   font-size: 0.625rem;
   color: var(--color-navy-muted);
   letter-spacing: 0.02em;
-  white-space: nowrap;
+  /* Wraps within the existing rail width instead of widening it (the
+     nowrap rule was what produced the horizontal scrollbar). */
+  text-wrap: balance;
 }
 
 .nav {
@@ -79,6 +89,10 @@
     color var(--transition-fast);
 }
 
+.navLink svg {
+  flex-shrink: 0;
+}
+
 .navLink:hover {
   background: var(--color-navy-800);
   color: #fff;
@@ -90,11 +104,11 @@
   box-shadow: 0 4px 14px rgba(224, 52, 44, 0.35);
 }
 
-/* "Admin Demo" section (temporary entry until real Firebase admin auth).
+/* "Admin" section (temporary entry until real Firebase admin auth).
    Renders with the exact same nav-link styles as the rest of the sidebar;
-   separated only by a subtle existing-token divider. Temporary demo
-   posture: /admin is intentionally open until real admin authentication
-   is implemented. */
+   separated only by a subtle existing-token divider. Temporary
+   authentication-bypass posture: /admin is intentionally open until real
+   admin authentication is implemented. */
 .devSection {
   border-top: 1px solid var(--color-navy-800);
   margin-top: var(--space-4);

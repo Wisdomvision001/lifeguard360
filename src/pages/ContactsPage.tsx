@@ -33,11 +33,12 @@ import styles from "@/pages/ContactsPage.module.css";
  * Phones are normalised to E.164 on the client; Firestore rules remain the
  * authoritative validation.
  *
- * TEMPORARY DEMO MODE (same posture as the Admin Demo): signed-out visitors get
- * the identical interface backed by the browser-local demo store
- * (demoContactStore — localStorage only, never Firestore). The authenticated
- * Firestore architecture is untouched and resumes automatically the moment a
- * user signs in. Final auth hardening lands after the demo phase.
+ * TEMPORARY AUTHENTICATION BYPASS (same posture as the unauthenticated admin
+ * access): signed-out users get the identical interface backed by the
+ * device-local store (demoContactStore — localStorage only, never Firestore).
+ * The authenticated Firestore architecture is untouched and resumes
+ * automatically the moment a user signs in. Authentication enforcement
+ * returns after the supervisor review.
  */
 
 interface ContactDraft {
@@ -80,7 +81,7 @@ export function ContactsPage(): JSX.Element {
   useEffect(() => {
     let cancelled = false;
     if (uid === null) {
-      // Demo mode: load this browser's localStorage-backed contacts only.
+      // Not signed in: load this device's localStorage-backed contacts only.
       // Never touches Firestore.
       Promise.resolve().then(() => {
         if (!cancelled) {
@@ -127,7 +128,8 @@ export function ContactsPage(): JSX.Element {
 
   const handleSave = async (): Promise<void> => {
     const errors = validateDraft(draft);
-    // Duplicate-phone gate (demo + authenticated modes): compared against the
+    // Duplicate-phone gate (unauthenticated + authenticated modes): compared
+    // against the
     // current contact list, normalised via toE164Nigerian. Excluding the
     // contact being edited prevents a false positive when its own number is
     // unchanged. Presentation-layer validation only — Firestore rules remain
@@ -148,8 +150,8 @@ export function ContactsPage(): JSX.Element {
         phoneNumber: phoneNumberSchema.parse(draft.phoneNumber),
       };
       if (uid === null) {
-        // Demo mode: browser-local storage ONLY — no Firestore call exists on
-        // this branch. Demo activity goes to the local demo activity store
+        // Not signed in: device-local storage ONLY — no Firestore call exists
+        // on this branch. Activity goes to the device-local activity store
         // via logActivity(null, …) — never Firestore.
         if (editingId !== null) {
           updateDemoContact(editingId, payload);
@@ -221,11 +223,10 @@ export function ContactsPage(): JSX.Element {
       </header>
 
       {uid === null && (
-        <Card title="Demo mode — saved in this browser only" titleIcon="contacts">
+        <Card title="Not signed in — saved on this device" titleIcon="contacts">
           <p>
-            You are not signed in, so these contacts are kept in this browser's local storage for
-            the Lifeguard360 demo — nothing is sent to Firestore. Sign in to store contacts safely
-            in your account.
+            You're not signed in, so these contacts are saved on this device — nothing is sent to
+            Firestore. Sign in to keep your contacts associated with your account.
           </p>
         </Card>
       )}
@@ -250,7 +251,7 @@ export function ContactsPage(): JSX.Element {
                 <div className={styles.contactInfo}>
                   <h3>
                     {contact.fullName}{" "}
-                    {contact.id.startsWith("demo-") && <Badge tone="neutral">demo</Badge>}
+                    {contact.id.startsWith("demo-") && <Badge tone="neutral">on this device</Badge>}
                   </h3>
                   <p className={styles.contactMeta}>
                     <Badge tone="neutral">{contact.relationship}</Badge>

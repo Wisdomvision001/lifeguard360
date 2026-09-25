@@ -22,6 +22,12 @@
  * verified. Distances are always computed by Lifeguard360 from the user's
  * fix; any provider-supplied distance is discarded. Provider failures are
  * normalized into NearbyDiscoveryErrorCode and never expose raw payloads.
+ *
+ * Above the single-shot `searchNearbyFacilities()` there is the product flow
+ * `discoverNearbyFacilities()`: current location → search → widen internally
+ * when the result set is empty/thin → nearest-first display. It owns the
+ * widening policy so the UI never exposes a radius control, and it reports the
+ * widening honestly instead of presenting a wide result set as a local one.
  */
 
 import type { FacilityWithDistance, GeoCoordinates } from "@/types";
@@ -30,6 +36,7 @@ import { distanceMeters } from "@/utils/format";
 import { findNearbyFacilities } from "./facilityService";
 import {
   NearbyDiscoveryError,
+  NEARBY_RADIUS_LIMITS,
   withDistanceFrom,
   validateNearbyQuery,
   buildNearbyFacilityId,
@@ -122,6 +129,96 @@ export function normalizeDynamicCandidate(
  */
 export function dedupeNearbyResults(facilities: readonly NearbyFacility[]): NearbyFacility[] {
   return [...facilities];
+}
+
+// ------------------------------------------------------- discovery flow
+
+/**
+ * Internal search widening ladder (metres). The UI never chooses a radius:
+ * nothing in the product is gated by "within N km". Discovery starts local for
+ * efficiency and widens itself until it has enough to show, up to the contract
+ * maximum (50 km). Distances are displayed as information only.
+ */
+export const DISCOVERY_RADIUS_LADDER: readonly number[] = [3_000, 15_000, 50_000];
+
+/** Result count considered "enough" — below it the next wider rung is tried. */
+export const DISCOVERY_MIN_RESULTS = 5;
+
+export interface NearbyDiscoveryOutcome {
+  /** Normalized, deduped results, nearest-first. */
+  facilities: NearbyFacility[];
+  sources: FacilitySourceInfo[];
+  diagnostics: NearbyFacilitySearchResult["diagnostics"];
+  note: string | null;
+  /** The rung that produced the shown results (diagnostic; not a user filter). */
+  radiusMeters: number;
+}
+
+function formatRadius(meters: number): string {
+  return meters >= 1000 ? `${Math.round(meters / 1000)} km` : `${Math.round(meters)} m`;
+}
+
+/**
+ * The victim-facing discovery flow: current location → search → widen when the
+ * result set is empty or thin → nearest-first display. It composes the existing
+ * `searchNearbyFacilities()` per rung, so verified Firestore facilities and
+ * dynamic provider results keep flowing through the one architecture (trust
+ * stamping, app-computed distance, dedupe seam, diagnostics).
+ *
+ * There is no radius parameter: widening policy lives here, not in the UI.
+ */
+export async function discoverNearbyFacilities(
+  coordinates: GeoCoordinates,
+  provider?: FacilityDiscoveryProvider,
+  options: { radiusLadder?: readonly number[]; minimumResults?: number } = {},
+): Promise<NearbyDiscoveryOutcome> {
+  const ladder = [...(options.radiusLadder ?? DISCOVERY_RADIUS_LADDER)]
+    .filter((radius) => radius >= NEARBY_RADIUS_LIMITS.min && radius <= NEARBY_RADIUS_LIMITS.max)
+    .sort((a, b) => a - b);
+  const rungs = ladder.length > 0 ? ladder : [NEARBY_RADIUS_LIMITS.max];
+  const target = options.minimumResults ?? DISCOVERY_MIN_RESULTS;
+
+  const collected = new Map<string, NearbyFacility>();
+  let lastAttempt: NearbyFacilitySearchResult | null = null;
+  let radiusMeters = rungs[0] as number;
+  let attempts = 0;
+
+  for (let index = 0; index < rungs.length; index++) {
+    const rung = rungs[index] as number;
+    attempts += 1;
+    const attempt = await searchNearbyFacilities({ coordinates, radiusMeters: rung }, provider);
+    lastAttempt = attempt;
+    radiusMeters = rung;
+    for (const facility of attempt.facilities) {
+      if (!collected.has(facility.id)) collected.set(facility.id, facility);
+    }
+    if (collected.size >= target || index === rungs.length - 1) break;
+  }
+
+  const facilities = dedupeNearbyResults([...collected.values()]).sort(
+    (a, b) => a.distanceMeters - b.distanceMeters,
+  );
+
+  const notes: string[] = [];
+  if (lastAttempt?.note != null) notes.push(lastAttempt.note);
+  // Never present a widened result set as if it were the immediate neighbourhood.
+  if (attempts > 1) {
+    notes.push(
+      facilities.length === 0
+        ? `No facilities were found even after widening the search to ${formatRadius(radiusMeters)}.`
+        : `Nothing closer was found, so the search was widened to ${formatRadius(radiusMeters)}.`,
+    );
+  } else if (facilities.length === 0) {
+    notes.push(`No facilities were found within ${formatRadius(radiusMeters)} of your location.`);
+  }
+
+  return {
+    facilities,
+    sources: lastAttempt?.sources ?? [LIFEGUARD360_SOURCE],
+    diagnostics: lastAttempt?.diagnostics ?? { countsBySource: {} },
+    note: notes.length > 0 ? notes.join(" ") : null,
+    radiusMeters,
+  };
 }
 
 // ---------------------------------------------------------------- errors

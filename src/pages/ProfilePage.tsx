@@ -22,7 +22,7 @@ import styles from "@/pages/ProfilePage.module.css";
 
 /**
  * Profile (Phase 2): registered-user identity, preferences, sign-out.
- * Guests never reach this page (route is account-gated).
+ * Signed-out users never reach this page (route is account-gated).
  */
 export function ProfilePage(): JSX.Element {
   const { authState } = useAuth();

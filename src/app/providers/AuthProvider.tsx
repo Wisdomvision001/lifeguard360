@@ -13,8 +13,8 @@ import { observeAuth } from "@/services/auth/authService";
 
 /**
  * AuthProvider (Phase 2): exposes Firebase auth state to the tree.
- * `loading` until the first determination; guests are a normal, first-class
- * state — personalisation features prompt sign-in when used.
+ * `loading` until the first determination; not-signed-in is a normal,
+ * first-class state — personalisation features prompt sign-in when used.
  */
 
 const AuthContext = createContext<{ authState: AuthState } | null>(null);

@@ -3,6 +3,7 @@ import { Link } from "react-router";
 
 import { useAuth } from "@/app/providers/AuthProvider";
 import { useGeolocation } from "@/hooks/useGeolocation";
+import { useResolvedPlace } from "@/hooks/useResolvedPlace";
 import { Card } from "@/components/Card";
 import { Badge } from "@/components/Badge";
 import { Button } from "@/components/Button";
@@ -17,7 +18,11 @@ import {
   prepareEmergencySms,
 } from "@/services/communication/communicationService";
 import { isFresh } from "@/services/location/locationService";
-import { describeAccuracy, formatTimestamp } from "@/utils/format";
+import {
+  REVERSE_GEOCODE_ATTRIBUTION,
+  REVERSE_GEOCODE_DISCLOSURE,
+} from "@/services/location/reverseGeocodeService";
+import { formatCoordinateMeta, formatCoordinates, formatTimestamp } from "@/utils/format";
 import type { EmergencyContact, PreparedSms } from "@/types";
 import styles from "@/pages/GetHelpPage.module.css";
 
@@ -33,6 +38,9 @@ export function GetHelpPage(): JSX.Element {
   const { authState } = useAuth();
   const uid = authState.status === "signed-in" ? (authState.user?.uid ?? null) : null;
   const geo = useGeolocation();
+  // Readable location description for the acquired fix — one lookup per fix,
+  // coordinates remain the honest fallback when no label is available.
+  const place = useResolvedPlace(geo.fix);
 
   const [contacts, setContacts] = useState<EmergencyContact[]>([]);
   const [loadState, setLoadState] = useState<"loading" | "ready" | "error">("loading");
@@ -44,7 +52,7 @@ export function GetHelpPage(): JSX.Element {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (uid === null) return; // guests: no account data to load
+    if (uid === null) return; // not signed in: no account data to load
     let cancelled = false;
     listContacts(uid)
       .then((loaded) => {
@@ -63,18 +71,19 @@ export function GetHelpPage(): JSX.Element {
     };
   }, [uid]);
 
-  // Guests cannot own Firestore contacts; derive instead of storing per-uid
-  // state in an effect, so the UI never hangs on a spinner it can never
-  // resolve. Guest contacts come from the SAME browser-local demo store the
-  // Contacts page maintains — listDemoContacts() is a synchronous, defensive
-  // localStorage read: no Firestore call, and the derived state resolves
-  // deterministically on first render (no loading loop is possible).
+  // Unauthenticated users cannot own Firestore contacts; derive instead of
+  // storing per-uid state in an effect, so the UI never hangs on a spinner it
+  // can never resolve. Their contacts come from the SAME device-local store
+  // the Contacts page maintains (demoContactStore) — listDemoContacts() is a
+  // synchronous, defensive localStorage read: no Firestore call, and the
+  // derived state resolves deterministically on first render (no loading loop
+  // is possible).
   const demoContacts = useMemo(() => (uid === null ? listDemoContacts() : []), [uid]);
   const effectiveContacts = uid === null ? demoContacts : contacts;
   const effectiveLoadState = uid === null ? ("ready" as const) : loadState;
   const effectiveLoadError = uid === null ? null : loadError;
 
-  // Guest selection defaults to the first demo contact so the emergency
+  // Selection defaults to the first device-local contact so the emergency
   // actions are immediately reachable. The authenticated selection behaviour
   // is unchanged (the effect below pre-selects the first loaded contact).
   const effectiveSelectedId =
@@ -133,10 +142,11 @@ export function GetHelpPage(): JSX.Element {
           : "Location acquired. It is shown below and is only used when you include it in an action.",
       );
       if (fix !== null) {
-        void logActivity(uid, "location_shared", {
-          via: "get-help",
-          coordinates: fix.coordinates,
-        });
+        // Data minimisation (Task 1 privacy correction): the activity record
+        // says that a one-shot fix was acquired — it never stores the
+        // coordinates themselves. This matches the unauthenticated device-local
+        // path, which has always stripped them.
+        void logActivity(uid, "location_shared", { via: "get-help" });
       }
     } finally {
       setBusy(false);
@@ -197,11 +207,11 @@ export function GetHelpPage(): JSX.Element {
       </Card>
 
       {uid === null && (
-        <Card title="Demo mode — saved in this browser only" titleIcon="contacts">
+        <Card title="Not signed in — saved on this device" titleIcon="contacts">
           <p>
-            You are not signed in, so the contacts shown here come from this browser's local demo
-            storage — nothing is sent to Firestore. Signing in later does not move demo contacts
-            into an account. Sign in to store contacts safely in your account.
+            You're not signed in, so the contacts shown here are the ones saved on this device —
+            nothing is sent to Firestore. Signing in later does not move them into your account.
+            Sign in to keep your contacts associated with your account.
           </p>
         </Card>
       )}
@@ -325,16 +335,34 @@ export function GetHelpPage(): JSX.Element {
               </Button>
               {geo.fix !== null && (
                 <div className={styles.locationResult}>
+                  {/* Primary: the real OpenStreetMap description once it exists;
+                      until then the coordinates, never a placeholder. */}
                   <p>
                     <strong>
-                      {geo.fix.coordinates.latitude.toFixed(5)},{" "}
-                      {geo.fix.coordinates.longitude.toFixed(5)}
+                      {place.label ?? formatCoordinates(geo.fix.coordinates)}
                     </strong>
                   </p>
+                  {/* Secondary: coordinates + accuracy stay visible either way. */}
                   <p>
-                    {describeAccuracy(geo.fix.accuracy)} (±{Math.round(geo.fix.accuracy)} m) ·{" "}
-                    {isFresh(geo.fix) ? "fresh" : "stale"} · {formatTimestamp(geo.fix.timestamp)}
+                    {formatCoordinateMeta(geo.fix)} · {isFresh(geo.fix) ? "fresh" : "stale"} ·{" "}
+                    {formatTimestamp(geo.fix.timestamp)}
                   </p>
+                  {place.status === "resolving" && (
+                    <p role="status">
+                      Finding a readable location name for these coordinates…
+                    </p>
+                  )}
+                  {place.status === "unavailable" && (
+                    <p role="status">
+                      Location acquired, but a readable location name could not be determined —
+                      showing coordinates.
+                    </p>
+                  )}
+                  {place.label !== null && (
+                    <p>
+                      {REVERSE_GEOCODE_ATTRIBUTION} {REVERSE_GEOCODE_DISCLOSURE}
+                    </p>
+                  )}
                 </div>
               )}
               {geo.message !== null && (

@@ -6,6 +6,8 @@ import { withDistanceFrom, validateNearbyQuery, buildNearbyFacilityId, NearbyDis
 import {
   adaptVerifiedFacilities,
   dedupeNearbyResults,
+  discoverNearbyFacilities,
+  DISCOVERY_RADIUS_LADDER,
   normalizeDynamicCandidate,
   searchNearbyFacilities,
   StaticTestProvider,
@@ -269,6 +271,131 @@ describe("adapter and seam units", () => {
     const list = [makeDynamic(), makeDynamic()];
     const out = dedupeNearbyResults(list as never);
     expect(out).toHaveLength(2);
+  });
+});
+
+describe("discovery flow — internal widening (the UI exposes no radius)", () => {
+  /** Provider that records the radius of every call and returns what the test asks for. */
+  function recordingProvider(
+    calls: number[],
+    results: (radiusMeters: number) => Parameters<typeof normalizeDynamicCandidate>[0][],
+  ): FacilityDiscoveryProvider {
+    return {
+      providerId: "recording-provider",
+      searchNearby: async (query) => {
+        calls.push(query.radiusMeters);
+        return results(query.radiusMeters);
+      },
+    };
+  }
+
+  it("widens through the ladder until the result set is sufficient", async () => {
+    const calls: number[] = [];
+    const provider = recordingProvider(calls, (radius) =>
+      radius < 15_000
+        ? []
+        : [
+            makeDynamic({ externalId: "node/1", coordinates: { latitude: 9.235, longitude: 12.4575 } }),
+            makeDynamic({ externalId: "node/2", coordinates: { latitude: 9.245, longitude: 12.462 } }),
+          ],
+    );
+
+    const outcome = await discoverNearbyFacilities(FROM, provider, { minimumResults: 2 });
+
+    // Started local (3 km), widened exactly one rung, stopped once satisfied.
+    expect(calls).toEqual([3_000, 15_000]);
+    expect(outcome.facilities).toHaveLength(2);
+    expect(outcome.radiusMeters).toBe(15_000);
+    // The widening is reported honestly — a wide result set is never sold as a local one.
+    expect(outcome.note).toMatch(/search was widened to 15 km/i);
+  });
+
+  it("does not widen at all when the first rung is already sufficient", async () => {
+    const calls: number[] = [];
+    const provider = recordingProvider(calls, () => {
+      const facilities: Parameters<typeof normalizeDynamicCandidate>[0][] = [];
+      for (let index = 0; index < 3; index++) {
+        facilities.push(
+          makeDynamic({ externalId: `node/${index}`, coordinates: { latitude: 9.235, longitude: 12.457 } }),
+        );
+      }
+      return facilities;
+    });
+
+    const outcome = await discoverNearbyFacilities(FROM, provider, { minimumResults: 3 });
+
+    expect(calls).toEqual([3_000]);
+    expect(outcome.radiusMeters).toBe(3_000);
+    expect(outcome.facilities).toHaveLength(3);
+    expect(outcome.note ?? "").not.toMatch(/widen/i);
+  });
+
+  it("stops at the widest rung and says so honestly when nothing exists anywhere in the ladder", async () => {
+    const calls: number[] = [];
+    const provider = recordingProvider(calls, () => []);
+
+    const outcome = await discoverNearbyFacilities(FROM, provider);
+
+    expect(calls).toEqual([...DISCOVERY_RADIUS_LADDER]);
+    expect(outcome.facilities).toEqual([]);
+    expect(outcome.radiusMeters).toBe(50_000);
+    expect(outcome.note).toMatch(/even after widening the search to 50 km/i);
+  });
+
+  it("merges results across rungs without duplicates, nearest-first", async () => {
+    const far = makeDynamic({
+      externalId: "node/far",
+      name: "Far Clinic",
+      coordinates: { latitude: 9.42, longitude: 12.66 },
+    });
+    const near = makeDynamic({
+      externalId: "node/near",
+      name: "Near Clinic",
+      coordinates: { latitude: 9.2352, longitude: 12.4571 },
+    });
+    const calls: number[] = [];
+    // The narrower rung only knows the far one; the wider rung rediscovers it
+    // alongside a nearer facility — so merging must collapse the duplicate.
+    const provider = recordingProvider(calls, (radius) =>
+      radius < 15_000 ? [far] : [near, far],
+    );
+
+    const outcome = await discoverNearbyFacilities(FROM, provider, { minimumResults: 2 });
+
+    expect(calls).toEqual([3_000, 15_000]);
+    expect(outcome.facilities.map((f) => f.name)).toEqual(["Near Clinic", "Far Clinic"]);
+    expect(new Set(outcome.facilities.map((f) => f.id)).size).toBe(outcome.facilities.length);
+    expect(outcome.facilities.map((f) => f.distanceMeters)).toEqual(
+      [...outcome.facilities.map((f) => f.distanceMeters)].sort((a, b) => a - b),
+    );
+  });
+
+  it("ignores rungs outside the contract radius limits and falls back to the contract maximum", async () => {
+    const calls: number[] = [];
+    const provider = recordingProvider(calls, () => []);
+
+    const outcome = await discoverNearbyFacilities(FROM, provider, {
+      radiusLadder: [10, 999_999],
+      minimumResults: 1,
+    });
+
+    expect(calls).toEqual([50_000]);
+    expect(outcome.radiusMeters).toBe(50_000);
+    // Single rung → the "within R" phrasing, not the widening phrasing.
+    expect(outcome.note).toMatch(/within 50 km of your location/i);
+  });
+
+  it("keeps verified and dynamic results distinguishable through the whole flow", async () => {
+    verifiedSeed();
+    const provider = recordingProvider([], () => [
+      makeDynamic({ externalId: "node/osm-1", coordinates: { latitude: 9.235, longitude: 12.457 } }),
+    ]);
+
+    const outcome = await discoverNearbyFacilities(FROM, provider, { minimumResults: 4 });
+
+    expect(outcome.facilities.filter((f) => f.trust === "verified").length).toBe(2);
+    expect(outcome.facilities.filter((f) => f.trust === "dynamic").length).toBe(1);
+    expect(outcome.sources.map((source) => source.id)).toContain("dynamic-provider");
   });
 });
 

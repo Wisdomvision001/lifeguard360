@@ -1,4 +1,4 @@
-# Lifeguard360 — Facility Discovery (Overpass/OSM, Preparation Tooling)
+# Lifeguard360 — Facility Discovery (Overpass/OpenStreetMap)
 
 > **Overpass/OpenStreetMap is a discovery source, not an authoritative verification
 > source. A discovered facility must never automatically become `verified: true`.**
@@ -7,16 +7,27 @@
 
 `tools/facilityDiscovery/` discovers candidate healthcare facilities from
 OpenStreetMap via the Overpass API so a human can review, verify, and deliberately
-promote them into the curated dataset (`tools/facilities.*.json`). The public
-application never talks to Overpass; its runtime facility search continues to read
-**verified facilities from Firestore only**.
+promote them into the curated dataset (`tools/facilities.*.json`).
+
+Part 1 of this document describes that **preparation tooling**. Part 2 describes the
+**runtime layer** (AD-13), which also queries Overpass — at request time, from the
+user's own coordinates — but keeps every discovered record untrusted
+(`trust: "dynamic"`). The curated Firestore dataset remains the only source of
+`verified` facilities in either case.
 
 ## 2. Architecture
 
 ```
 OSM/Overpass → discovery candidates → human review → curated dataset
             → dataset validation → Firebase Admin seeding → Firestore facilities
-            → Lifeguard360 public facility search (unchanged)
+            → Lifeguard360 verified facility search (unchanged)
+```
+
+The runtime layer adds a second, untrusted path (Part 2):
+
+```
+user coordinates → Overpass (live) → normalized dynamic records ┐
+Firestore verified facilities ───────────────────────────────────┴→ labelled results
 ```
 
 Layers (and who owns them):
@@ -166,14 +177,20 @@ These boundaries are enforced by static-assertion tests (`safety.test.ts`).
 
 Part 1 above is **developer/admin data acquisition**. This part defines the
 **victim-facing runtime discovery layer**, which is a separate responsibility with
-separate code. The Yola discovery CLI is never connected to the runtime search.
+separate code. The discovery CLI is never connected to the runtime search.
+
+> **Scope:** Runtime facility discovery is location-based and intended for locations
+> throughout Nigeria. Yola and Jos are verification examples only. Every query is
+> derived at request time from the user's current coordinates — there is no list of
+> supported cities, states or LGAs in the discovery code, and no geographic boundary
+> or allowlist is applied.
 
 ## R1. Two facility sources, one normalized model
 
 ```
 Verified (trusted)                         Dynamic (untrusted)
-  Lifeguard360 curated dataset               external runtime provider (future)
-  persisted in Firestore                     overpass/OSM or commercial provider
+  Lifeguard360 curated dataset               Overpass/OSM runtime provider
+  persisted in Firestore                     queried live from the user's fix
   human-verified provenance                  machine-discovered, no verification
         ↓                                            ↓
   facilityService.findNearbyFacilities()      FacilityDiscoveryProvider
@@ -183,13 +200,19 @@ Verified (trusted)                         Dynamic (untrusted)
         └──────────────── combine → dedupe seam → app-computed distance → sort → UI ─┘
 ```
 
-Implementation (contracts + service only; no provider integrated yet):
+Implementation:
 
 - `src/services/facilities/nearbyDiscoveryContracts.ts` — normalized model,
   provider interface, error model, validation helpers.
 - `src/services/facilities/nearbyDiscoveryService.ts` — `searchNearbyFacilities()`:
   validates the query, runs the verified Firestore path, optionally invokes an
   injected provider, stamps trust at the service boundary, sorts nearest-first.
+  `discoverNearbyFacilities()` is the product flow above it (R7).
+- `src/services/facilities/overpassProvider.ts` — the runtime Overpass/OSM provider
+  (R7).
+- Consumers: `HomePage` (3-row preview) and `FacilitiesPage` (full list) call the
+  discovery flow; `LocationMap.toMapFacility()` projects either source onto the map's
+  narrow display contract.
 
 ## R2. Explicit separations
 
@@ -240,11 +263,108 @@ results — it is recorded in `diagnostics.errorsBySource` and surfaced as a not
 - No provider API secrets belong in client code; a future provider requiring
   protected credentials must proxy through a trusted backend.
 - Firestore remains the trusted persistence layer for approved Lifeguard360 data;
-  dynamic results are never persisted (no caching in this spike).
+  dynamic results are never persisted anywhere. The provider keeps at most an
+  in-memory, session-local, short-lived response cache (never `localStorage`,
+  `sessionStorage`, IndexedDB or Firestore), and it is test-pinned that no storage
+  writes occur.
 
 ## R6. Current status
 
-The spike ships contracts, the service pipeline, and 24 test-pinned behaviours.
-No real provider is integrated and no network calls are made by this layer. The
-next decision is the production dynamic provider (OSM/Overpass-runtime vs a
-commercial API) and whether it needs a server proxy for credentials.
+The normalized pipeline (contracts + service) is in production use, and the
+runtime provider is **integrated**: `overpassProvider` (R7) satisfies
+`FacilityDiscoveryProvider`, and both Home and `/facilities` run the widening
+discovery flow against it.
+
+What is live:
+
+- verified Firestore facilities via the unchanged `facilityService` path;
+- dynamic OpenStreetMap facilities discovered live from the user's coordinates;
+- one labelled, nearest-first result list with per-source trust chips;
+- honest empty/error copy in place of fabricated results;
+- no radius control anywhere in the UI — widening is internal (R7).
+
+Still open (deliberately not decided here): whether a commercial provider is ever
+added alongside OSM, and whether any future provider needs a server proxy for
+protected credentials. OSM/Overpass needs neither a key nor a proxy — the endpoint
+is public and CORS-open — so no backend was added.
+
+### Verification examples (not a supported-location list)
+
+Yola (9.2398, 12.4987) and Jos (9.8965, 8.8583) are used in tests and manual checks
+as **examples among many** to prove that changing coordinates changes the query. The
+test suite explicitly guards against geographic hard-coding: the provider query must
+contain no city/state text, the module must contain no location allowlist, and
+arbitrary coordinate pairs (including a southern-hemisphere one) must each produce
+their own `around:` clause. Discovery is Nigeria-wide because it is coordinate-driven,
+not because any location is enumerated.
+
+## R7. Runtime Overpass provider
+
+`src/services/facilities/overpassProvider.ts` implements `FacilityDiscoveryProvider`
+(`providerId: "OpenStreetMap"`) and is the only module that performs network I/O for
+runtime discovery.
+
+### Endpoint and request
+
+- `POST https://overpass-api.de/api/interpreter`, body `data=<QL>`
+  (`application/x-www-form-urlencoded`). The browser's own `User-Agent` is sent with
+  every request (Overpass answers `406` to requests without one), and no header
+  carries credentials. The endpoint is public, CORS-open
+  (`Access-Control-Allow-Origin: *`), and needs no API key — so the browser calls it
+  directly and **no backend or proxy was introduced**.
+- Query shape: `[out:json][timeout:15];` with one `nwr[...](around:R,LAT,LON);`
+  clause per tag, then `out center tags 200;`.
+- Tags: `amenity=hospital|clinic|pharmacy|doctors`, `healthcare=*` — the same
+  healthcare union the Part 1 tooling uses.
+- **Coordinates only.** The query is built from the runtime latitude/longitude and
+  the radius; no city, state or LGA ever appears in it.
+- Timeouts: server-side `15 s`, client-side `AbortController` at `15 s`; one retry
+  after `1.5 s` for rate-limit/transient failures.
+
+### Radius policy (no user-facing selector)
+
+There is no radius selector in the product and no radius parameter in the discovery
+flow. `discoverNearbyFacilities()` walks an internal ladder — 3 km → 15 km → 50 km
+(the contract maximum) — stopping as soon as the merged set reaches the minimum
+result count, then sorts nearest-first. The outcome reports the rung that produced
+the shown results, and the UI states the widening honestly instead of presenting a
+wide result set as a local one. **Distances describe results; they never filter
+eligibility.**
+
+### Normalization and identity
+
+- One record per OSM element; `externalId` is `<type>/<id>` (`node/123`),
+  `sourceUrl` is the corresponding `openstreetmap.org` URL.
+- Coordinates come from node `lat`/`lon` or way/relation `center`; a record without
+  valid coordinates is dropped (never coerced to `0,0`).
+- Category is mapped from the approved tag union (hospital, clinic, pharmacy,
+  doctors); a nameless element is labelled
+  `"<Category> (name not in OpenStreetMap)"` — a name is never invented.
+- Optional detail is carried only when present (`phone`/`contact:phone`,
+  `opening_hours`, `operator`, composed `addr:*`).
+- Trust and distance are **not** the provider's to assign: the service stamps
+  `trust: "dynamic"` and recomputes `distanceMeters` from the user's own fix.
+- Duplicates are collapsed by OSM identity before the category filter and the
+  200-element cap; the service's `dedupeNearbyResults` seam runs afterwards.
+
+### Failure mapping
+
+Provider failures become normalized `NearbyDiscoveryErrorCode` values and never
+discard verified results (they are recorded in `diagnostics.errorsBySource` and
+surfaced as a note):
+
+| Condition | Code | Retried |
+|---|---|---|
+| client abort / timeout | `provider-timeout` | no |
+| network failure / 5xx | `provider-unavailable` | 5xx yes |
+| 429 | `provider-rate-limited` | yes (one retry) |
+| other 4xx | `provider-unavailable` | no |
+| unparseable body / non-array `elements` | `provider-malformed-response` | no |
+
+Raw payloads, URLs and status bodies never reach the UI. The request body carries
+coordinates and tags only — no uid, email, phone, token or API key (test-pinned).
+
+### Attribution
+
+OpenStreetMap-derived results are shown with “© OpenStreetMap contributors (ODbL)”,
+and each dynamic record links back to its source element.

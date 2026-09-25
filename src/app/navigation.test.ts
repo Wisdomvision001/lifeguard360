@@ -3,12 +3,13 @@ import { describe, expect, it } from "vitest";
 import { NAV_ITEMS } from "@/app/navigation";
 
 /**
- * Navigation/guard consistency (Guest Mode tasks 1–3).
+ * Navigation/guard consistency (unauthenticated access tasks 1–3).
  *
- * Pins the navigation contract for the temporary demo posture: routes that
- * are public (contacts, activity — reachable signed-out with browser-local
- * demo storage) must NOT carry `requiresAccount`, so AppLayout does not hide
- * them from guests. Account-gated routes (offline, profile) keep the flag.
+ * Pins the navigation contract for the temporary authentication bypass:
+ * routes that are public (contacts, activity — reachable while not signed in,
+ * with device-local storage) must NOT carry `requiresAccount`, so AppLayout
+ * does not hide them from signed-out users. Account-gated routes (offline,
+ * profile) keep the flag.
  */
 
 function itemFor(path: string) {

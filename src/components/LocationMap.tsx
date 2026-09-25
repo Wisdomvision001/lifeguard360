@@ -3,7 +3,8 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 import { facilityDirectionsUrl } from "@/services/facilities/facilityService";
-import type { FacilityWithDistance, GeoCoordinates, LocationFix } from "@/types";
+import type { NearbyFacility } from "@/services/facilities/nearbyDiscoveryContracts";
+import type { GeoCoordinates, LocationFix } from "@/types";
 import { formatDistance } from "@/utils/format";
 import styles from "@/components/LocationMap.module.css";
 
@@ -33,8 +34,53 @@ function isRenderableCoordinates(coordinates: GeoCoordinates): boolean {
   );
 }
 
+/**
+ * The narrow contract the map needs to plot a facility. The existing verified
+ * `FacilityWithDistance` is structurally assignable to it, so verified callers
+ * and dynamic (discovered) results both flow through one display path without
+ * the map learning anything about providers.
+ */
+export interface MapFacility {
+  id: string;
+  name: string;
+  category: string;
+  coordinates: GeoCoordinates;
+  distanceMeters: number;
+  verified: boolean;
+  /** Human-readable provenance label (e.g. "Verified by Lifeguard360", "OpenStreetMap"). */
+  source: string;
+  /**
+   * Trust classification when known. "dynamic" means runtime-discovered and
+   * unreviewed, and is labelled as such — it can never read as verified.
+   */
+  trust?: "verified" | "dynamic";
+  address?: string;
+  phone?: string;
+  openingHours?: string;
+  /** Link to the source record (e.g. the OpenStreetMap element), when one exists. */
+  sourceUrl?: string;
+}
+
+/** Projects a discovered facility onto the map's display contract. Pure. */
+export function toMapFacility(facility: NearbyFacility): MapFacility {
+  return {
+    id: facility.id,
+    name: facility.name,
+    category: facility.category,
+    coordinates: facility.coordinates,
+    distanceMeters: facility.distanceMeters,
+    verified: facility.trust === "verified",
+    source: facility.source.label,
+    trust: facility.trust,
+    address: facility.address,
+    phone: facility.phone,
+    openingHours: facility.openingHours,
+    sourceUrl: facility.sourceUrl,
+  };
+}
+
 /** Popup content built via DOM APIs (no HTML string interpolation of data). */
-function buildFacilityPopup(facility: FacilityWithDistance): HTMLElement {
+function buildFacilityPopup(facility: MapFacility): HTMLElement {
   const root = document.createElement("div");
 
   const name = document.createElement("strong");
@@ -55,13 +101,21 @@ function buildFacilityPopup(facility: FacilityWithDistance): HTMLElement {
     root.appendChild(address);
   }
 
+  // Trust labelling: a runtime-discovered result is never presented as
+  // verified data, and a verified one never loses its provenance.
+  const isDynamic = facility.trust === "dynamic";
   const verified = document.createElement("p");
   verified.className = styles.popupMeta;
-  verified.textContent = facility.verified ? "Verified facility" : "Unverified record";
+  verified.textContent = isDynamic
+    ? `Dynamic result · ${facility.source}`
+    : facility.verified
+      ? "Verified facility"
+      : "Unverified record";
   root.appendChild(verified);
 
   // Provenance (5D-3): shown when present so source data is never dead data.
-  if (facility.source !== "" && facility.source !== "unknown") {
+  // Dynamic results already name their provider in the trust line above.
+  if (!isDynamic && facility.source !== "" && facility.source !== "unknown") {
     const source = document.createElement("p");
     source.className = styles.popupSource;
     source.textContent = facility.source;
@@ -83,6 +137,17 @@ function buildFacilityPopup(facility: FacilityWithDistance): HTMLElement {
     root.appendChild(phone);
   }
 
+  // Source record (e.g. the OpenStreetMap element) when the provider supplies one.
+  if (facility.sourceUrl !== undefined && facility.sourceUrl !== "") {
+    const record = document.createElement("a");
+    record.className = styles.popupLink;
+    record.href = facility.sourceUrl;
+    record.target = "_blank";
+    record.rel = "noopener noreferrer";
+    record.textContent = "Source record";
+    root.appendChild(record);
+  }
+
   const directions = document.createElement("a");
   directions.className = styles.popupLink;
   directions.href = facilityDirectionsUrl(facility);
@@ -96,8 +161,12 @@ function buildFacilityPopup(facility: FacilityWithDistance): HTMLElement {
 
 export interface LocationMapProps {
   location: LocationFix | null;
-  /** Nearby verified facilities to plot (Phase 5D-1). Optional — omitted = no facility layer content. */
-  facilities?: FacilityWithDistance[];
+  /**
+   * Facilities to plot (Phase 5D-1; dynamic discovery added later). Verified
+   * `FacilityWithDistance[]` and discovered `NearbyFacility[]` (via
+   * `toMapFacility`) are both accepted. Optional — omitted = no facility layer.
+   */
+  facilities?: MapFacility[];
 }
 
 export function LocationMap({ location, facilities }: LocationMapProps): JSX.Element {

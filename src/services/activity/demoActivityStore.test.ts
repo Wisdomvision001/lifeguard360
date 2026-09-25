@@ -7,9 +7,9 @@ import {
 import type { ActivityType } from "@/types";
 
 /**
- * Demo-mode activity store: browser-local only, never Firestore. These tests
- * pin the localStorage contract, the demo-`id` namespacing, the six-type
- * allowlist, the newest-first/100-cap behaviour, and guest coordinate
+ * Device-local activity store: localStorage only, never Firestore. These tests
+ * pin the localStorage contract, the `demo-` id namespacing, the six-type
+ * allowlist, the newest-first/100-cap behaviour, and the coordinate-minimisation
  * data-minimisation.
  */
 
@@ -22,7 +22,7 @@ const ALL_TYPES: readonly ActivityType[] = [
   "offline_download",
 ];
 
-describe("demoActivityStore", () => {
+describe("demoActivityStore (device-local activity)", () => {
   beforeEach(() => {
     window.localStorage.clear();
     vi.restoreAllMocks();
@@ -84,7 +84,7 @@ describe("demoActivityStore", () => {
     expect(records[records.length - 1].detail.seq).toBe(20);
   });
 
-  it("strips exact coordinates from guest location_shared detail (data minimisation)", () => {
+  it("strips exact coordinates from unauthenticated location_shared detail (data minimisation)", () => {
     logDemoActivity("location_shared", {
       via: "get-help",
       coordinates: { latitude: 9.1945102, longitude: 12.4914788 },
@@ -96,7 +96,7 @@ describe("demoActivityStore", () => {
     expect(record.detail.via).toBe("get-help");
   });
 
-  it("strips coordinates for every guest location_shared variant but keeps other detail", () => {
+  it("strips coordinates for every unauthenticated location_shared variant but keeps other detail", () => {
     logDemoActivity("location_shared", {
       via: "sms",
       contactId: "demo-abc123",

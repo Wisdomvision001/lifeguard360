@@ -1,4 +1,4 @@
-import type { GeoCoordinates } from "@/types";
+import type { GeoCoordinates, LocationFix } from "@/types";
 
 /**
  * Shared, dependency-free formatting and geometry helpers.
@@ -40,6 +40,30 @@ export function distanceMeters(a: GeoCoordinates, b: GeoCoordinates): number {
 export function mapsLink(coordinates: GeoCoordinates): string {
   const { latitude, longitude } = coordinates;
   return `https://maps.google.com/?q=${latitude.toFixed(6)},${longitude.toFixed(6)}`;
+}
+
+/**
+ * Plain coordinate text, shared so no two screens disagree. The default 4
+ * decimals (~11 m) is already finer than typical device accuracy, so it does
+ * not overstate precision — the accuracy figure sits beside it.
+ */
+export function formatCoordinates(coordinates: GeoCoordinates, precision = 4): string {
+  const { latitude, longitude } = coordinates;
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return "—";
+  return `${latitude.toFixed(precision)}, ${longitude.toFixed(precision)}`;
+}
+
+/**
+ * The approved SECONDARY location line: coordinates plus accuracy, exactly as
+ * the readable location is the primary text.
+ * e.g. "9.2398, 12.4987 · ±18 m accuracy"
+ */
+export function formatCoordinateMeta(fix: Pick<LocationFix, "coordinates" | "accuracy">): string {
+  const coordinates = formatCoordinates(fix.coordinates);
+  const accuracy = Math.round(fix.accuracy);
+  return Number.isFinite(fix.accuracy)
+    ? `${coordinates} · ±${accuracy} m accuracy`
+    : `${coordinates} · accuracy unknown`;
 }
 
 /** Human-readable accuracy band, for honest UI copy. */

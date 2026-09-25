@@ -54,7 +54,8 @@ vi.mock("leaflet", () => {
 vi.mock("leaflet/dist/leaflet.css", () => ({}));
 
 import L from "leaflet";
-import { LocationMap } from "@/components/LocationMap";
+import { LocationMap, toMapFacility, type MapFacility } from "@/components/LocationMap";
+import type { NearbyFacility } from "@/services/facilities/nearbyDiscoveryContracts";
 import type { FacilityWithDistance, LocationFix } from "@/types";
 
 const FIX: LocationFix = {
@@ -83,7 +84,9 @@ const FACILITY: FacilityWithDistance = {
   distanceMeters: 2750,
 };
 
-function renderMap(location: LocationFix | null, facilities?: FacilityWithDistance[]): void {
+// Verified FacilitiesWithDistance are structurally assignable to the map's
+// narrow MapFacility contract, so one helper covers both sources.
+function renderMap(location: LocationFix | null, facilities?: MapFacility[]): void {
   render(<LocationMap location={location} facilities={facilities} />);
 }
 
@@ -246,5 +249,89 @@ describe("LocationMap facilities layer (Phase 5D-1)", () => {
     const { rerender } = render(<LocationMap location={FIX} facilities={[FACILITY]} />);
     rerender(<LocationMap location={FIX} facilities={[]} />);
     expect(layerGroupInstance.clearLayers).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe("LocationMap — dynamically discovered facilities", () => {
+  /** A runtime-discovered (untrusted) record as the discovery service emits it. */
+  function nearby(overrides: Partial<NearbyFacility> = {}): NearbyFacility {
+    return {
+      id: "dynamic-provider:node/42",
+      name: "OSM Clinic",
+      category: "clinic",
+      coordinates: { latitude: 9.2, longitude: 12.4 },
+      source: { id: "dynamic-provider", label: "OpenStreetMap" },
+      trust: "dynamic",
+      distanceMeters: 1234,
+      address: "1 Test Road",
+      phone: "+2348000000000",
+      openingHours: "Mo-Su 08:00-20:00",
+      sourceUrl: "https://www.openstreetmap.org/node/42",
+      ...overrides,
+    };
+  }
+
+  it("projects a discovered record onto the map contract without granting trust", () => {
+    const projected = toMapFacility(nearby());
+    expect(projected).toMatchObject({
+      id: "dynamic-provider:node/42",
+      name: "OSM Clinic",
+      category: "clinic",
+      verified: false,
+      trust: "dynamic",
+      source: "OpenStreetMap",
+      distanceMeters: 1234,
+      address: "1 Test Road",
+      phone: "+2348000000000",
+      openingHours: "Mo-Su 08:00-20:00",
+      sourceUrl: "https://www.openstreetmap.org/node/42",
+    });
+  });
+
+  it("projects a verified record as verified under its own provenance label", () => {
+    const projected = toMapFacility(
+      nearby({ source: { id: "lifeguard360", label: "Verified by Lifeguard360" }, trust: "verified" }),
+    );
+    expect(projected.verified).toBe(true);
+    expect(projected.trust).toBe("verified");
+    expect(projected.source).toBe("Verified by Lifeguard360");
+  });
+
+  it("never reads as verified from a provider-supplied flag — trust is the only signal", () => {
+    const spoofed = { ...nearby(), verified: true } as NearbyFacility & { verified: boolean };
+    expect(toMapFacility(spoofed).verified).toBe(false);
+  });
+
+  it("omits absent optional detail instead of inventing it", () => {
+    const projected = toMapFacility(
+      nearby({
+        address: undefined,
+        phone: undefined,
+        openingHours: undefined,
+        sourceUrl: undefined,
+      }),
+    );
+    expect(projected.address).toBeUndefined();
+    expect(projected.phone).toBeUndefined();
+    expect(projected.openingHours).toBeUndefined();
+    expect(projected.sourceUrl).toBeUndefined();
+  });
+
+  it("plots and popups a discovered facility as a dynamic result, never as verified", () => {
+    renderMap(FIX, [toMapFacility(nearby())]);
+
+    // 1 user marker + 1 facility marker at the provider's coordinates.
+    expect(L.circleMarker).toHaveBeenCalledTimes(2);
+    const popupContent = markerInstance.bindPopup.mock.calls[0]?.[0] as HTMLElement;
+    expect(popupContent.textContent).toContain("OSM Clinic");
+    expect(popupContent.textContent).toContain("Dynamic result · OpenStreetMap");
+    expect(popupContent.textContent).not.toContain("Verified facility");
+    expect(popupContent.textContent).not.toContain("Unverified record");
+    // The provider is named once (in the trust line) — it is not repeated as a source line.
+    expect((popupContent.textContent ?? "").split("OpenStreetMap")).toHaveLength(2);
+    // The OSM element stays reachable from the popup.
+    expect(
+      popupContent.querySelector('a[href="https://www.openstreetmap.org/node/42"]'),
+    ).not.toBeNull();
   });
 });

@@ -2,7 +2,7 @@ import type { CommunicationState, PreparedSms } from "@/types";
 
 import { logActivity } from "@/services/activity/activityService";
 import { formatDistance, mapsLink } from "@/utils/format";
-import type { GeoCoordinates, LocationFix } from "@/types";
+import type { LocationFix } from "@/types";
 
 /**
  * EmergencyCommunicationService (Phase 7) — Call/SMS via the device's own
@@ -55,18 +55,23 @@ export function prepareEmergencySms(input: {
   const to = input.contact.phoneNumber;
   const href = `sms:${to}?&body=${encodeURIComponent(body)}`;
   window.location.href = href;
-  const state: CommunicationState = "composer-opened";  if (input.uid) {
-    void logActivity(input.uid, "emergency_action", {
-      action: "sms_prepared",
-      contactId: input.contact.id,
-      includedLocation: input.fix !== null,
-    });
-  }
+  const state: CommunicationState = "composer-opened";
+  // Logged for both signed-in and not-signed-in users. An unnecessary uid
+  // guard previously dropped this record for unauthenticated users, while the
+  // call path and the location record below were already logged either way.
+  void logActivity(input.uid, "emergency_action", {
+    action: "sms_prepared",
+    contactId: input.contact.id,
+    includedLocation: input.fix !== null,
+  });
   if (input.fix) {
+    // Data minimisation (Task 1 privacy correction): the record proves that a
+    // one-shot fix was included in the prepared message — it never stores the
+    // coordinates themselves, matching the unauthenticated device-local path
+    // and the Get Help record.
     void logActivity(input.uid, "location_shared", {
       via: "sms",
       contactId: input.contact.id,
-      coordinates: input.fix.coordinates as GeoCoordinates,
     });
   }
   return { state, to, body };

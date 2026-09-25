@@ -95,8 +95,13 @@ export async function findNearbyFacilities(
   return { facilities: withDistance, source: "firestore", note: null };
 }
 
-/** Directions link (Google Maps) for a facility — display only. */
-export function facilityDirectionsUrl(facility: Facility): string {
+/**
+ * Directions link (Google Maps) for a facility — display only.
+ *
+ * Accepts anything carrying coordinates so verified records and dynamically
+ * discovered facilities share one directions behaviour.
+ */
+export function facilityDirectionsUrl(facility: { coordinates: GeoCoordinates }): string {
   const { latitude, longitude } = facility.coordinates;
   return `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`;
 }
