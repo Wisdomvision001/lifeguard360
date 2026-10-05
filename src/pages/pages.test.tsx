@@ -1,7 +1,48 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { JSX } from "react";
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { MemoryRouter, Route, Routes, useLocation } from "react-router";
+
+// Admin CMS services are mocked so route tests exercise the real components
+// without touching the network (fetchDraft/listMediaItems would otherwise
+// attempt live Firestore/Storage reads when VITE_FIREBASE_* env is present).
+vi.mock("@/services/admin/adminGuideService", () => ({
+  fetchGuideOverview: vi.fn().mockResolvedValue([]),
+  fetchDraft: vi.fn().mockResolvedValue({ guide: null, updatedAt: "" }),
+  fetchAllDrafts: vi.fn().mockResolvedValue(new Map()),
+  saveDraft: vi.fn().mockResolvedValue(undefined),
+  publishGuide: vi.fn().mockResolvedValue(undefined),
+  discardDraft: vi.fn().mockResolvedValue(undefined),
+}));
+
+vi.mock("@/services/admin/adminMediaService", async (importOriginal) => {
+  const actual = await importOriginal<Record<string, unknown>>();
+  return {
+    ...actual,
+    listMediaItems: vi.fn().mockResolvedValue([]),
+    buildMediaUsageIndex: vi.fn().mockResolvedValue(new Map()),
+    uploadImage: vi.fn(),
+    deleteMediaItem: vi.fn(),
+    replaceMediaItem: vi.fn(),
+  };
+});
+
+// Route/shell tests exercise the real router tree, which wires RequireAdmin
+// with its DEFAULT authorization observer. Authorization decisions themselves
+// are covered exhaustively in RequireAdmin.test.tsx; here the default observer
+// grants so admin route rendering can be tested independently of Firebase
+// auth state. Everything else from authService stays REAL (observeAuth,
+// used by AuthProvider, is untouched).
+vi.mock("@/services/auth/authService", async (importOriginal) => {
+  const actual = await importOriginal<typeof AuthService>();
+  return {
+    ...actual,
+    observeAdminAuthorization: (onChange: (authorization: AdminAuthorization) => void) => {
+      onChange({ decision: "granted" });
+      return () => undefined;
+    },
+  };
+});
 
 import { GuidePage } from "@/pages/GuidePage";
 import { GuideStepByStepPage } from "@/pages/GuideStepByStepPage";
@@ -15,6 +56,8 @@ import { AppRoutes } from "@/app/router";
 import { RequireAdmin } from "@/app/providers/RequireAdmin";
 import { AdminLayout } from "@/layouts/AdminLayout";
 import { ADMIN_NAV_ITEMS } from "@/app/adminNavigation";
+import type { AdminAuthorization } from "@/services/auth/authService";
+import type * as AuthService from "@/services/auth/authService";
 
 function renderWithProviders(ui: React.ReactElement): ReturnType<typeof render> {
   return render(
@@ -309,10 +352,10 @@ describe("admin route branch (Phase 1 · Task 1)", () => {
   }
 
   it("renders the section placeholders at their routes", () => {
+    // /admin/map was removed: Medical Facilities is a public feature, not an
+    // admin one — the public /facilities page covers it.
     renderAppAt("/admin/map");
-    expect(
-      screen.getByRole("heading", { name: "Location & Nearby Medical Facilities" }),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Page not found")).toBeInTheDocument();
 
     cleanup();
     renderAppAt("/admin/media");
@@ -323,11 +366,16 @@ describe("admin route branch (Phase 1 · Task 1)", () => {
     expect(screen.getByRole("heading", { name: "Settings" })).toBeInTheDocument();
   });
 
-  it("resolves the nested :categoryId route in the editor placeholder", () => {
+  it("renders the real guide editor at the nested :categoryId route", async () => {
     renderAppAt("/admin/first-aid/burns");
-    expect(screen.getByText(/Category parameter:/i)).toHaveTextContent(
-      "Category parameter: burns",
-    );
+    expect(
+      await screen.findByRole("heading", { level: 1, name: "Burns" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Guide details")).toBeInTheDocument();
+    expect(screen.getByText("Protocol steps")).toBeInTheDocument();
+    expect(screen.getByText(/admin-only working copy/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^save draft$/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^publish$/i })).toBeInTheDocument();
   });
 
   it("keeps unknown /admin/* paths in the admin context", () => {
@@ -373,9 +421,10 @@ describe("RequireAdmin guard (Phase 1 · Task 2)", () => {
     return <div>login page (from: {from})</div>;
   }
 
-  it("allows the admin route through in development mode (default check)", () => {
-    // vitest runs with import.meta.env.DEV === true, so the default
-    // environment check exercises the real development path.
+  it("allows the admin route through when authorization is granted", () => {
+    // The default authorization observer (mocked above to grant) exercises
+    // the real guard wiring end to end: only a GRANTED decision renders the
+    // protected tree — see RequireAdmin.test.tsx for denial/unresolved paths.
     render(
       <MemoryRouter initialEntries={["/admin"]}>
         <Routes>
@@ -402,7 +451,12 @@ describe("RequireAdmin guard (Phase 1 · Task 2)", () => {
           <Route
             path="admin/*"
             element={
-              <RequireAdmin isAdminEnvironment={() => false}>
+              <RequireAdmin
+                authorizationObserver={(onChange) => {
+                  onChange({ decision: "denied", reason: "unauthenticated" });
+                  return () => undefined;
+                }}
+              >
                 <div>secret admin content</div>
               </RequireAdmin>
             }
@@ -422,7 +476,12 @@ describe("RequireAdmin guard (Phase 1 · Task 2)", () => {
           <Route
             path="admin/*"
             element={
-              <RequireAdmin isAdminEnvironment={() => false}>
+              <RequireAdmin
+                authorizationObserver={(onChange) => {
+                  onChange({ decision: "denied", reason: "claim-missing-or-invalid" });
+                  return () => undefined;
+                }}
+              >
                 <div>editor would render here</div>
               </RequireAdmin>
             }
@@ -577,27 +636,39 @@ describe("AdminDashboardPage (Phase 1 · Task 4)", () => {
 
   it("quick actions navigate to real admin routes", () => {
     renderDashboard();
-    expect(screen.getByRole("link", { name: /Manage First-Aid Content/i })).toHaveAttribute(
+    const quickActions = within(screen.getByRole("region", { name: /Quick actions/i }));
+    expect(quickActions.getByRole("link", { name: /Manage First-Aid Content/i })).toHaveAttribute(
       "href",
       "/admin/first-aid",
     );
-    expect(screen.getByRole("link", { name: /Manage Media/i })).toHaveAttribute(
+    expect(quickActions.getByRole("link", { name: /Manage Media/i })).toHaveAttribute(
       "href",
       "/admin/media",
     );
-    expect(screen.getByRole("link", { name: /View Medical Facilities/i })).toHaveAttribute(
-      "href",
-      "/admin/map",
-    );
-    expect(screen.getByRole("link", { name: /View Users/i })).toHaveAttribute(
+    expect(quickActions.queryByRole("link", { name: /View Medical Facilities/i })).not.toBeInTheDocument();
+    expect(quickActions.getByRole("link", { name: /View Users/i })).toHaveAttribute(
       "href",
       "/admin/users",
+    );
+    expect(quickActions.getByRole("link", { name: /Analytics/i })).toHaveAttribute(
+      "href",
+      "/admin/analytics",
+    );
+    expect(quickActions.getByRole("link", { name: /Activity Log/i })).toHaveAttribute(
+      "href",
+      "/admin/activity",
     );
   });
 
   it("shows honest backend-pending states and no fabricated metrics", () => {
     renderDashboard();
-    expect(screen.getAllByText("Backend data not connected")).toHaveLength(2);
+    // Exactly one backend-pending tile remains (Users). Medical Facilities is
+    // not an admin-managed feature, so its tile was removed with the feature.
+    expect(screen.getAllByText("Not implemented")).toHaveLength(1);
+    expect(
+      screen.getByText(/User statistics are not fabricated/),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/Facility counts appear once/)).not.toBeInTheDocument();
     expect(
       screen.getByText(/No administrative activity recorded yet/i),
     ).toBeInTheDocument();

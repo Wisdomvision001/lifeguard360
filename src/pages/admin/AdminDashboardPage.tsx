@@ -5,6 +5,7 @@ import { Badge } from "@/components/Badge";
 import { Card } from "@/components/Card";
 import { Icon } from "@/components/icons";
 import { getAllGuides } from "@/services/firstAid/firstAidService";
+import { isFirebaseConfigured } from "@/services/firebase/client";
 import { CONTENT_VERSION } from "@/data/firstAid";
 import { CATEGORY_META } from "@/data/categoryMeta";
 import styles from "@/pages/admin/AdminDashboardPage.module.css";
@@ -13,15 +14,14 @@ import styles from "@/pages/admin/AdminDashboardPage.module.css";
  * Admin Dashboard (Phase 1 - Task 4).
  *
  * HONESTY CONTRACT: every value shown is derived from the running application
- * (bundled content, build mode, route availability). Anything that needs
- * backend data is shown as an explicit "backend not connected" state — never
- * a fabricated number. The data preparation below is kept separate from the
- * JSX so a real backend service can replace it without touching presentation.
+ * (bundled content, build mode, route availability) or read live from
+ * Firebase. Anything not implemented is shown as an explicit "not
+ * implemented" state — never a fabricated number. The data preparation below
+ * is kept separate from the JSX so backend services can evolve without
+ * touching presentation.
  */
 
 // ------------------------------------------------------------------ data prep
-
-const guides = getAllGuides();
 
 interface GuideSummary {
   id: string;
@@ -31,36 +31,34 @@ interface GuideSummary {
   contentVersion: string;
 }
 
-const guideSummaries: GuideSummary[] = guides.map((guide) => ({
-  id: guide.id,
-  label: guide.label,
-  toneClass: CATEGORY_META[guide.id]?.toneClass ?? "tone-red",
-  stepCount: guide.content.steps.length,
-  contentVersion: guide.content.contentVersion,
-}));
-
-/** Tiles whose data is not available until Firebase-backed admin services exist. */
+/** Tiles whose data is deliberately not implemented (never fabricated). */
 const backendPendingTiles = [
   {
     label: "Users",
-    value: "Backend data not connected",
-    note: "User statistics appear once the Firebase-backed admin services are connected.",
-  },
-  {
-    label: "Medical Facilities",
-    value: "Backend data not connected",
-    note: "Facility counts appear once the verified facilities dataset is connected.",
+    value: "Not implemented",
+    note: "User statistics are not fabricated — the Users section reads the live directory from Firestore.",
   },
 ] as const;
 
 // --------------------------------------------------------------- presentation
 
 export function AdminDashboardPage(): JSX.Element {
+  // Fresh per render so a published-content refresh (FirstAidContentProvider)
+  // is reflected immediately; before refresh resolves this is the bundled set.
+  const guides = getAllGuides();
+  const guideSummaries: GuideSummary[] = guides.map((guide) => ({
+    id: guide.id,
+    label: guide.label,
+    toneClass: CATEGORY_META[guide.id]?.toneClass ?? "tone-red",
+    stepCount: guide.content.steps.length,
+    contentVersion: guide.content.contentVersion,
+  }));
+
   return (
     <div className={styles.page}>
       <header className={styles.pageHeader}>
         <h1>Dashboard</h1>
-        <p>Overview of Lifeguard360 content, users, facilities, and system configuration.</p>
+        <p>Overview of Lifeguard360 first-aid content, users, analytics, activity, and settings.</p>
       </header>
 
       <section className={styles.tileGrid} aria-label="Overview">
@@ -82,7 +80,9 @@ export function AdminDashboardPage(): JSX.Element {
           <p className={styles.tileLabel}>System</p>
           <p className={styles.tileValue}>Application running</p>
           <p className={styles.tileNote}>
-            Frontend is operational; backend integration is pending.
+            {isFirebaseConfigured()
+              ? "Firebase configured — backend services read and write live data."
+              : "Firebase not configured — bundled content is served."}
           </p>
         </div>
       </section>
@@ -90,7 +90,8 @@ export function AdminDashboardPage(): JSX.Element {
       <Card title="First-Aid Content" titleIcon="first-aid">
         <p className={styles.cardIntro}>
           {guides.length} configured emergency categories · content version{" "}
-          {CONTENT_VERSION} · bundled application content (not yet backend-managed).
+          {CONTENT_VERSION} · bundled fallback content, overlaid by published
+          Firestore guides when available.
         </p>
         <ul className={styles.guideList}>
           {guideSummaries.map((guide) => (
@@ -119,13 +120,17 @@ export function AdminDashboardPage(): JSX.Element {
             <Icon name="upload" size={16} />
             Manage Media
           </Link>
-          <Link to="/admin/map" className={styles.actionLink}>
-            <Icon name="facility" size={16} />
-            View Medical Facilities
-          </Link>
           <Link to="/admin/users" className={styles.actionLink}>
             <Icon name="user" size={16} />
             View Users
+          </Link>
+          <Link to="/admin/analytics" className={styles.actionLink}>
+            <Icon name="heart-pulse" size={16} />
+            Analytics
+          </Link>
+          <Link to="/admin/activity" className={styles.actionLink}>
+            <Icon name="history" size={16} />
+            Activity Log
           </Link>
         </div>
       </section>

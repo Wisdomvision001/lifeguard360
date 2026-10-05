@@ -9,21 +9,55 @@ import {
 } from "@/types";
 
 /**
- * FirstAidService (Phase 3): serves first-aid content from the bundled,
- * versioned dataset. Offline by construction — a Firestore content source can
- * layer on top later without changing callers.
+ * FirstAidService: serves first-aid content from a MERGED store.
+ *
+ * Source precedence per category (Phase 6 fallback architecture):
+ *
+ *   published Firestore document (validated by guideContentCodec)
+ *     ?? bundled versioned dataset
+ *
+ * The overlay is populated once per refresh by FirstAidContentProvider; every
+ * caller keeps reading synchronously through getGuide()/getAllGuides() with
+ * no code changes. When Firestore is unavailable or a document fails
+ * validation, the bundled dataset stays served — the public app never breaks
+ * and never shows unvalidated content. The bundled dataset itself is never
+ * deleted (offline-first + fallback guarantee).
  *
  * Users only ever consume `published` content. The bundled dataset carries
  * `contentVersion` and provenance; nothing here presents unreviewed content
  * as clinically approved (see data/firstAid.ts header).
  */
 
+/** Validated published guides keyed by category; empty before first refresh. */
+const publishedOverlay = new Map<EmergencyCategoryId, FirstAidGuide>();
+
+/** Replace the published overlay after a successful Firestore read. */
+export function applyPublishedGuides(guides: FirstAidGuide[]): void {
+  publishedOverlay.clear();
+  for (const guide of guides) {
+    publishedOverlay.set(guide.id, guide);
+  }
+}
+
+/** Drop all published content (test hygiene / return to bundled-only state). */
+export function resetPublishedGuides(): void {
+  publishedOverlay.clear();
+}
+
+/** True when a validated Firestore document currently overrides the bundle. */
+export function isPublished(id: string): boolean {
+  return isEmergencyCategoryId(id) && publishedOverlay.has(id);
+}
+
 export function getAllGuides(): FirstAidGuide[] {
-  return Object.values(FIRST_AID_GUIDES);
+  return Object.values(FIRST_AID_GUIDES).map(
+    (guide) => publishedOverlay.get(guide.id) ?? guide,
+  );
 }
 
 export function getGuide(id: string): FirstAidGuide | null {
-  return isEmergencyCategoryId(id) ? FIRST_AID_GUIDES[id] : null;
+  if (!isEmergencyCategoryId(id)) return null;
+  return publishedOverlay.get(id) ?? FIRST_AID_GUIDES[id];
 }
 
 /** The canonical protocol steps of a guide. */

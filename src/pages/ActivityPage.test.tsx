@@ -47,6 +47,7 @@ vi.mock("@/services/auth/authService", () => ({
       user: null,
       profile: null,
       preferences: null,
+      claims: {},
       status: "signed-out",
       error: null,
     });
@@ -136,9 +137,10 @@ describe("ActivityPage — authenticated path unchanged", () => {
     const { observeAuth: mockedObserve } = await import("@/services/auth/authService");
     vi.mocked(mockedObserve).mockImplementation((callback: (state: AuthState) => void) => {
       callback({
-        user: { uid: "user-1", email: "user@example.com", displayName: "Test User" },
+        user: { uid: "user-1", email: "user@example.com", displayName: "Test User", emailVerified: true },
         profile: null,
         preferences: null,
+        claims: {},
         status: "signed-in",
         error: null,
       });

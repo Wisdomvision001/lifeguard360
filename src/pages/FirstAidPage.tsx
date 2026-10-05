@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import type { JSX } from "react";
 
-import { GUIDE_LIST } from "@/data/firstAid";
+import { getAllGuides } from "@/services/firstAid/firstAidService";
 import { assetPath } from "@/utils/paths";
 import { Card } from "@/components/Card";
 import { Icon } from "@/components/icons";
@@ -28,7 +28,7 @@ export function FirstAidPage(): JSX.Element {
       </header>
 
       <div className={styles.grid}>
-        {GUIDE_LIST.map((guide) => (
+        {getAllGuides().map((guide) => (
           <Link key={guide.id} to={`/first-aid/${guide.id}`} className={styles.card}>
             {guide.image !== undefined && (
               <span className={styles.thumb} aria-hidden="true">

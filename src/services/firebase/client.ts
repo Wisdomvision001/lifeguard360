@@ -1,6 +1,7 @@
 import { initializeApp, getApps, type FirebaseApp } from "firebase/app";
 import { getAuth, type Auth } from "firebase/auth";
 import { getFirestore, type Firestore } from "firebase/firestore";
+import { getStorage, type FirebaseStorage } from "firebase/storage";
 
 /**
  * Lazy Firebase initialisation.
@@ -40,9 +41,15 @@ export function readFirebaseConfig(): FirebaseConfig | null {
 let app: FirebaseApp | null = null;
 let firestore: Firestore | null = null;
 let auth: Auth | null = null;
+let storage: FirebaseStorage | null = null;
 
 /** Throws a clear error when Firebase env config is missing. */
-export function requireFirebase(): { app: FirebaseApp; db: Firestore; auth: Auth } {
+export function requireFirebase(): {
+  app: FirebaseApp;
+  db: Firestore;
+  auth: Auth;
+  storage: FirebaseStorage;
+} {
   const config = readFirebaseConfig();
   if (config === null) {
     throw new Error(
@@ -52,7 +59,11 @@ export function requireFirebase(): { app: FirebaseApp; db: Firestore; auth: Auth
   app = getApps()[0] ?? initializeApp(config);
   firestore = firestore ?? getFirestore(app);
   auth = auth ?? getAuth(app);
-  return { app, db: firestore, auth };
+  // Storage bucket for the admin CMS upload flow (guide images). The bucket
+  // comes from VITE_FIREBASE_STORAGE_BUCKET — the same public web-config
+  // values as everything else; writes are gated by Storage Security Rules.
+  storage = storage ?? getStorage(app);
+  return { app, db: firestore, auth, storage };
 }
 
 export function getDb(): Firestore {
@@ -61,6 +72,10 @@ export function getDb(): Firestore {
 
 export function getAuthInstance(): Auth {
   return requireFirebase().auth;
+}
+
+export function getStorageInstance(): FirebaseStorage {
+  return requireFirebase().storage;
 }
 
 export function isFirebaseConfigured(): boolean {

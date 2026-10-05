@@ -1,0 +1,101 @@
+/* Admin Users. Existing tokens only. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.pageHeader h1 {
+  font-size: var(--fs-xl);
+  margin-bottom: var(--space-1);
+}
+
+.pageHeader p {
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+  max-width: 70ch;
+}
+
+.notice {
+  font-size: var(--fs-sm);
+  color: var(--color-amber-600);
+  margin-bottom: var(--space-3);
+}
+
+.stateText {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.errorBox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  border: 1px solid var(--color-red-100);
+  background: var(--color-red-50);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+.countNote {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-3);
+}
+
+.userList {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.userRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+  flex-wrap: wrap;
+}
+
+.userRow:last-child {
+  border-bottom: none;
+}
+
+.userName {
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+}
+
+.userMeta {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.userMeta code {
+  font-family: var(--font-display);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0 var(--space-1);
+  word-break: break-all;
+}
+
+.userRow > :last-child {
+  margin-left: auto;
+}
+
+.boundaryList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-left: var(--space-5);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  line-height: 1.55;
+}

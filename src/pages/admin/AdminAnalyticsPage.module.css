@@ -1,0 +1,56 @@
+/* Admin Analytics. Existing tokens only. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.pageHeader h1 {
+  font-size: var(--fs-xl);
+  margin-bottom: var(--space-1);
+}
+
+.pageHeader p {
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+  max-width: 70ch;
+}
+
+.statusRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.explanation {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  max-width: 75ch;
+  margin-bottom: var(--space-3);
+}
+
+.requirementList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-left: var(--space-5);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  line-height: 1.55;
+}
+
+.requirementList strong {
+  color: var(--color-text);
+}
+
+.relatedNote {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.relatedNote a {
+  color: var(--color-blue-600);
+}

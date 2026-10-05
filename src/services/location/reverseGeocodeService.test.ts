@@ -56,6 +56,32 @@ const JIMETA_PAYLOAD = {
   boundingbox: ["9.2292380", "9.2563446", "12.4784624", "12.5095709"],
 };
 
+/**
+ * Verbatim live response shape for a coordinate whose closest match is a named
+ * facility: `display_name` leads with the object's own name, while the address
+ * fields stay locality-grade. Pins the POI-immunity guarantee.
+ */
+const FACILITY_MATCH_PAYLOAD = {
+  place_id: 42408930,
+  osm_type: "way",
+  osm_id: 670573837,
+  category: "amenity",
+  type: "university",
+  addresstype: "amenity",
+  name: "Modibbo Adama University of Technology",
+  display_name: "Modibbo Adama University of Technology, A13, Girei, Adamawa State, Nigeria",
+  address: {
+    amenity: "Modibbo Adama University of Technology",
+    road: "A13",
+    town: "Girei",
+    county: "Girei",
+    state: "Adamawa State",
+    "ISO3166-2-lvl4": "NG-AD",
+    country: "Nigeria",
+    country_code: "ng",
+  },
+};
+
 /** Verbatim live response for a coordinate Nominatim cannot describe. */
 const EMPTY_PAYLOAD = { error: "Unable to geocode" };
 
@@ -150,11 +176,42 @@ describe("isValidGeocodeCoordinates", () => {
 });
 
 describe("describePlaceLabel", () => {
-  it("uses the returned display_name verbatim", () => {
-    expect(describePlaceLabel(JIMETA_PAYLOAD)).toBe("Jimeta, Girei, Adamawa, 640221, Nigeria");
+  it("composes the locality label from the address fields OSM actually returned", () => {
+    expect(describePlaceLabel(JIMETA_PAYLOAD)).toBe("Jimeta, Girei, Adamawa, Nigeria");
   });
 
-  it("composes a label from the address parts OSM actually returned when display_name is absent", () => {
+  it("never presents the matched POI, its road or a postcode as the user's locality", () => {
+    const label = describePlaceLabel(FACILITY_MATCH_PAYLOAD);
+
+    expect(label).toBe("Girei, Adamawa State, Nigeria");
+    // The matched object's own name and its access road must stay out of the
+    // locality label even though display_name leads with them.
+    expect(label?.includes("University of Technology")).toBe(false);
+    expect(label?.includes("A13")).toBe(false);
+  });
+
+  it("orders settlements finest-first: hamlet before village before city", () => {
+    expect(
+      describePlaceLabel({ address: { village: "Kwo", city: "Jimeta", county: "Girei", state: "Adamawa", country: "Nigeria" } }),
+    ).toBe("Kwo, Jimeta, Girei, Adamawa, Nigeria");
+    expect(
+      describePlaceLabel({ address: { hamlet: "Dumnga", village: "Kofare", country: "Nigeria" } }),
+    ).toBe("Dumnga, Kofare, Nigeria");
+  });
+
+  it("composes county + state + country when no settlement field exists", () => {
+    expect(
+      describePlaceLabel({ address: { county: "Girei", state: "Adamawa State", country: "Nigeria" } }),
+    ).toBe("Girei, Adamawa State, Nigeria");
+  });
+
+  it("excludes the postcode from a composed label", () => {
+    expect(
+      describePlaceLabel({ address: { city: "Jimeta", postcode: "640221", state: "Adamawa", country: "Nigeria" } }),
+    ).toBe("Jimeta, Adamawa, Nigeria");
+  });
+
+  it("composes a label from the address parts OSM actually returned", () => {
     expect(
       describePlaceLabel({
         place_id: 1,
@@ -195,7 +252,7 @@ describe("reverseGeocode — success and incomplete responses", () => {
     const outcome = await reverseGeocode(JIMETA, fastConfig(fetchFn));
 
     expect(outcome.reason).toBeNull();
-    expect(outcome.place?.label).toBe("Jimeta, Girei, Adamawa, 640221, Nigeria");
+    expect(outcome.place?.label).toBe("Jimeta, Girei, Adamawa, Nigeria");
     expect(outcome.place?.attribution).toBe(REVERSE_GEOCODE_ATTRIBUTION);
     expect(outcome.place?.coordinates).toEqual(JIMETA);
     expect(calls).toHaveLength(1);
@@ -410,7 +467,7 @@ describe("reverseGeocode — session-memory cache and rate gate", () => {
 
     expect((await reverseGeocode(JIMETA, fastConfig(failing.fetchFn))).reason).toBe("unavailable");
     expect((await reverseGeocode(JIMETA, fastConfig(working.fetchFn))).place?.label).toBe(
-      "Jimeta, Girei, Adamawa, 640221, Nigeria",
+      "Jimeta, Girei, Adamawa, Nigeria",
     );
   });
 });

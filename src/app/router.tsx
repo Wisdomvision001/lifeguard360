@@ -22,7 +22,6 @@ import { NotFoundPage } from "@/pages/NotFoundPage";
 import { RequireAdmin } from "@/app/providers/RequireAdmin";
 import { AdminLayout } from "@/layouts/AdminLayout";
 import { AdminDashboardPage } from "@/pages/admin/AdminDashboardPage";
-import { AdminMapPage } from "@/pages/admin/AdminMapPage";
 import { AdminFirstAidPage } from "@/pages/admin/AdminFirstAidPage";
 import { AdminGuideEditorPage } from "@/pages/admin/AdminGuideEditorPage";
 import { AdminMediaPage } from "@/pages/admin/AdminMediaPage";
@@ -101,10 +100,12 @@ export function AppRoutes(): JSX.Element {
       </Route>
 
       {/* -------------------------------------------------------------- admin
-          Admin route branch (Phase 1). RequireAdmin is a temporary passthrough
-          until real admin auth lands in the next task; AdminLayout is a
-          passthrough until the admin shell lands. Unknown /admin/* paths fall
-          through to the admin-scoped not-found, never the public 404. */}
+          Admin route branch. EVERY /admin/* path sits behind RequireAdmin
+          (authenticated + email-verified + ID-token claim admin === true);
+          there is no public navigation entry — administrators reach the area
+          by navigating to /admin directly, and the guard decides. Unknown
+          /admin/* paths fall through to the admin-scoped not-found, never
+          the public 404. */}
       <Route
         path="admin"
         element={
@@ -114,7 +115,6 @@ export function AppRoutes(): JSX.Element {
         }
       >
         <Route index element={<AdminDashboardPage />} />
-        <Route path="map" element={<AdminMapPage />} />
         <Route path="first-aid" element={<AdminFirstAidPage />} />
         <Route path="first-aid/:categoryId" element={<AdminGuideEditorPage />} />
         <Route path="media" element={<AdminMediaPage />} />

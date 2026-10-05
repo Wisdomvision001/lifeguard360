@@ -1,7 +1,7 @@
 import { useState, type JSX } from "react";
 import { Link } from "react-router";
 
-import { GUIDE_LIST } from "@/data/firstAid";
+import { getAllGuides } from "@/services/firstAid/firstAidService";
 import { Card } from "@/components/Card";
 import { Badge } from "@/components/Badge";
 import { Icon } from "@/components/icons";
@@ -166,7 +166,7 @@ export function HomePage(): JSX.Element {
           </div>
 
           <div className={styles.emergencyGrid}>
-            {GUIDE_LIST.map((guide) => (
+            {getAllGuides().map((guide) => (
               <Link
                 key={guide.id}
                 to={`/first-aid/${guide.id}`}

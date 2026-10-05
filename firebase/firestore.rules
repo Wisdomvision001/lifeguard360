@@ -14,8 +14,13 @@ rules_version = '2';
 //   users/{uid}                    — owner read/update on a strict field set
 //   users/{uid}/contacts/{id}      — owner-only CRUD
 //   users/{uid}/activity/{id}      — owner-only create (append-only) + read
-//   firstAidGuides/{category}      — public read; admin-only write (MVP: no
-//                                    client writes at all)
+//   firstAidGuides/{category}      — public read; create/update only
+//                                    for admins carrying the admin custom
+//                                    claim, through the same content
+//                                    validation as the published dataset
+//   firstAidDrafts/{category}      — admin-only draft working copies
+//                                    (never readable by the public); same
+//                                    content validation as published
 //   facilities/{id}                — public read; no client writes
 //   config/{doc}                   — public read; no client writes
 //
@@ -34,6 +39,16 @@ service cloud.firestore {
 
     function isOwner(uid) {
       return isSignedIn() && request.auth.uid == uid;
+    }
+
+    // Server-side admin authorization (Stage 3): the SAME custom claim the
+    // client guard reads, evaluated independently here as the real security
+    // boundary. Strict boolean equality — a missing, false, "true", 1 or "1"
+    // claim NEVER authorizes. Only operator-held Admin SDK tooling
+    // (tools/setAdminClaim.ts) can set or clear the claim; nothing in this
+    // database lets a client grant itself admin rights.
+    function isAdmin() {
+      return isSignedIn() && request.auth.token.get('admin', false) == true;
     }
 
     // UserPreferences is a closed, correctly-typed map mirroring the app's
@@ -68,6 +83,97 @@ service cloud.firestore {
         && coords.keys().hasOnly(['latitude', 'longitude'])
         && coords.latitude is number
         && coords.longitude is number;
+    }
+
+    // GuideStep exactly as the application publishes it (src/types GuideStep,
+    // reconciled 2026-10): { title, text } are required; image / imageAlt /
+    // warning are optional media and safety fields. The previous shape here
+    // ({ number, title, text, flaggedPhrases }) did not exist anywhere in the
+    // application and could never accept real content — this is a schema
+    // reconciliation, not a relaxation: every field is strictly typed and
+    // length-bounded, and unknown keys are still rejected outright.
+    function isValidGuideStep(step) {
+      return step is map
+        && step.keys().hasAll(['title', 'text'])
+        && step.keys().hasOnly(['title', 'text', 'image', 'imageAlt', 'warning'])
+        && step.title is string
+        && step.title.size() >= 1
+        && step.title.size() <= 120
+        && step.text is string
+        && step.text.size() >= 1
+        && step.text.size() <= 2000
+        // image may be a public/images path or a Firebase Storage download
+        // URL (both bounded; 512 fits real Storage download URLs).
+        && (!('image' in step)
+          || (step.image is string && step.image.size() <= 512))
+        && (!('imageAlt' in step)
+          || (step.imageAlt is string && step.imageAlt.size() <= 300))
+        && (!('warning' in step)
+          || (step.warning is string && step.warning.size() <= 500));
+    }
+
+    // First-aid guide content (FirstAidGuideVersion minus the review
+    // envelope): the exact shape the bundled dataset publishes. Life-safety
+    // content is validated the same way for admins as for any other write —
+    // an admin claim never bypasses content validation.
+    function isValidGuideContent(content) {
+      return content is map
+        && content.keys().hasAll(
+          ['contentVersion', 'summary', 'steps', 'dos', 'donts', 'whenToSeekHelp', 'quickGuide', 'provenance'])
+        && content.keys().hasOnly(
+          ['contentVersion', 'summary', 'steps', 'dos', 'donts', 'whenToSeekHelp', 'quickGuide', 'provenance', 'variants', 'video', 'reviewedBy', 'reviewedAt'])
+        && content.contentVersion is string
+        && content.contentVersion.size() >= 1
+        && content.contentVersion.size() <= 40
+        && content.summary is string
+        && content.summary.size() >= 1
+        && content.summary.size() <= 2000
+        && content.steps is list
+        && content.steps.size() >= 1
+        && content.dos is list
+        && content.donts is list
+        && content.whenToSeekHelp is list
+        && content.quickGuide is map
+        && content.provenance is list
+        && content.provenance.size() <= 50
+        && content.steps[0] is map
+        && isValidGuideStep(content.steps[0]);
+    }
+
+    // The guide document body shared by BOTH the published guide
+    // (firstAidGuides) and its admin-only draft twin (firstAidDrafts): the
+    // draft and the published copy are validated identically, so a draft that
+    // saves can always be published without shape changes. CEL has no list
+    // concatenation operator, so the two full allowed-key sets (body + the
+    // collection's timestamp field) are spelled out separately below.
+    function publishedGuideKeys() {
+      return ['id', 'label', 'summary', 'iconClass', 'image', 'content',
+              'provenance', 'publishedAt'];
+    }
+
+    function draftGuideKeys() {
+      return ['id', 'label', 'summary', 'iconClass', 'image', 'content',
+              'provenance', 'updatedAt'];
+    }
+
+    function hasValidGuideBody(data, categoryId) {
+      return data.keys().hasAll(['id', 'label', 'summary', 'content', 'provenance'])
+        && data.id == categoryId
+        && data.label is string
+        && data.label.size() >= 1
+        && data.label.size() <= 80
+        && data.summary is string
+        && data.summary.size() >= 1
+        && data.summary.size() <= 2000
+        && data.iconClass is string
+        && data.iconClass.size() <= 80
+        // image is optional: a public/images path or a Firebase Storage
+        // download URL when present.
+        && (!('image' in data)
+          || (data.image is string && data.image.size() <= 512))
+        && data.provenance is list
+        && data.provenance.size() <= 50
+        && isValidGuideContent(data.content);
     }
 
     // Activity detail shapes mirror the application's logActivity call sites
@@ -122,9 +228,11 @@ service cloud.firestore {
     // ------------------------------------------------------------- users
 
     match /users/{uid} {
-      // Profile is readable only by its owner. Confidentiality: contacts,
-      // phone and preferences are personal data.
-      allow get, list: if isOwner(uid);
+      // Profiles are readable by their owner; admins (admin custom claim) may
+      // additionally READ profiles for user administration. Confidentiality:
+      // contacts, phone and preferences are personal data — admin access is
+      // READ only, writes stay strictly owner-controlled below.
+      allow get, list: if isOwner(uid) || isAdmin();
 
       // Integrity: the client may set its own profile on creation and update
       // presentation fields, but never timestamps (server-set) and never
@@ -215,14 +323,58 @@ service cloud.firestore {
       // content without an account.
       allow get, list: if true;
 
-      // Integrity: no client writes in the MVP. Content publishing is a
-      // controlled process done with admin tooling / console.
-      allow write: if false;
+      // Integrity: admins may publish and revise guide content, but ONLY
+      // through the exact validated shape the application publishes — an
+      // admin claim never bypasses content validation. publishedAt is
+      // server-set on create and immutable afterwards.
+      allow create: if isAdmin()
+        && request.resource.data.keys().hasOnly(publishedGuideKeys())
+        && hasValidGuideBody(request.resource.data, categoryId)
+        && request.resource.data.publishedAt == request.time;
+
+      allow update: if isAdmin()
+        && request.resource.data.keys().hasOnly(publishedGuideKeys())
+        && request.resource.data.id == resource.data.id
+        && hasValidGuideBody(request.resource.data, categoryId)
+        && request.resource.data.publishedAt == resource.data.publishedAt;
+
+      // Guides are version-controlled content; deletion would orphan the
+      // published versions history. Withdraw content by publishing a new
+      // version instead.
+      allow delete: if false;
 
       match /versions/{versionId} {
         allow get, list: if true;
-        allow write: if false; // immutable published versions
+        allow write: if false; // immutable published versions — even for admins
       }
+    }
+
+    // ----------------------------------------------- first aid draft copies
+
+    match /firstAidDrafts/{categoryId} {
+      // Confidentiality: drafts are unfinished working copies. They are
+      // readable ONLY by admins — the public never sees unpublished content.
+      allow read: if isAdmin();
+
+      // Integrity: identical content validation to the published guide
+      // (hasValidGuideBody), plus a server-set updatedAt on every write. A
+      // draft never carries publishedAt — publication state is which
+      // collection the document lives in, never a client-set flag.
+      allow create: if isAdmin()
+        && request.resource.data.keys().hasOnly(draftGuideKeys())
+        && hasValidGuideBody(request.resource.data, categoryId)
+        && request.resource.data.updatedAt == request.time;
+
+      allow update: if isAdmin()
+        && request.resource.data.keys().hasOnly(draftGuideKeys())
+        && request.resource.data.id == resource.data.id
+        && hasValidGuideBody(request.resource.data, categoryId)
+        && request.resource.data.updatedAt == request.time;
+
+      // Discarding a draft is an admin workflow action, not content deletion:
+      // published guides are unaffected (they live in firstAidGuides, where
+      // delete stays false).
+      allow delete: if isAdmin();
     }
 
     // ------------------------------------------------------------- facilities

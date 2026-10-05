@@ -1,21 +1,55 @@
 rules_version = '2';
 
 // ============================================================================
-// Lifeguard360 — Storage Security Rules (Phase 11)
+// Lifeguard360 — Storage Security Rules (CMS integration)
 //
-// First-aid educational videos are the only user-facing content. They are
-// app-published, version-controlled with the guide content, and publicly
-// readable. There is NO user-generated upload in the MVP (data minimisation),
-// so all client writes are denied.
+// Contents:
+//   images/{allPaths=**}   — first-aid imagery. Publicly READ (guide content
+//                            is public by design); WRITE only for admins
+//                            carrying the admin custom claim, and only for
+//                            well-formed image uploads within the size cap.
+//                            This is the same claim the Firestore rules
+//                            evaluate independently — the browser UI is never
+//                            the security boundary.
+//   videos/{...}           — educational videos: public read, no client
+//                            writes (published via console/admin tooling).
+//   everything else        — default deny.
+//
+// No user-generated uploads exist beyond the admin CMS path (data
+// minimisation): a normal authenticated user can never write to this bucket.
 // ============================================================================
 
 service firebase.storage {
   match /b/{bucket}/o {
 
+    // Same strict boolean equality as the Firestore isAdmin(): a missing,
+    // false, "true", 1 or "1" claim NEVER authorizes.
+    function isAdmin() {
+      return request.auth != null && request.auth.token.get('admin', false) == true;
+    }
+
+    // Upload-shaped constraints evaluated on the object that would result
+    // from the write (only meaningful for create/update).
+    function isValidImageUpload() {
+      return request.resource != null
+        && request.resource.size <= 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/(png|jpeg|webp|gif)');
+    }
+
     // Public educational videos, e.g. videos/burns/lesson-v1.mp4
     match /videos/{categoryId}/{fileName} {
       allow read: if true;
       allow write: if false; // published via console/admin tooling only
+    }
+
+    // First-aid guide imagery (banners and step images), e.g.
+    // images/burns/3f2a….png — uploaded by the Admin Media/Editor flows and
+    // attached to guide content in Firestore by path/URL.
+    match /images/{allPaths=**} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidImageUpload();
+      allow update: if isAdmin() && isValidImageUpload();
+      allow delete: if isAdmin(); // removal has no resulting object to validate
     }
 
     match /{allPaths=**} {

@@ -75,6 +75,7 @@ vi.mock("@/services/auth/authService", () => ({
       user: null,
       profile: null,
       preferences: null,
+      claims: {},
       status: "signed-out",
       error: null,
     });
@@ -189,9 +190,10 @@ describe("GetHelpPage — authenticated path unchanged", () => {
     const { observeAuth: mockedObserve } = await import("@/services/auth/authService");
     vi.mocked(mockedObserve).mockImplementation((callback: (state: AuthState) => void) => {
       callback({
-        user: { uid: "user-1", email: "user@example.com", displayName: "Test User" },
+        user: { uid: "user-1", email: "user@example.com", displayName: "Test User", emailVerified: true },
         profile: null,
         preferences: null,
+        claims: {},
         status: "signed-in",
         error: null,
       });
@@ -243,7 +245,7 @@ const FIX: LocationFix = {
 async function signOut(): Promise<void> {
   const { observeAuth } = await import("@/services/auth/authService");
   vi.mocked(observeAuth).mockImplementation((callback: (state: AuthState) => void) => {
-    callback({ user: null, profile: null, preferences: null, status: "signed-out", error: null });
+    callback({ user: null, profile: null, preferences: null, claims: {}, status: "signed-out", error: null });
     return () => undefined;
   });
 }
@@ -252,9 +254,10 @@ async function signIn(): Promise<void> {
   const { observeAuth } = await import("@/services/auth/authService");
   vi.mocked(observeAuth).mockImplementation((callback: (state: AuthState) => void) => {
     callback({
-      user: { uid: "user-1", email: "user@example.com", displayName: "Test User" },
+      user: { uid: "user-1", email: "user@example.com", displayName: "Test User", emailVerified: true },
       profile: null,
       preferences: null,
+      claims: {},
       status: "signed-in",
       error: null,
     });

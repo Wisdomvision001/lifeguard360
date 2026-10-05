@@ -212,6 +212,28 @@ describe("LocationMap facilities layer (Phase 5D-1)", () => {
     const popupContent = markerInstance.bindPopup.mock.calls[0]?.[0] as HTMLElement;
     expect(popupContent.textContent).not.toContain("Test Street");
   });
+
+  it("omits the distance line when no reference point supplied one (admin dataset view)", () => {
+    const withoutDistance: MapFacility = {
+      id: "fac-nodist",
+      name: "Dataset Hospital",
+      category: "hospital",
+      coordinates: { latitude: 9.21, longitude: 12.47 },
+      verified: true,
+      source: "Official registry (example.org), verified 2026-09-10",
+      // distanceMeters deliberately omitted — no user reference point exists.
+    };
+    renderMap(null, [withoutDistance]);
+
+    const popupContent = markerInstance.bindPopup.mock.calls[0]?.[0] as HTMLElement;
+    expect(popupContent.textContent).toContain("Dataset Hospital");
+    expect(popupContent.textContent).toContain("hospital");
+    expect(popupContent.textContent).not.toContain("km away");
+    expect(popupContent.textContent).not.toContain("m away");
+    // With no user fix the map fits the bounds over the facilities alone.
+    expect(mapInstance.setView).not.toHaveBeenCalled();
+    expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
+  });
   it("shows the provenance source line in the popup (5D-3)", () => {
     renderMap(FIX, [FACILITY]);
     const popupContent = markerInstance.bindPopup.mock.calls[0]?.[0] as HTMLElement;

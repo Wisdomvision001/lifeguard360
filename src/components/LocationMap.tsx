@@ -45,7 +45,13 @@ export interface MapFacility {
   name: string;
   category: string;
   coordinates: GeoCoordinates;
-  distanceMeters: number;
+  /**
+   * App-computed distance from the user's fix, when a reference point exists.
+   * Optional: dataset views with no user fix (e.g. the admin facilities page)
+   * supply no distance and the popup then omits the distance — a fabricated
+   * distance is never shown.
+   */
+  distanceMeters?: number;
   verified: boolean;
   /** Human-readable provenance label (e.g. "Verified by Lifeguard360", "OpenStreetMap"). */
   source: string;
@@ -88,9 +94,15 @@ function buildFacilityPopup(facility: MapFacility): HTMLElement {
   name.className = styles.popupName;
   root.appendChild(name);
 
+  // Category and, when a reference point exists, the app-computed distance.
+  // Without one (e.g. an admin dataset view) no distance is shown — never a
+  // fabricated one.
   const meta = document.createElement("p");
   meta.className = styles.popupMeta;
-  meta.textContent = `${facility.category} · ${formatDistance(facility.distanceMeters)}`;
+  meta.textContent =
+    facility.distanceMeters === undefined
+      ? facility.category
+      : `${facility.category} · ${formatDistance(facility.distanceMeters)}`;
   root.appendChild(meta);
 
   // Address (when curated): safe textContent, never interpolated HTML.

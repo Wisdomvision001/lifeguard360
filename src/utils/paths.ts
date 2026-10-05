@@ -7,7 +7,14 @@
  */
 const BASE_URL: string = import.meta.env.BASE_URL;
 
-/** Prefix a root-relative public/ asset path with the deploy base URL. */
+/**
+ * Prefix a root-relative public/ asset path with the deploy base URL.
+ *
+ * Absolute http(s) URLs (e.g. Firebase Storage download URLs assigned by the
+ * admin CMS upload flow) pass through untouched — they must never be prefixed
+ * with the deploy base.
+ */
 export function assetPath(path: string): string {
+  if (/^https?:\/\//i.test(path)) return path;
   return `${BASE_URL}${path.replace(/^\//, "")}`;
 }

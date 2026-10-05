@@ -1,0 +1,253 @@
+/* Admin Guide Editor. Existing tokens only. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.crumbs {
+  display: flex;
+  gap: var(--space-2);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.crumbs a {
+  color: var(--color-blue-600);
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.pageHeader h1 {
+  font-size: var(--fs-xl);
+  margin-bottom: var(--space-1);
+}
+
+.headerMeta {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.headerMeta code {
+  font-family: var(--font-display);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0 var(--space-2);
+}
+
+.headerBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* -------------------------------------------------------- boundary notes */
+
+.boundaryNote {
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+  line-height: 1.6;
+  margin-bottom: var(--space-3);
+}
+
+.boundarySchema {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* ------------------------------------------------------------ action bar */
+
+.actionBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.warningNote {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-amber-600);
+  border-radius: var(--radius-md);
+  background: var(--color-amber-50);
+  color: var(--color-amber-600);
+  font-size: var(--fs-sm);
+}
+
+.confirmRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+}
+
+.actionError {
+  font-size: var(--fs-sm);
+  color: var(--color-red-700);
+}
+
+.actionStatus {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+/* --------------------------------------------------------------- layout */
+
+.gridTwo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.textarea {
+  width: 100%;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  font: inherit;
+  font-size: var(--fs-base);
+  color: var(--color-text);
+  background: var(--color-surface);
+  resize: vertical;
+}
+
+.textarea:focus-visible {
+  outline: 2px solid var(--color-blue-600);
+  outline-offset: 1px;
+}
+
+.mediaNote {
+  font-size: var(--fs-xs);
+  color: var(--color-text-faint);
+}
+
+.sectionIntro {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  line-height: 1.55;
+  margin-bottom: var(--space-4);
+}
+
+/* ------------------------------------------------------------ step cards */
+
+.stepCard {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.stepCard legend {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+  padding: 0 var(--space-2);
+}
+
+/* ----------------------------------------------------------- list editor */
+
+.listEditor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  list-style: none;
+  padding: 0;
+}
+
+.listRow {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.listInput {
+  flex: 1;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  font: inherit;
+  font-size: var(--fs-base);
+  color: var(--color-text);
+  background: var(--color-surface);
+  min-width: 0;
+}
+
+.listInput:focus-visible {
+  outline: 2px solid var(--color-blue-600);
+  outline-offset: 1px;
+}
+
+.listItemError {
+  font-size: var(--fs-xs);
+  color: var(--color-red-600);
+  margin-top: var(--space-1);
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------ provenance */
+
+.provenanceList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: 0;
+  list-style: none;
+}
+
+.provenanceList li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-2);
+}
+
+.provenanceList li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.provenanceList strong {
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+}
+
+.provenanceList span {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+/* -------------------------------------------------------------- responsive */
+
+@media (max-width: 720px) {
+  .gridTwo {
+    grid-template-columns: 1fr;
+  }
+
+  .pageHeader {
+    flex-direction: column;
+  }
+}

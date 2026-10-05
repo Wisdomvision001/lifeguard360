@@ -4,14 +4,21 @@ import { Link, useNavigate } from "react-router";
 import { Card } from "@/components/Card";
 import { Button } from "@/components/Button";
 import { Field, TextField } from "@/components/Field";
-import { registerWithEmail } from "@/services/auth/authService";
+import { GoogleGlyph } from "@/components/GoogleGlyph";
+import {
+  registerWithEmail,
+  signInWithGoogle,
+  GoogleSignInCancelledError,
+} from "@/services/auth/authService";
 import { describeFirebaseError } from "@/services/firebase/db";
 import styles from "@/pages/AuthPage.module.css";
 
 /**
- * Create account (Phase 2). Password floor is deliberately modest but real:
- * 8+ characters with at least one letter and one digit. No fake strength
- * meters — just an enforceable rule with a clear message.
+ * Create account (Phase 2 + Google). Password floor is deliberately modest
+ * but real: 8+ characters with at least one letter and one digit. No fake
+ * strength meters — just an enforceable rule with a clear message.
+ * Registration triggers Firebase's real verification email; a persistent
+ * notice offers resend until the address is verified.
  */
 export function RegisterPage(): JSX.Element {
   const navigate = useNavigate();
@@ -20,9 +27,39 @@ export function RegisterPage(): JSX.Element {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [googleSubmitting, setGoogleSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
 
   const passwordValid = password.length >= 8 && /[a-zA-Z]/.test(password) && /\d/.test(password);
+
+  const handleGoogle = async (): Promise<void> => {
+    setGoogleSubmitting(true);
+    setError(null);
+    setInfo(null);
+    try {
+      // New Google identities are created automatically by Firebase; existing
+      // Google users sign in. (A password account with the same address is
+      // handled on the sign-in page's linking flow.)
+      await signInWithGoogle();
+      navigate("/", { replace: true });
+    } catch (err) {
+      if (err instanceof GoogleSignInCancelledError) {
+        setInfo("Google sign-in was cancelled. You can try again any time.");
+      } else if (
+        err instanceof Error &&
+        /already exists with a password/i.test(err.message)
+      ) {
+        // Same email already registered with a password — linking happens
+        // during sign-in, where the password can be collected.
+        setError(err.message + " Go to sign-in to link it.");
+      } else {
+        setError(describeFirebaseError(err));
+      }
+    } finally {
+      setGoogleSubmitting(false);
+    }
+  };
 
   const handleSubmit = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
@@ -97,11 +134,28 @@ export function RegisterPage(): JSX.Element {
               {error}
             </p>
           )}
+          {info !== null && (
+            <p role="status" className={styles.infoNote}>
+              {info}
+            </p>
+          )}
 
           <Button type="submit" size="lg" block disabled={submitting}>
             {submitting ? "Creating account…" : "Create account"}
           </Button>
         </form>
+
+        <p className={styles.divider}>or</p>
+
+        <button
+          type="button"
+          className={styles.googleButton}
+          onClick={() => void handleGoogle()}
+          disabled={googleSubmitting}
+        >
+          <GoogleGlyph />
+          {googleSubmitting ? "Opening Google…" : "Continue with Google"}
+        </button>
 
         <div className={styles.authFooter}>
           <p>

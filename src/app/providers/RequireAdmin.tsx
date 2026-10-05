@@ -1,44 +1,86 @@
+import { useEffect, useState, type JSX, type ReactNode } from "react";
 import { Navigate, useLocation } from "react-router";
-import type { JSX, ReactNode } from "react";
+
+import {
+  observeAdminAuthorization,
+  type AdminAuthorization,
+  type AdminAuthorizationObserver,
+} from "@/services/auth/authService";
 
 export interface RequireAdminProps {
   children: ReactNode;
-  /**
-   * Injectable for tests (mirrors AuthProvider's injectable observer);
-   * defaults to the temporary allow-all check below.
-   */
-  isAdminEnvironment?: () => boolean;
+  /** Injectable for tests; defaults to the real service. */
+  authorizationObserver?: AdminAuthorizationObserver;
 }
 
 /**
- * TEMPORARY AUTHENTICATION BYPASS (until real admin authentication lands): the
- * guard allows everyone through so /admin is directly accessible while the
- * admin functionality is built and tested — no email, password,
- * or Firebase authentication required.
- *
- * PRODUCTION TARGET (later backend/security phase — not implemented here):
+ * PRODUCTION AUTHORIZATION (claims resolved here; rules elsewhere):
  *   Firebase Authentication -> signed-in user
- *     -> Firebase custom claim admin === true
+ *     -> email verified (Firebase's real verification state)
+ *     -> ID-token custom claim admin === true (strict boolean)
  *     -> RequireAdmin (UX protection only)
  *     -> AdminLayout -> admin pages
- * The claim check will replace the allow-all default inside this guard
- * without router or admin-page changes. Real authorization is enforced by
- * Firestore and Storage security rules, never by this client-side guard.
+ * AND independently, as the real security boundary:
+ *   Firestore / Storage rules -> request.auth.token.admin == true
  *
- * The injectable isAdminEnvironment keeps the deny path (redirect to /login
- * preserving the intended destination) testable until then.
+ * There is NO development bypass of any kind: every environment runs the
+ * same claim-based check (a missing or malformed claim denies; an unverified
+ * email denies with its own honest state). While auth and claims are still
+ * unresolved the guard renders an indeterminate state and NEVER the protected
+ * content. Denial redirects to /login preserving the intended destination —
+ * except email-not-verified, where the signed-in user is told exactly what to
+ * do instead of being bounced to a sign-in form they do not need.
  */
-function isDemoAccessEnabled(): boolean {
-  return true;
-}
 export function RequireAdmin({
   children,
-  isAdminEnvironment = isDemoAccessEnabled,
+  authorizationObserver = observeAdminAuthorization,
 }: RequireAdminProps): JSX.Element {
   const location = useLocation();
 
-  if (!isAdminEnvironment()) {
+  // Start unresolved: protected content never renders before authorization
+  // has been determined.
+  const [authorization, setAuthorization] = useState<AdminAuthorization>({
+    decision: "unresolved",
+  });
+
+  useEffect(() => authorizationObserver(setAuthorization), [authorizationObserver]);
+
+  // Indeterminate: auth and/or claims not yet resolved. No protected content.
+  if (authorization.decision === "unresolved") {
+    return (
+      <section aria-busy="true">
+        <p>Checking your authorization…</p>
+      </section>
+    );
+  }
+
+  // Signed-in admin candidate whose mailbox is not verified yet: an honest,
+  // actionable state — not a redirect to a login form for an account that is
+  // already signed in.
+  if (
+    authorization.decision === "denied" &&
+    authorization.reason === "email-not-verified"
+  ) {
+    return (
+      <section role="alert">
+        <h1>Verify your email to use the admin area</h1>
+        <p>
+          Your account is signed in and carries the admin role, but your email
+          address has not been verified yet. Open the verification email we
+          sent you and follow the link, then reload this page. The verification
+          notice at the top of the app has a “Resend” action if you need it.
+        </p>
+        <p>
+          <a href="/">Back to the application</a>
+        </p>
+      </section>
+    );
+  }
+
+  // Definitive denial (unauthenticated, or claim missing/malformed).
+  if (authorization.decision !== "granted") {
     return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
+
   return <>{children}</>;
 }

@@ -1,8 +1,9 @@
 /**
  * ReverseGeocodeService (Task 1) — the SINGLE readable-location authority.
  *
- * It answers one question for one already-acquired coordinate: "what does
- * OpenStreetMap call this place?" Nothing else. It does NOT acquire location
+ * It answers one question for one already-acquired coordinate: "which
+ * inhabited/locality areas does OpenStreetMap say contain this place?"
+ * Nothing else. It does NOT acquire location
  * (that remains `locationService`, one-shot and user-initiated only), never
  * watches, never polls, and never asks the browser for anything.
  *
@@ -71,7 +72,7 @@ export type ReverseGeocodeFailureReason =
 
 /** A label that a real service really returned for this coordinate. */
 export interface ResolvedPlace {
-  /** Verbatim (or factually composed) OpenStreetMap text — never invented. */
+  /** Composed from address fields OpenStreetMap actually returned — never invented. */
   label: string;
   /** The coordinates this label describes (echoed, for keying/display). */
   coordinates: GeoCoordinates;
@@ -137,14 +138,18 @@ export function buildReverseGeocodeUrl(
 // ------------------------------------------------------------- label reading
 
 /**
- * Address keys in locality order. Used ONLY to compose a label when Nominatim
- * returns no `display_name`, and only from parts it actually returned.
+ * Address keys in locality order — finest inhabited place first (a hamlet is
+ * smaller than a village, a village smaller than a town). The ONLY source of
+ * the composed label; every token must be a field Nominatim actually returned.
+ * Deliberately excludes `display_name` (may lead with the matched object's own
+ * name), `road` (names one street segment, not a locality) and `postcode`
+ * (not a place).
  */
 const ADDRESS_KEYS = [
   "neighbourhood",
   "suburb",
-  "village",
   "hamlet",
+  "village",
   "town",
   "city",
   "municipality",
@@ -160,19 +165,22 @@ function readString(value: unknown): string | null {
 }
 
 /**
- * Extracts a human-readable label from a Nominatim `jsonv2` payload without
- * ever inventing one: the returned `display_name` is used verbatim; when it is
- * absent/empty the label is composed from the address parts OSM actually sent
- * (locality → county → state → country), de-duplicated and never padded. A
- * payload with nothing usable returns null (incomplete information is shown as
- * absent, not as a guess).
+ * Extracts a human-readable locality label from a Nominatim `jsonv2` payload
+ * without ever inventing one: the label is composed ONLY from the address
+ * fields OSM actually returned (finest inhabited place first — see the
+ * precedence list above), de-duplicated and never padded.
+ *
+ * The top-level `display_name` is deliberately NOT used, even when present:
+ * for a reverse match it may BEGIN with the matched object's own name — a
+ * facility, a business or a single road segment (the documented behaviour of
+ * building/POI-level matches) — which would present that object as the user's
+ * locality. Individual address fields cannot contain that failure mode, and
+ * they carry no postcode. A payload with nothing usable returns null
+ * (incomplete information is shown as absent, not as a guess).
  */
 export function describePlaceLabel(payload: unknown): string | null {
   if (payload === null || typeof payload !== "object") return null;
   const record = payload as { display_name?: unknown; address?: unknown };
-
-  const displayName = readString(record.display_name);
-  if (displayName !== null) return displayName;
 
   if (record.address === null || typeof record.address !== "object") return null;
   const address = record.address as Record<string, unknown>;

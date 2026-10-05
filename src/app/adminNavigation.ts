@@ -19,7 +19,6 @@ export interface AdminNavItem {
 
 export const ADMIN_NAV_ITEMS: readonly AdminNavItem[] = [
   { to: "/admin", label: "Dashboard", icon: "home", end: true },
-  { to: "/admin/map", label: "Medical Facilities", icon: "facility" },
   { to: "/admin/first-aid", label: "First-Aid Content", icon: "first-aid" },
   { to: "/admin/media", label: "Media", icon: "upload" },
   { to: "/admin/users", label: "Users", icon: "user" },

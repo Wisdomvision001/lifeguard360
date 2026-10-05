@@ -23,6 +23,7 @@ const GUEST_STATE: AuthState = {
   user: null,
   profile: null,
   preferences: null,
+  claims: {},
   status: "signed-out",
   error: null,
 };

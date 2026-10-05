@@ -2,6 +2,7 @@ import { useEffect, useState, type JSX } from "react";
 import { NavLink, Outlet, Link } from "react-router";
 
 import { NAV_ITEMS } from "@/app/navigation";
+import { EmailVerificationNotice } from "@/components/EmailVerificationNotice";
 import { BrandMark, Icon } from "@/components/icons";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
@@ -31,10 +32,6 @@ export function AppLayout(): JSX.Element {
   const bottomItems = items
     .filter((item) => item.inBottomBar === true)
     .slice(0, 5);
-  // "Admin" entry, rendered in its separated sidebar section in all
-  // builds. Temporary posture: /admin is intentionally open until real
-  // Firebase admin authentication is implemented.
-  const devItems = items.filter((item) => item.devOnly === true);
 
   const initials =
     authState.user?.displayName
@@ -72,9 +69,7 @@ export function AppLayout(): JSX.Element {
           </Link>
 
           <nav className={styles.nav}>
-            {items
-              .filter((item) => item.devOnly !== true)
-              .map((item) => (
+            {items.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
@@ -87,24 +82,7 @@ export function AppLayout(): JSX.Element {
                 <Icon name={item.icon} size={18} />
                 {item.label}
               </NavLink>
-              ))}
-            {devItems.length > 0 && (
-              <div className={styles.devSection}>
-                {devItems.map((item) => (
-                  <NavLink
-                    key={item.to}
-                    to={item.to}
-                    className={({ isActive }) =>
-                      `${styles.navLink} ${isActive ? styles.navLinkActive : ""}`
-                    }
-                    onClick={() => setDrawerOpen(false)}
-                  >
-                    <Icon name={item.icon} size={18} />
-                    {item.label}
-                  </NavLink>
-                ))}
-              </div>
-            )}
+            ))}
             {!signedIn && (
               <NavLink
                 to="/login"
@@ -160,6 +138,7 @@ export function AppLayout(): JSX.Element {
           </header>
 
           <main className={styles.content} id="mainContent">
+            <EmailVerificationNotice />
             <Outlet />
           </main>
 

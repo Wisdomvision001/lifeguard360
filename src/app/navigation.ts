@@ -16,11 +16,6 @@ export interface NavItem {
   inBottomBar?: boolean;
   /** Requires a registered account to be useful. */
   requiresAccount?: boolean;
-  /**
-   * Renders in the separated "Admin" section of the sidebar/drawer (in all
-   * builds). Route access remains enforced by the RequireAdmin guard.
-   */
-  devOnly?: boolean;
 }
 
 const PUBLIC_NAV_ITEMS = [
@@ -62,18 +57,11 @@ const PUBLIC_NAV_ITEMS = [
 ] as const;
 
 /**
- * Unauthenticated access to the /admin route branch, rendered in a separated
- * sidebar section in ALL builds. Temporary posture: /admin is intentionally
- * open while the admin functionality is built; real Firebase admin
- * authentication will replace this later.
+ * Admin is deliberately NOT part of the public navigation. The /admin route
+ * branch exists and is protected by RequireAdmin (authenticated + verified
+ * email + admin claim); administrators reach it by navigating to /admin
+ * directly. Hiding the entry is UX only — the guard is the enforcement.
  */
-const ADMIN_NAV_ITEMS: readonly NavItem[] = [
-  { to: "/admin", label: "Admin", icon: "settings", devOnly: true },
-];
-
-export const NAV_ITEMS: readonly NavItem[] = [
-  ...PUBLIC_NAV_ITEMS,
-  ...ADMIN_NAV_ITEMS,
-];
+export const NAV_ITEMS: readonly NavItem[] = [...PUBLIC_NAV_ITEMS];
 
 export const BOTTOM_NAV_MAX = 5;
