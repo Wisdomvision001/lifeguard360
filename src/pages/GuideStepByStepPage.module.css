@@ -163,6 +163,154 @@
   color: var(--color-text);
 }
 
+/* ---- Treatment flow additions ---- */
+
+.immediateActions {
+  background: var(--color-red-50);
+  border: 1px solid var(--color-red-100);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.immediateLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-red-600) !important;
+  margin-bottom: var(--space-2);
+}
+
+.immediateList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+}
+
+.immediateList li {
+  margin: 0;
+}
+
+.immediateTitle {
+  font-weight: var(--fw-bold);
+  color: var(--color-text);
+  margin: 0 0 var(--space-1);
+}
+
+.immediateText {
+  font-size: var(--fs-md);
+  line-height: 1.55;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.immediateCaution {
+  font-size: var(--fs-sm);
+  color: var(--color-red-700);
+  margin: var(--space-1) 0 0;
+}
+
+.treatmentMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.procedureLabel {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.ageActions {
+  margin: 0;
+}
+
+.stepExplanation {
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  margin: var(--space-3) 0 0;
+  max-width: 62ch;
+}
+
+.nextCriteria {
+  background: var(--color-blue-50);
+  border: 1px solid var(--color-blue-100);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  margin-top: var(--space-4);
+}
+
+.nextCriteriaTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: var(--fw-bold);
+  color: var(--color-blue-700) !important;
+  margin-bottom: var(--space-1);
+}
+
+.nextCriteria p {
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+  margin: 0;
+}
+
+.followUp {
+  background: var(--color-green-50);
+  border: 1px solid var(--color-green-100);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  margin-top: var(--space-4);
+}
+
+.followUpTitle {
+  font-weight: var(--fw-semibold);
+  color: var(--color-green-800);
+  margin: 0;
+}
+
+.ageOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.ageOption {
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  padding: var(--space-3) var(--space-4);
+  min-width: 120px;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.ageOption:hover {
+  border-color: var(--color-blue-600);
+  background: var(--color-blue-50);
+}
+
+.ageOptionActive {
+  border-color: var(--color-blue-700);
+  background: var(--color-blue-600);
+  color: #fff;
+}
+
 @media (max-width: 720px) {
   .stepPanel {
     max-width: none;
@@ -176,4 +324,13 @@
   .controls button {
     flex: 1 1 140px; /* large, easy tap targets */
   }
+
+  .ageOptions {
+    flex-direction: column;
+  }
+
+  .ageOption {
+    width: 100%;
+  }
 }
+

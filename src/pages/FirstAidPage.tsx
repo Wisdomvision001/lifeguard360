@@ -7,6 +7,27 @@ import { Card } from "@/components/Card";
 import { Icon } from "@/components/icons";
 import styles from "@/pages/FirstAidPage.module.css";
 
+/**
+ * Distinct visual treatment for the adaptive assessment entry so it is not
+ * confused with a first-aid category card.
+ */
+function UnsureCard(): JSX.Element {
+  return (
+    <Link to="/emergency" className={styles.unsureCard}>
+      <span className={styles.unsureIcon} aria-hidden="true">
+        <Icon name="info" size={28} />
+      </span>
+      <span className={styles.unsureBody}>
+        <span className={styles.unsureTitle}>Not sure what’s happening?</span>
+        <span className={styles.unsureText}>
+          Describe the situation for guidance.
+        </span>
+      </span>
+      <Icon name="chevron" size={18} className={styles.unsureChevron} />
+    </Link>
+  );
+}
+
 export function FirstAidPage(): JSX.Element {
   return (
     <div>
@@ -45,6 +66,7 @@ export function FirstAidPage(): JSX.Element {
             <Icon name="chevron" size={18} className={styles.chevron} />
           </Link>
         ))}
+        <UnsureCard />
       </div>
 
       <Card title="About this content" titleIcon="alert">
